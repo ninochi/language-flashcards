@@ -1,0 +1,54 @@
+name: Install and deploy Chinese Lesson 4
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/install-and-deploy-lesson4.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  install-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          if '"chinese-4"' not in s:
+              deck = '''{"label":"中国語 第4課","subtitle":"表：日本語 ／ 裏：中国語＋拼音","backLabel":"中国語・拼音","words":[{"id":"c4-001","ja":"申請する、出願する","answer":"申请<br><small>shēnqǐng</small>"},{"id":"c4-002","ja":"～か所、～校（施設を数える量詞）","answer":"所<br><small>suǒ</small>"},{"id":"c4-003","ja":"有名である","answer":"有名<br><small>yǒumíng</small>"},{"id":"c4-004","ja":"とても","answer":"很<br><small>hěn</small>"},{"id":"c4-005","ja":"最も、一番","answer":"最<br><small>zuì</small>"},{"id":"c4-006","ja":"上がる、通う、行く","answer":"上<br><small>shàng</small>"},{"id":"c4-007","ja":"得意分野、強み","answer":"强项<br><small>qiángxiàng</small>"},{"id":"c4-008","ja":"よい","answer":"好<br><small>hǎo</small>"},{"id":"c4-009","ja":"中国の大学入試","answer":"高考<br><small>gāokǎo</small>"},{"id":"c4-010","ja":"点数、成績","answer":"分数<br><small>fēnshù</small>"},{"id":"c4-011","ja":"高い","answer":"高<br><small>gāo</small>"},{"id":"c4-012","ja":"選ぶ、選択する","answer":"选择<br><small>xuǎnzé</small>"},{"id":"c4-013","ja":"多い","answer":"多<br><small>duō</small>"},{"id":"c4-014","ja":"そうだ、ところで","answer":"对了<br><small>duìle</small>"},{"id":"c4-015","ja":"短期","answer":"短期<br><small>duǎnqī</small>"},{"id":"c4-016","ja":"留学する","answer":"留学<br><small>liúxué</small>"},{"id":"c4-017","ja":"項目、プロジェクト","answer":"项目<br><small>xiàngmù</small>"},{"id":"c4-018","ja":"年","answer":"年<br><small>nián</small>"},{"id":"c4-019","ja":"本当に、実に","answer":"真<br><small>zhēn</small>"},{"id":"c4-020","ja":"すごい、立派である","answer":"厉害<br><small>lìhai</small>"},{"id":"c4-021","ja":"～していない、ない","answer":"没<br><small>méi</small>"},{"id":"c4-022","ja":"尋ねる、質問する","answer":"问<br><small>wèn</small>"},{"id":"c4-023","ja":"～頭（大型動物の量詞）","answer":"头<br><small>tóu</small>"},{"id":"c4-024","ja":"牛","answer":"牛<br><small>niú</small>"},{"id":"c4-025","ja":"～個、～切れ（塊状の物の量詞）","answer":"块<br><small>kuài</small>"},{"id":"c4-026","ja":"ケーキ","answer":"蛋糕<br><small>dàngāo</small>"},{"id":"c4-027","ja":"～匹、～本（細長い物の量詞）","answer":"条<br><small>tiáo</small>"},{"id":"c4-028","ja":"魚","answer":"鱼<br><small>yú</small>"},{"id":"c4-029","ja":"～枚、～切れ","answer":"片<br><small>piàn</small>"},{"id":"c4-030","ja":"パン","answer":"面包<br><small>miànbāo</small>"},{"id":"c4-031","ja":"～枚（紙などの量詞）","answer":"张<br><small>zhāng</small>"},{"id":"c4-032","ja":"紙","answer":"纸<br><small>zhǐ</small>"},{"id":"c4-033","ja":"～本、～つ（柄のある物の量詞）","answer":"把<br><small>bǎ</small>"},{"id":"c4-034","ja":"～本、～台（映画や機械などの量詞）","answer":"部<br><small>bù</small>"},{"id":"c4-035","ja":"映画","answer":"电影<br><small>diànyǐng</small>"},{"id":"c4-036","ja":"発表する、公表する、掲載する","answer":"发表<br><small>fābiǎo</small>"},{"id":"c4-037","ja":"～編、～本（文章の量詞）","answer":"篇<br><small>piān</small>"},{"id":"c4-038","ja":"論文","answer":"论文<br><small>lùnwén</small>"},{"id":"c4-039","ja":"ディズニーランド","answer":"迪士尼乐园<br><small>Díshìní Lèyuán</small>"},{"id":"c4-040","ja":"休みになる、休暇に入る","answer":"放假<br><small>fàngjià</small>"},{"id":"c4-041","ja":"夏休み","answer":"暑假<br><small>shǔjià</small>"},{"id":"c4-042","ja":"上海","answer":"上海<br><small>Shànghǎi</small>"},{"id":"c4-043","ja":"遊ぶ","answer":"玩儿<br><small>wánr</small>"},{"id":"c4-044","ja":"書留郵便","answer":"挂号信<br><small>guàhàoxìn</small>"},{"id":"c4-045","ja":"高い（値段が）","answer":"贵<br><small>guì</small>"},{"id":"c4-046","ja":"普通郵便","answer":"平信<br><small>píngxìn</small>"},{"id":"c4-047","ja":"安い","answer":"便宜<br><small>piányi</small>"},{"id":"c4-048","ja":"兵馬俑","answer":"兵马俑<br><small>bīngmǎyǒng</small>"},{"id":"c4-049","ja":"非常に、とても","answer":"非常<br><small>fēicháng</small>"},{"id":"c4-050","ja":"壮観である","answer":"壮观<br><small>zhuàngguān</small>"},{"id":"c4-051","ja":"暑い、熱い","answer":"热<br><small>rè</small>"},{"id":"c4-052","ja":"広い","answer":"宽<br><small>kuān</small>"},{"id":"c4-053","ja":"書き物机、勉強机","answer":"书桌<br><small>shūzhuō</small>"},{"id":"c4-054","ja":"狭い","answer":"窄<br><small>zhǎi</small>"},{"id":"c4-055","ja":"成都","answer":"成都<br><small>Chéngdū</small>"},{"id":"c4-056","ja":"かわいい","answer":"可爱<br><small>kě’ài</small>"},{"id":"c4-057","ja":"ジャイアントパンダ","answer":"大熊猫<br><small>dàxióngmāo</small>"},{"id":"c4-058","ja":"著名である、有名である","answer":"著名<br><small>zhùmíng</small>"},{"id":"c4-059","ja":"武侯祠","answer":"武侯祠<br><small>Wǔhóucí</small>"},{"id":"c4-060","ja":"知らせ、情報","answer":"消息<br><small>xiāoxi</small>"},{"id":"c4-061","ja":"悪い、壊れている","answer":"坏<br><small>huài</small>"},{"id":"c4-062","ja":"先に、まず","answer":"先<br><small>xiān</small>"},{"id":"c4-063","ja":"ご飯、食事","answer":"饭<br><small>fàn</small>"},{"id":"c4-064","ja":"散歩する","answer":"散步<br><small>sànbù</small>"},{"id":"c4-065","ja":"習慣、慣れる","answer":"习惯<br><small>xíguàn</small>"},{"id":"c4-066","ja":"上海料理","answer":"上海菜<br><small>Shànghǎicài</small>"},{"id":"c4-067","ja":"四川料理","answer":"四川菜<br><small>Sìchuāncài</small>"},{"id":"c4-068","ja":"広東料理","answer":"广东菜<br><small>Guǎngdōngcài</small>"},{"id":"c4-069","ja":"～冊、～本","answer":"本<br><small>běn</small>"},{"id":"c4-070","ja":"荷物","answer":"行李<br><small>xíngli</small>"},{"id":"c4-071","ja":"いつも、たびたび","answer":"常常<br><small>chángcháng</small>"},{"id":"c4-072","ja":"学校へ行く、登校する","answer":"上学<br><small>shàngxué</small>"},{"id":"c4-073","ja":"道中、途中","answer":"路上<br><small>lùshang</small>"},{"id":"c4-074","ja":"背負う、背中に担ぐ","answer":"背<br><small>bēi</small>"},{"id":"c4-075","ja":"暗記する、そらで覚える","answer":"背<br><small>bèi</small>"},{"id":"c4-076","ja":"単語","answer":"单词<br><small>dāncí</small>"},{"id":"c4-077","ja":"新エネルギー車","answer":"新能源车<br><small>xīnnéngyuánchē</small>"},{"id":"c4-078","ja":"流行する、はやる","answer":"流行<br><small>liúxíng</small>"},{"id":"c4-079","ja":"～日（時間を数える量詞）","answer":"天<br><small>tiān</small>"},{"id":"c4-080","ja":"朝寝坊する、遅くまで寝る","answer":"睡懒觉<br><small>shuì lǎnjiào</small>"}]}'''
+              marker = '};\nconst DAY='
+              if marker not in s:
+                  raise SystemExit('DECKS marker not found')
+              s = s.replace(marker, ',"chinese-4":' + deck + '};\nconst DAY=', 1)
+              p.write_text(s, encoding='utf-8')
+      - name: Commit lesson data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "Add Chinese lesson 4 deck"
+          git push
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
