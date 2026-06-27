@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>台湾語フラッシュカード</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --bg: #f4f6f8;
+      --panel: #ffffff;
+      --text: #18212b;
+      --muted: #687684;
+      --border: #dce3e9;
+      --primary: #1769aa;
+      --danger: #b3261e;
+      --shadow: 0 14px 38px rgba(21, 37, 53, 0.12);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #101418;
+        --panel: #1a2026;
+        --text: #edf2f6;
+        --muted: #a9b4be;
+        --border: #34404a;
+        --primary: #66b5ff;
+        --danger: #ff9b94;
+        --shadow: 0 14px 38px rgba(0, 0, 0, 0.34);
+      }
+    }
+    * { box-sizing: border-box; }
+    body { margin:0; min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--text); }
+    .app { width:min(760px,calc(100% - 28px)); margin:0 auto; padding:24px 0 50px; }
+    h1 { margin:0 0 5px; font-size:clamp(22px,5vw,32px); }
+    .subtitle { color:var(--muted); font-size:14px; }
+    .panel { background:var(--panel); border:1px solid var(--border); border-radius:18px; box-shadow:var(--shadow); padding:18px; }
+    .settings { display:grid; grid-template-columns:1fr auto; gap:14px; align-items:center; margin-bottom:18px; }
+    .toggle-row { display:flex; align-items:center; gap:10px; }
+    .toggle-row input { width:20px; height:20px; }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:9px; margin-bottom:18px; }
+    .stat { padding:12px 8px; text-align:center; border:1px solid var(--border); border-radius:13px; background:var(--panel); }
+    .stat strong { display:block; font-size:21px; margin-bottom:3px; }
+    .stat span { color:var(--muted); font-size:12px; }
+    .card-wrap { perspective:1200px; margin:18px 0; }
+    .card { min-height:330px; position:relative; transform-style:preserve-3d; transition:transform .45s ease; cursor:pointer; user-select:none; }
+    .card.flipped { transform:rotateY(180deg); }
+    .face { position:absolute; inset:0; display:grid; place-items:center; padding:30px; border-radius:24px; border:1px solid var(--border); background:var(--panel); box-shadow:var(--shadow); backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+    .back { transform:rotateY(180deg); }
+    .face-label { position:absolute; top:18px; left:20px; color:var(--muted); font-size:13px; letter-spacing:.06em; }
+    .word { text-align:center; font-size:clamp(34px,8vw,60px); font-weight:750; line-height:1.35; overflow-wrap:anywhere; }
+    .hint { position:absolute; bottom:16px; color:var(--muted); font-size:13px; }
+    .controls { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    button { appearance:none; border:0; border-radius:13px; padding:14px 16px; font:inherit; font-weight:700; cursor:pointer; text-align:center; }
+    button:disabled { opacity:.45; cursor:not-allowed; }
+    .again { background:color-mix(in srgb,var(--danger) 13%,var(--panel)); color:var(--danger); border:1px solid color-mix(in srgb,var(--danger) 38%,var(--border)); }
+    .known { background:var(--primary); color:white; }
+    .secondary { background:transparent; color:var(--text); border:1px solid var(--border); }
+    .small-actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
+    .small-actions button { padding:10px 12px; font-size:13px; font-weight:600; }
+    .empty { min-height:330px; display:grid; place-items:center; text-align:center; border:1px dashed var(--border); border-radius:24px; background:var(--panel); padding:30px; }
+    .empty p { color:var(--muted); line-height:1.7; }
+    @media (max-width:560px) { .stats{grid-template-columns:repeat(2,1fr)} .settings{grid-template-columns:1fr} .card,.empty{min-height:300px} }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header><h1>台湾語フラッシュカード</h1><div class="subtitle">表：日本語 ／ 裏：台湾語ローマ字</div></header>
+    <section class="panel settings">
+      <label class="toggle-row"><input id="srsToggle" type="checkbox" /><span><strong>忘却曲線モード</strong><br><small class="subtitle">習得済みも復習日になったら再出題</small></span></label>
+      <button id="shuffleBtn" class="secondary">順番をシャッフル</button>
+    </section>
+    <section class="stats">
+      <div class="stat"><strong id="remainingCount">0</strong><span>今回の残り</span></div>
+      <div class="stat"><strong id="masteredCount">0</strong><span>習得済み</span></div>
+      <div class="stat"><strong id="wrongCount">0</strong><span>誤答回数</span></div>
+      <div class="stat"><strong id="totalCount">0</strong><span>全単語</span></div>
+    </section>
+    <section id="studyArea">
+      <div class="card-wrap"><div id="card" class="card" tabindex="0">
+        <div class="face front"><span class="face-label">日本語</span><div id="frontText" class="word"></div><span class="hint">タップして答えを見る</span></div>
+        <div class="face back"><span class="face-label">TÂI-GÍ</span><div id="backText" class="word"></div><span class="hint">結果を選んで次へ</span></div>
+      </div></div>
+      <div class="controls"><button id="againBtn" class="again" disabled>もう一度</button><button id="knownBtn" class="known" disabled>覚えた</button></div>
+    </section>
+    <section id="emptyArea" class="empty" hidden><div><h2>今回の学習は完了です</h2><p id="emptyMessage">未習得の単語はありません。</p><button id="restartBtn" class="secondary">未習得だけ再開</button></div></section>
+    <section class="small-actions"><button id="resetSessionBtn" class="secondary">今回の順番を作り直す</button><button id="resetAllBtn" class="secondary">学習履歴を初期化</button></section>
+  </main>
+  <script>
+    const WORDS = [
+      {id:"001",ja:"あなた",reading:"lí"},{id:"002",ja:"～である／はい",reading:"sī"},{id:"003",ja:"～か",reading:"sī-bô"},{id:"004",ja:"私",reading:"góa"},{id:"005",ja:"こんにちは",reading:"lí hó"},{id:"006",ja:"両親、父母",reading:"sī-tōa-lâng"},{id:"007",ja:"ありがとう",reading:"to-siā"},{id:"008",ja:"～である（望ましくない意味）",reading:"ē"},{id:"009",ja:"学校",reading:"ha̍k-hāu"},{id:"010",ja:"比較的に、割合に",reading:"khah"},{id:"011",ja:"中、内",reading:"lāi-bīn"},{id:"012",ja:"何、どんな",reading:"sím-mi̍h"},{id:"013",ja:"それ、あれ",reading:"he"},{id:"014",ja:"どういたしまして",reading:"bōe"},{id:"015",ja:"今日",reading:"kin-á-ji̍t"},{id:"016",ja:"暑い",reading:"joa̍h"},{id:"017",ja:"日本",reading:"Ji̍t-pún"},{id:"018",ja:"夏",reading:"joa̍h-thiⁿ"},{id:"019",ja:"～と言う、～と呼ぶ",reading:"kiò-chò"},{id:"020",ja:"高校生",reading:"ko-tiong-seng"},{id:"021",ja:"～と",reading:"kah"},{id:"022",ja:"知り合う",reading:"se̍k-sāi"},{id:"023",ja:"行く",reading:"lâi-khì"}
+    ];
+    const KEY="language-flashcards:taigi:v1", DAY=86400000;
+    let state=load(), queue=[], current=null, flipped=false;
+    const $=id=>document.getElementById(id);
+    function blank(){return{mastered:false,wrong:0,streak:0,due:0}}
+    function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x)return x}catch{}const p={};WORDS.forEach(w=>p[w.id]=blank());return{progress:p,srs:false}}
+    function save(){localStorage.setItem(KEY,JSON.stringify(state))}
+    function mix(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+    function eligible(w){const p=state.progress[w.id]||blank();return !p.mastered||(state.srs&&p.due<=Date.now())}
+    function build(){queue=mix(WORDS.filter(eligible).map(w=>w.id));current=null;next()}
+    function next(){flipped=false;$('card').classList.remove('flipped');$('againBtn').disabled=true;$('knownBtn').disabled=true;current=queue.shift()||null;if(!current){$('studyArea').hidden=true;$('emptyArea').hidden=false;stats();return}const w=WORDS.find(x=>x.id===current);$('frontText').textContent=w.ja;$('backText').textContent=w.reading;$('studyArea').hidden=false;$('emptyArea').hidden=true;stats()}
+    function flip(){if(!current)return;flipped=!flipped;$('card').classList.toggle('flipped',flipped);$('againBtn').disabled=!flipped;$('knownBtn').disabled=!flipped}
+    function again(){if(!current||!flipped)return;const p=state.progress[current];p.mastered=false;p.wrong++;p.streak=0;p.due=0;queue.splice(Math.min(2,queue.length),0,current);save();next()}
+    function known(){if(!current||!flipped)return;const p=state.progress[current];p.mastered=true;p.streak++;if(state.srs){const d=[1,3,7,14,30,60][Math.min(p.streak-1,5)];p.due=Date.now()+d*DAY}else p.due=Number.MAX_SAFE_INTEGER;save();next()}
+    function stats(){const ps=WORDS.map(w=>state.progress[w.id]||blank());$('remainingCount').textContent=queue.length+(current?1:0);$('masteredCount').textContent=ps.filter(p=>p.mastered).length;$('wrongCount').textContent=ps.reduce((s,p)=>s+p.wrong,0);$('totalCount').textContent=WORDS.length}
+    $('card').onclick=flip;$('againBtn').onclick=again;$('knownBtn').onclick=known;$('shuffleBtn').onclick=build;$('restartBtn').onclick=build;$('resetSessionBtn').onclick=build;$('resetAllBtn').onclick=()=>{if(confirm('学習履歴を初期化しますか？')){state={progress:{},srs:state.srs};WORDS.forEach(w=>state.progress[w.id]=blank());save();build()}};$('srsToggle').onchange=e=>{state.srs=e.target.checked;save();build()};$('srsToggle').checked=state.srs;build();
+  </script>
+</body>
+</html>
