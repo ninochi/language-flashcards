@@ -1,109 +1,57 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>台湾語フラッシュカード</title>
-  <style>
-    :root {
-      color-scheme: light dark;
-      --bg: #f4f6f8;
-      --panel: #ffffff;
-      --text: #18212b;
-      --muted: #687684;
-      --border: #dce3e9;
-      --primary: #1769aa;
-      --danger: #b3261e;
-      --shadow: 0 14px 38px rgba(21, 37, 53, 0.12);
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #101418;
-        --panel: #1a2026;
-        --text: #edf2f6;
-        --muted: #a9b4be;
-        --border: #34404a;
-        --primary: #66b5ff;
-        --danger: #ff9b94;
-        --shadow: 0 14px 38px rgba(0, 0, 0, 0.34);
-      }
-    }
-    * { box-sizing: border-box; }
-    body { margin:0; min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--text); }
-    .app { width:min(760px,calc(100% - 28px)); margin:0 auto; padding:24px 0 50px; }
-    h1 { margin:0 0 5px; font-size:clamp(22px,5vw,32px); }
-    .subtitle { color:var(--muted); font-size:14px; }
-    .panel { background:var(--panel); border:1px solid var(--border); border-radius:18px; box-shadow:var(--shadow); padding:18px; }
-    .settings { display:grid; grid-template-columns:1fr auto; gap:14px; align-items:center; margin-bottom:18px; }
-    .toggle-row { display:flex; align-items:center; gap:10px; }
-    .toggle-row input { width:20px; height:20px; }
-    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:9px; margin-bottom:18px; }
-    .stat { padding:12px 8px; text-align:center; border:1px solid var(--border); border-radius:13px; background:var(--panel); }
-    .stat strong { display:block; font-size:21px; margin-bottom:3px; }
-    .stat span { color:var(--muted); font-size:12px; }
-    .card-wrap { perspective:1200px; margin:18px 0; }
-    .card { min-height:330px; position:relative; transform-style:preserve-3d; transition:transform .45s ease; cursor:pointer; user-select:none; }
-    .card.flipped { transform:rotateY(180deg); }
-    .face { position:absolute; inset:0; display:grid; place-items:center; padding:30px; border-radius:24px; border:1px solid var(--border); background:var(--panel); box-shadow:var(--shadow); backface-visibility:hidden; -webkit-backface-visibility:hidden; }
-    .back { transform:rotateY(180deg); }
-    .face-label { position:absolute; top:18px; left:20px; color:var(--muted); font-size:13px; letter-spacing:.06em; }
-    .word { text-align:center; font-size:clamp(34px,8vw,60px); font-weight:750; line-height:1.35; overflow-wrap:anywhere; }
-    .hint { position:absolute; bottom:16px; color:var(--muted); font-size:13px; }
-    .controls { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-    button { appearance:none; border:0; border-radius:13px; padding:14px 16px; font:inherit; font-weight:700; cursor:pointer; text-align:center; }
-    button:disabled { opacity:.45; cursor:not-allowed; }
-    .again { background:color-mix(in srgb,var(--danger) 13%,var(--panel)); color:var(--danger); border:1px solid color-mix(in srgb,var(--danger) 38%,var(--border)); }
-    .known { background:var(--primary); color:white; }
-    .secondary { background:transparent; color:var(--text); border:1px solid var(--border); }
-    .small-actions { display:flex; flex-wrap:wrap; gap:9px; margin-top:16px; }
-    .small-actions button { padding:10px 12px; font-size:13px; font-weight:600; }
-    .empty { min-height:330px; display:grid; place-items:center; text-align:center; border:1px dashed var(--border); border-radius:24px; background:var(--panel); padding:30px; }
-    .empty p { color:var(--muted); line-height:1.7; }
-    @media (max-width:560px) { .stats{grid-template-columns:repeat(2,1fr)} .settings{grid-template-columns:1fr} .card,.empty{min-height:300px} }
-  </style>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>語学フラッシュカード</title>
+<style>
+:root{--bg:#f4f6f8;--panel:#fff;--text:#18212b;--muted:#687684;--border:#dce3e9;--primary:#1769aa;--danger:#b3261e;--shadow:0 14px 38px rgba(21,37,53,.12)}
+@media(prefers-color-scheme:dark){:root{--bg:#101418;--panel:#1a2026;--text:#edf2f6;--muted:#a9b4be;--border:#34404a;--primary:#66b5ff;--danger:#ff9b94;--shadow:0 14px 38px rgba(0,0,0,.34)}}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
+.app{width:min(760px,calc(100% - 28px));margin:auto;padding:24px 0 50px}h1{margin:0 0 5px;font-size:clamp(22px,5vw,32px)}.subtitle{color:var(--muted);font-size:14px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow);padding:18px}.settings{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+select,button{appearance:none;border-radius:13px;padding:13px 14px;font:inherit;font-weight:700}select{width:100%;background:var(--panel);color:var(--text);border:1px solid var(--border)}button{border:0;cursor:pointer}
+.toggle-row{display:flex;align-items:center;gap:10px}.toggle-row input{width:20px;height:20px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:18px}
+.stat{padding:12px 8px;text-align:center;border:1px solid var(--border);border-radius:13px;background:var(--panel)}.stat strong{display:block;font-size:21px}.stat span{color:var(--muted);font-size:12px}
+.card-wrap{perspective:1200px;margin:18px 0}.card{min-height:330px;position:relative;transform-style:preserve-3d;transition:transform .45s;cursor:pointer;user-select:none}.card.flipped{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;display:grid;place-items:center;padding:30px;border-radius:24px;border:1px solid var(--border);background:var(--panel);box-shadow:var(--shadow);backface-visibility:hidden}.back{transform:rotateY(180deg)}
+.face-label{position:absolute;top:18px;left:20px;color:var(--muted);font-size:13px}.word{text-align:center;font-size:clamp(34px,8vw,60px);font-weight:750;line-height:1.35;overflow-wrap:anywhere}.word small{display:block;font-size:.45em;font-weight:600;margin-top:12px;color:var(--muted)}
+.hint{position:absolute;bottom:16px;color:var(--muted);font-size:13px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px}button:disabled{opacity:.45}.again{background:color-mix(in srgb,var(--danger) 13%,var(--panel));color:var(--danger);border:1px solid color-mix(in srgb,var(--danger) 38%,var(--border))}.known{background:var(--primary);color:white}.secondary{background:transparent;color:var(--text);border:1px solid var(--border)}.small-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}.small-actions button{padding:10px 12px;font-size:13px}.empty{min-height:330px;display:grid;place-items:center;text-align:center;border:1px dashed var(--border);border-radius:24px;background:var(--panel);padding:30px}
+@media(max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}.settings{grid-template-columns:1fr}.card,.empty{min-height:300px}}
+</style>
 </head>
-<body>
-  <main class="app">
-    <header><h1>台湾語フラッシュカード</h1><div class="subtitle">表：日本語 ／ 裏：台湾語ローマ字</div></header>
-    <section class="panel settings">
-      <label class="toggle-row"><input id="srsToggle" type="checkbox" /><span><strong>忘却曲線モード</strong><br><small class="subtitle">習得済みも復習日になったら再出題</small></span></label>
-      <button id="shuffleBtn" class="secondary">順番をシャッフル</button>
-    </section>
-    <section class="stats">
-      <div class="stat"><strong id="remainingCount">0</strong><span>今回の残り</span></div>
-      <div class="stat"><strong id="masteredCount">0</strong><span>習得済み</span></div>
-      <div class="stat"><strong id="wrongCount">0</strong><span>誤答回数</span></div>
-      <div class="stat"><strong id="totalCount">0</strong><span>全単語</span></div>
-    </section>
-    <section id="studyArea">
-      <div class="card-wrap"><div id="card" class="card" tabindex="0">
-        <div class="face front"><span class="face-label">日本語</span><div id="frontText" class="word"></div><span class="hint">タップして答えを見る</span></div>
-        <div class="face back"><span class="face-label">TÂI-GÍ</span><div id="backText" class="word"></div><span class="hint">結果を選んで次へ</span></div>
-      </div></div>
-      <div class="controls"><button id="againBtn" class="again" disabled>もう一度</button><button id="knownBtn" class="known" disabled>覚えた</button></div>
-    </section>
-    <section id="emptyArea" class="empty" hidden><div><h2>今回の学習は完了です</h2><p id="emptyMessage">未習得の単語はありません。</p><button id="restartBtn" class="secondary">未習得だけ再開</button></div></section>
-    <section class="small-actions"><button id="resetSessionBtn" class="secondary">今回の順番を作り直す</button><button id="resetAllBtn" class="secondary">学習履歴を初期化</button></section>
-  </main>
-  <script>
-    const WORDS = [
-      {id:"001",ja:"あなた",reading:"lí"},{id:"002",ja:"～である／はい",reading:"sī"},{id:"003",ja:"～か",reading:"sī-bô"},{id:"004",ja:"私",reading:"góa"},{id:"005",ja:"こんにちは",reading:"lí hó"},{id:"006",ja:"両親、父母",reading:"sī-tōa-lâng"},{id:"007",ja:"ありがとう",reading:"to-siā"},{id:"008",ja:"～である（望ましくない意味）",reading:"ē"},{id:"009",ja:"学校",reading:"ha̍k-hāu"},{id:"010",ja:"比較的に、割合に",reading:"khah"},{id:"011",ja:"中、内",reading:"lāi-bīn"},{id:"012",ja:"何、どんな",reading:"sím-mi̍h"},{id:"013",ja:"それ、あれ",reading:"he"},{id:"014",ja:"どういたしまして",reading:"bōe"},{id:"015",ja:"今日",reading:"kin-á-ji̍t"},{id:"016",ja:"暑い",reading:"joa̍h"},{id:"017",ja:"日本",reading:"Ji̍t-pún"},{id:"018",ja:"夏",reading:"joa̍h-thiⁿ"},{id:"019",ja:"～と言う、～と呼ぶ",reading:"kiò-chò"},{id:"020",ja:"高校生",reading:"ko-tiong-seng"},{id:"021",ja:"～と",reading:"kah"},{id:"022",ja:"知り合う",reading:"se̍k-sāi"},{id:"023",ja:"行く",reading:"lâi-khì"}
-    ];
-    const KEY="language-flashcards:taigi:v1", DAY=86400000;
-    let state=load(), queue=[], current=null, flipped=false;
-    const $=id=>document.getElementById(id);
-    function blank(){return{mastered:false,wrong:0,streak:0,due:0}}
-    function load(){try{const x=JSON.parse(localStorage.getItem(KEY));if(x)return x}catch{}const p={};WORDS.forEach(w=>p[w.id]=blank());return{progress:p,srs:false}}
-    function save(){localStorage.setItem(KEY,JSON.stringify(state))}
-    function mix(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-    function eligible(w){const p=state.progress[w.id]||blank();return !p.mastered||(state.srs&&p.due<=Date.now())}
-    function build(){queue=mix(WORDS.filter(eligible).map(w=>w.id));current=null;next()}
-    function next(){flipped=false;$('card').classList.remove('flipped');$('againBtn').disabled=true;$('knownBtn').disabled=true;current=queue.shift()||null;if(!current){$('studyArea').hidden=true;$('emptyArea').hidden=false;stats();return}const w=WORDS.find(x=>x.id===current);$('frontText').textContent=w.ja;$('backText').textContent=w.reading;$('studyArea').hidden=false;$('emptyArea').hidden=true;stats()}
-    function flip(){if(!current)return;flipped=!flipped;$('card').classList.toggle('flipped',flipped);$('againBtn').disabled=!flipped;$('knownBtn').disabled=!flipped}
-    function again(){if(!current||!flipped)return;const p=state.progress[current];p.mastered=false;p.wrong++;p.streak=0;p.due=0;queue.splice(Math.min(2,queue.length),0,current);save();next()}
-    function known(){if(!current||!flipped)return;const p=state.progress[current];p.mastered=true;p.streak++;if(state.srs){const d=[1,3,7,14,30,60][Math.min(p.streak-1,5)];p.due=Date.now()+d*DAY}else p.due=Number.MAX_SAFE_INTEGER;save();next()}
-    function stats(){const ps=WORDS.map(w=>state.progress[w.id]||blank());$('remainingCount').textContent=queue.length+(current?1:0);$('masteredCount').textContent=ps.filter(p=>p.mastered).length;$('wrongCount').textContent=ps.reduce((s,p)=>s+p.wrong,0);$('totalCount').textContent=WORDS.length}
-    $('card').onclick=flip;$('againBtn').onclick=again;$('knownBtn').onclick=known;$('shuffleBtn').onclick=build;$('restartBtn').onclick=build;$('resetSessionBtn').onclick=build;$('resetAllBtn').onclick=()=>{if(confirm('学習履歴を初期化しますか？')){state={progress:{},srs:state.srs};WORDS.forEach(w=>state.progress[w.id]=blank());save();build()}};$('srsToggle').onchange=e=>{state.srs=e.target.checked;save();build()};$('srsToggle').checked=state.srs;build();
-  </script>
-</body>
-</html>
+<body><main class="app">
+<header><h1 id="title">語学フラッシュカード</h1><div id="subtitle" class="subtitle"></div></header>
+<section class="panel settings">
+<div><label class="subtitle">教材</label><select id="deckSelect"></select></div>
+<label class="toggle-row"><input id="srsToggle" type="checkbox"><span><strong>忘却曲線モード</strong><br><small class="subtitle">復習日に再出題</small></span></label>
+<button id="shuffleBtn" class="secondary">順番をシャッフル</button>
+</section>
+<section class="stats"><div class="stat"><strong id="remainingCount">0</strong><span>今回の残り</span></div><div class="stat"><strong id="masteredCount">0</strong><span>習得済み</span></div><div class="stat"><strong id="wrongCount">0</strong><span>誤答回数</span></div><div class="stat"><strong id="totalCount">0</strong><span>全単語</span></div></section>
+<section id="studyArea"><div class="card-wrap"><div id="card" class="card" tabindex="0">
+<div class="face front"><span class="face-label">日本語</span><div id="frontText" class="word"></div><span class="hint">タップして答えを見る</span></div>
+<div class="face back"><span id="backLabel" class="face-label"></span><div id="backText" class="word"></div><span class="hint">結果を選んで次へ</span></div>
+</div></div><div class="controls"><button id="againBtn" class="again" disabled>もう一度</button><button id="knownBtn" class="known" disabled>覚えた</button></div></section>
+<section id="emptyArea" class="empty" hidden><div><h2>今回の学習は完了です</h2><p>未習得の単語はありません。</p><button id="restartBtn" class="secondary">再開</button></div></section>
+<section class="small-actions"><button id="resetSessionBtn" class="secondary">今回の順番を作り直す</button><button id="resetAllBtn" class="secondary">この教材の履歴を初期化</button></section>
+</main>
+<script>
+const DECKS={"taigi":{"label":"台湾語","subtitle":"表：日本語 ／ 裏：台湾語ローマ字","backLabel":"TÂI-GÍ","words":[{"id":"t001","ja":"あなた","answer":"lí"},{"id":"t002","ja":"～である／はい","answer":"sī"},{"id":"t003","ja":"～か","answer":"sī-bô"},{"id":"t004","ja":"私","answer":"góa"},{"id":"t005","ja":"こんにちは","answer":"lí hó"},{"id":"t006","ja":"両親、父母","answer":"sī-tōa-lâng"},{"id":"t007","ja":"ありがとう","answer":"to-siā"},{"id":"t008","ja":"～である（望ましくない意味）","answer":"ē"},{"id":"t009","ja":"学校","answer":"ha̍k-hāu"},{"id":"t010","ja":"比較的に、割合に","answer":"khah"},{"id":"t011","ja":"中、内","answer":"lāi-bīn"},{"id":"t012","ja":"何、どんな","answer":"sím-mi̍h"},{"id":"t013","ja":"それ、あれ","answer":"he"},{"id":"t014","ja":"どういたしまして","answer":"bōe"},{"id":"t015","ja":"今日","answer":"kin-á-ji̍t"},{"id":"t016","ja":"暑い","answer":"joa̍h"},{"id":"t017","ja":"日本","answer":"Ji̍t-pún"},{"id":"t018","ja":"夏","answer":"joa̍h-thiⁿ"},{"id":"t019","ja":"～と言う、～と呼ぶ","answer":"kiò-chò"},{"id":"t020","ja":"高校生","answer":"ko-tiong-seng"},{"id":"t021","ja":"～と","answer":"kah"},{"id":"t022","ja":"知り合う","answer":"se̍k-sāi"},{"id":"t023","ja":"行く","answer":"lâi-khì"}]},"chinese-1":{"label":"中国語 第1課","subtitle":"表：日本語 ／ 裏：中国語＋拼音","backLabel":"中国語・拼音","words":[{"id":"c1-001","ja":"これ","answer":"这<br><small>zhè</small>"},{"id":"c1-002","ja":"～である","answer":"是<br><small>shì</small>"},{"id":"c1-003","ja":"あなた","answer":"你<br><small>nǐ</small>"},{"id":"c1-004","ja":"本","answer":"书<br><small>shū</small>"},{"id":"c1-005","ja":"こんにちは","answer":"你好<br><small>nǐ hǎo</small>"},{"id":"c1-006","ja":"私","answer":"我<br><small>wǒ</small>"},{"id":"c1-007","ja":"見る","answer":"看<br><small>kàn</small>"},{"id":"c1-008","ja":"中国語","answer":"汉语<br><small>Hànyǔ</small>"},{"id":"c1-009","ja":"教科書","answer":"课本<br><small>kèběn</small>"},{"id":"c1-010","ja":"留学生","answer":"留学生<br><small>liúxuéshēng</small>"},{"id":"c1-011","ja":"正しい、～に対して","answer":"对<br><small>duì</small>"},{"id":"c1-012","ja":"日本","answer":"日本<br><small>Rìběn</small>"},{"id":"c1-013","ja":"～という、～と呼ぶ","answer":"叫<br><small>jiào</small>"},{"id":"c1-014","ja":"方（姓）","answer":"方<br><small>Fāng</small>"},{"id":"c1-015","ja":"姓、名字の姓","answer":"姓<br><small>xìng</small>"},{"id":"c1-016","ja":"速成","answer":"速成<br><small>sùchéng</small>"},{"id":"c1-017","ja":"学院、大学・学部","answer":"学院<br><small>xuéyuàn</small>"},{"id":"c1-018","ja":"一、1","answer":"一<br><small>yī</small>"},{"id":"c1-019","ja":"学年","answer":"年级<br><small>niánjí</small>"},{"id":"c1-020","ja":"学生","answer":"学生<br><small>xuésheng</small>"},{"id":"c1-021","ja":"対外、外国向けの","answer":"对外<br><small>duìwài</small>"},{"id":"c1-022","ja":"学科、学系","answer":"系<br><small>xì</small>"},{"id":"c1-023","ja":"今後、これから","answer":"今后<br><small>jīnhòu</small>"},{"id":"c1-024","ja":"どうぞ、お願いする","answer":"请<br><small>qǐng</small>"},{"id":"c1-025","ja":"多く、もっと","answer":"多<br><small>duō</small>"},{"id":"c1-026","ja":"指導する","answer":"指教<br><small>zhǐjiào</small>"},{"id":"c1-027","ja":"客、顧客","answer":"顾客<br><small>gùkè</small>"},{"id":"c1-028","ja":"店員、サービス係","answer":"服务员<br><small>fúwùyuán</small>"},{"id":"c1-029","ja":"アメリカ人","answer":"美国人<br><small>Měiguórén</small>"},{"id":"c1-030","ja":"黄（姓）","answer":"黄<br><small>Huáng</small>"},{"id":"c1-031","ja":"王（姓）","answer":"王<br><small>Wáng</small>"},{"id":"c1-032","ja":"小～、若い～","answer":"小<br><small>xiǎo</small>"},{"id":"c1-033","ja":"張（姓）","answer":"张<br><small>Zhāng</small>"},{"id":"c1-034","ja":"学ぶ、勉強する","answer":"学习<br><small>xuéxí</small>"},{"id":"c1-035","ja":"物理","answer":"物理<br><small>wùlǐ</small>"},{"id":"c1-036","ja":"毎日","answer":"每天<br><small>měitiān</small>"},{"id":"c1-037","ja":"する、打つ","answer":"打<br><small>dǎ</small>"},{"id":"c1-038","ja":"太極拳","answer":"太极拳<br><small>tàijíquán</small>"},{"id":"c1-039","ja":"ハーブティー","answer":"香草茶<br><small>xiāngcǎochá</small>"},{"id":"c1-040","ja":"水仙","answer":"水仙<br><small>shuǐxiān</small>"},{"id":"c1-041","ja":"ニラ","answer":"韭菜<br><small>jiǔcài</small>"},{"id":"c1-042","ja":"大阪","answer":"大阪<br><small>Dàbǎn</small>"},{"id":"c1-043","ja":"駅","answer":"车站<br><small>chēzhàn</small>"},{"id":"c1-044","ja":"梅田","answer":"梅田<br><small>Méitián</small>"},{"id":"c1-045","ja":"月餅","answer":"月饼<br><small>yuèbing</small>"},{"id":"c1-046","ja":"～にいる、～にある","answer":"在<br><small>zài</small>"},{"id":"c1-047","ja":"学校","answer":"学校<br><small>xuéxiào</small>"},{"id":"c1-048","ja":"買う","answer":"买<br><small>mǎi</small>"},{"id":"c1-049","ja":"腕時計","answer":"手表<br><small>shǒubiǎo</small>"},{"id":"c1-050","ja":"コンピューター","answer":"电脑<br><small>diànnǎo</small>"},{"id":"c1-051","ja":"図書館","answer":"图书馆<br><small>túshūguǎn</small>"},{"id":"c1-052","ja":"博物館","answer":"博物馆<br><small>bówùguǎn</small>"},{"id":"c1-053","ja":"展示品","answer":"展品<br><small>zhǎnpǐn</small>"},{"id":"c1-054","ja":"会社","answer":"公司<br><small>gōngsī</small>"},{"id":"c1-055","ja":"お母さん","answer":"妈妈<br><small>māma</small>"},{"id":"c1-056","ja":"友達","answer":"朋友<br><small>péngyou</small>"},{"id":"c1-057","ja":"木材、木","answer":"木头<br><small>mùtou</small>"},{"id":"c1-058","ja":"箱","answer":"箱子<br><small>xiāngzi</small>"},{"id":"c1-059","ja":"亜麻、リネン","answer":"亚麻<br><small>yàmá</small>"},{"id":"c1-060","ja":"シャツ","answer":"衬衫<br><small>chènshān</small>"},{"id":"c1-061","ja":"学者","answer":"学者<br><small>xuézhě</small>"},{"id":"c1-062","ja":"ベトナム","answer":"越南<br><small>Yuènán</small>"},{"id":"c1-063","ja":"同級生、学友","answer":"同学<br><small>tóngxué</small>"},{"id":"c1-064","ja":"広東人","answer":"广东人<br><small>Guǎngdōngrén</small>"},{"id":"c1-065","ja":"福建人","answer":"福建人<br><small>Fújiànrén</small>"},{"id":"c1-066","ja":"中国","answer":"中国<br><small>Zhōngguó</small>"},{"id":"c1-067","ja":"韓国","answer":"韩国<br><small>Hánguó</small>"},{"id":"c1-068","ja":"参加する","answer":"参加<br><small>cānjiā</small>"},{"id":"c1-069","ja":"明日","answer":"明天<br><small>míngtiān</small>"},{"id":"c1-070","ja":"新入生を歓迎する","answer":"迎新<br><small>yíngxīn</small>"},{"id":"c1-071","ja":"夜の会、パーティー","answer":"晚会<br><small>wǎnhuì</small>"},{"id":"c1-072","ja":"陳（姓）","answer":"陈<br><small>Chén</small>"},{"id":"c1-073","ja":"一人っ子である","answer":"独生<br><small>dúshēng</small>"},{"id":"c1-074","ja":"子女、子ども","answer":"子女<br><small>zǐnǚ</small>"},{"id":"c1-075","ja":"李（姓）","answer":"李<br><small>Lǐ</small>"},{"id":"c1-076","ja":"魯迅","answer":"鲁迅<br><small>Lǔ Xùn</small>"},{"id":"c1-077","ja":"文学者","answer":"文学家<br><small>wénxuéjiā</small>"},{"id":"c1-078","ja":"思想家","answer":"思想家<br><small>sīxiǎngjiā</small>"},{"id":"c1-079","ja":"教える","answer":"教<br><small>jiāo</small>"},{"id":"c1-080","ja":"英語","answer":"英语<br><small>Yīngyǔ</small>"},{"id":"c1-081","ja":"好きである","answer":"喜欢<br><small>xǐhuan</small>"}]}};
+const DAY=86400000,$=id=>document.getElementById(id);
+let deckId=localStorage.getItem("language-flashcards:last-deck")||"taigi",deck,words,state,queue=[],current=null,flipped=false;
+function blank(){return{mastered:false,wrong:0,streak:0,due:0}}
+function key(){return `language-flashcards:${deckId}:v1`}
+function load(){let x;try{x=JSON.parse(localStorage.getItem(key()))}catch{}if(!x)x={progress:{},srs:false};words.forEach(w=>x.progress[w.id]??=blank());return x}
+function save(){localStorage.setItem(key(),JSON.stringify(state))}
+function mix(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function selectDeck(id){deckId=id;deck=DECKS[id];words=deck.words;state=load();localStorage.setItem("language-flashcards:last-deck",id);$("subtitle").textContent=deck.subtitle;$("backLabel").textContent=deck.backLabel;$("srsToggle").checked=state.srs;build()}
+function eligible(w){const p=state.progress[w.id]||blank();return !p.mastered||(state.srs&&p.due<=Date.now())}
+function build(){queue=mix(words.filter(eligible).map(w=>w.id));current=null;next()}
+function next(){flipped=false;$("card").classList.remove("flipped");$("againBtn").disabled=$("knownBtn").disabled=true;current=queue.shift()||null;if(!current){$("studyArea").hidden=true;$("emptyArea").hidden=false;stats();return}const w=words.find(x=>x.id===current);$("frontText").textContent=w.ja;$("backText").innerHTML=w.answer;$("studyArea").hidden=false;$("emptyArea").hidden=true;stats()}
+function flip(){if(!current)return;flipped=!flipped;$("card").classList.toggle("flipped",flipped);$("againBtn").disabled=$("knownBtn").disabled=!flipped}
+function again(){if(!current||!flipped)return;const p=state.progress[current];p.mastered=false;p.wrong++;p.streak=0;p.due=0;queue.splice(Math.min(2,queue.length),0,current);save();next()}
+function known(){if(!current||!flipped)return;const p=state.progress[current];p.mastered=true;p.streak++;p.due=state.srs?Date.now()+[1,3,7,14,30,60][Math.min(p.streak-1,5)]*DAY:Number.MAX_SAFE_INTEGER;save();next()}
+function stats(){const ps=words.map(w=>state.progress[w.id]||blank());$("remainingCount").textContent=queue.length+(current?1:0);$("masteredCount").textContent=ps.filter(p=>p.mastered).length;$("wrongCount").textContent=ps.reduce((s,p)=>s+p.wrong,0);$("totalCount").textContent=words.length}
+Object.entries(DECKS).forEach(([id,d])=>{const o=document.createElement("option");o.value=id;o.textContent=d.label;$("deckSelect").appendChild(o)});$("deckSelect").value=deckId;
+$("deckSelect").onchange=e=>selectDeck(e.target.value);$("card").onclick=flip;$("card").onkeydown=e=>{if(e.code==="Space"||e.code==="Enter"){e.preventDefault();flip()}};$("againBtn").onclick=again;$("knownBtn").onclick=known;$("shuffleBtn").onclick=build;$("restartBtn").onclick=build;$("resetSessionBtn").onclick=build;$("resetAllBtn").onclick=()=>{if(confirm("この教材の学習履歴を初期化しますか？")){state={progress:{},srs:state.srs};words.forEach(w=>state.progress[w.id]=blank());save();build()}};$("srsToggle").onchange=e=>{state.srs=e.target.checked;save();build()};
+selectDeck(deckId);
+</script></body></html>
