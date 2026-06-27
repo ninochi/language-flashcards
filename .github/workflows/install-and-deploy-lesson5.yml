@@ -1,0 +1,54 @@
+name: Install and deploy Chinese Lesson 5
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/install-and-deploy-lesson5.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  install-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          if '"chinese-5"' not in s:
+              deck = '''{"label":"中国語 第5課","subtitle":"表：日本語 ／ 裏：中国語＋拼音","backLabel":"中国語・拼音","words":[{"id":"c5-001","ja":"着く、到着する","answer":"到<br><small>dào</small>"},{"id":"c5-002","ja":"すみません、申し訳ない","answer":"抱歉<br><small>bàoqiàn</small>"},{"id":"c5-003","ja":"大丈夫、気にしない","answer":"没关系<br><small>méi guānxi</small>"},{"id":"c5-004","ja":"分間、分","answer":"分钟<br><small>fēnzhōng</small>"},{"id":"c5-005","ja":"長い","answer":"长<br><small>cháng</small>"},{"id":"c5-006","ja":"カフェラテ","answer":"拿铁<br><small>nátiě</small>"},{"id":"c5-007","ja":"いくら、どのくらい","answer":"多少<br><small>duōshao</small>"},{"id":"c5-008","ja":"お金","answer":"钱<br><small>qián</small>"},{"id":"c5-009","ja":"元（口語）、～個・～切れ","answer":"块<br><small>kuài</small>"},{"id":"c5-010","ja":"～杯、コップ","answer":"杯<br><small>bēi</small>"},{"id":"c5-011","ja":"なかなかよい、悪くない","answer":"不错<br><small>búcuò</small>"},{"id":"c5-012","ja":"熱い、暑い","answer":"热<br><small>rè</small>"},{"id":"c5-013","ja":"氷、冷たいもの","answer":"冰<br><small>bīng</small>"},{"id":"c5-014","ja":"注文する、点を打つ","answer":"点<br><small>diǎn</small>"},{"id":"c5-015","ja":"フランス語","answer":"法语<br><small>Fǎyǔ</small>"},{"id":"c5-016","ja":"講座、講演","answer":"讲座<br><small>jiǎngzuò</small>"},{"id":"c5-017","ja":"話す、言う","answer":"说<br><small>shuō</small>"},{"id":"c5-018","ja":"ただ～だけ","answer":"只<br><small>zhǐ</small>"},{"id":"c5-019","ja":"簡単である","answer":"简单<br><small>jiǎndān</small>"},{"id":"c5-020","ja":"翻訳する、通訳する","answer":"翻译<br><small>fānyì</small>"},{"id":"c5-021","ja":"どうですか、どのようですか","answer":"怎么样<br><small>zěnmeyàng</small>"},{"id":"c5-022","ja":"どんな様子ですか？、どうですか？","answer":"怎么样<br><small>zěnmeyàng</small>"},{"id":"c5-023","ja":"処理する、手続きをする","answer":"办<br><small>bàn</small>"},{"id":"c5-024","ja":"車、乗り物","answer":"车<br><small>chē</small>"},{"id":"c5-025","ja":"正しい、ちょうど、まさに","answer":"正<br><small>zhèng</small>"},{"id":"c5-026","ja":"線、路線","answer":"线<br><small>xiàn</small>"},{"id":"c5-027","ja":"再び、もう一度、それから","answer":"再<br><small>zài</small>"},{"id":"c5-028","ja":"倒れる、逆さになる、注ぐ","answer":"倒<br><small>dào</small>"},{"id":"c5-029","ja":"駅、停留所","answer":"站<br><small>zhàn</small>"},{"id":"c5-030","ja":"または、あるいは","answer":"或者<br><small>huòzhě</small>"},{"id":"c5-031","ja":"タクシー","answer":"出租车<br><small>chūzūchē</small>"},{"id":"c5-032","ja":"生まれる","answer":"出生<br><small>chūshēng</small>"},{"id":"c5-033","ja":"アモイ","answer":"厦门<br><small>Xiàmén</small>"},{"id":"c5-034","ja":"予約する、注文する","answer":"订<br><small>dìng</small>"},{"id":"c5-035","ja":"座席","answer":"座儿<br><small>zuòr</small>"},{"id":"c5-036","ja":"電話をかける","answer":"打电话<br><small>dǎ diànhuà</small>"},{"id":"c5-037","ja":"携帯電話、スマートフォン","answer":"手机<br><small>shǒujī</small>"},{"id":"c5-038","ja":"番号","answer":"号码<br><small>hàomǎ</small>"},{"id":"c5-039","ja":"高校","answer":"高中<br><small>gāozhōng</small>"},{"id":"c5-040","ja":"小遣い","answer":"零花钱<br><small>línghuāqián</small>"},{"id":"c5-041","ja":"引く、弦楽器を弾く","answer":"拉<br><small>lā</small>"},{"id":"c5-042","ja":"二胡","answer":"二胡<br><small>èrhú</small>"},{"id":"c5-043","ja":"乗る、またがる","answer":"骑<br><small>qí</small>"},{"id":"c5-044","ja":"話す、会話する","answer":"说话<br><small>shuōhuà</small>"},{"id":"c5-045","ja":"本場の、正統な","answer":"正宗<br><small>zhèngzōng</small>"},{"id":"c5-046","ja":"叫化鶏、乞食鶏","answer":"叫花鸡<br><small>jiàohuājī</small>"},{"id":"c5-047","ja":"批評する、批判する","answer":"批评<br><small>pīpíng</small>"},{"id":"c5-048","ja":"『源氏物語』","answer":"源氏物语<br><small>Yuánshì Wùyǔ</small>"},{"id":"c5-049","ja":"しかし","answer":"但是<br><small>dànshì</small>"},{"id":"c5-050","ja":"ずっと、まっすぐ","answer":"一直<br><small>yìzhí</small>"},{"id":"c5-051","ja":"ギョーザ","answer":"饺子<br><small>jiǎozi</small>"},{"id":"c5-052","ja":"書く","answer":"写<br><small>xiě</small>"},{"id":"c5-053","ja":"一般的な、普通の","answer":"一般<br><small>yìbān</small>"},{"id":"c5-054","ja":"スープ","answer":"汤<br><small>tāng</small>"},{"id":"c5-055","ja":"お尋ねします、すみませんが","answer":"请问<br><small>qǐngwèn</small>"},{"id":"c5-056","ja":"名前","answer":"名字<br><small>míngzi</small>"},{"id":"c5-057","ja":"料理、野菜","answer":"菜<br><small>cài</small>"},{"id":"c5-058","ja":"見学する、参観する","answer":"参观<br><small>cānguān</small>"},{"id":"c5-059","ja":"故宮","answer":"故宫<br><small>Gùgōng</small>"},{"id":"c5-060","ja":"それから、その後","answer":"然后<br><small>ránhòu</small>"},{"id":"c5-061","ja":"太古里","answer":"太古里<br><small>Tàigǔlǐ</small>"},{"id":"c5-062","ja":"物、品物","answer":"东西<br><small>dōngxi</small>"},{"id":"c5-063","ja":"歓迎する、ようこそ","answer":"欢迎<br><small>huānyíng</small>"},{"id":"c5-064","ja":"足りる、十分である","answer":"够<br><small>gòu</small>"}]}'''
+              marker = '};\nconst DAY='
+              if marker not in s:
+                  raise SystemExit('DECKS marker not found')
+              s = s.replace(marker, ',"chinese-5":' + deck + '};\nconst DAY=', 1)
+              p.write_text(s, encoding='utf-8')
+      - name: Commit lesson data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "Add Chinese lesson 5 deck"
+          git push
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
