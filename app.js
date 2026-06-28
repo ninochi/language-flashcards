@@ -1,6 +1,9 @@
 const DAY = 24 * 60 * 60 * 1000;
 const REVIEW_INTERVALS = [1, 3, 7, 14, 30, 60];
 const UNCERTAIN_REVIEW_DAYS = 1;
+const UNKNOWN_REVIEW_DAYS = 1;
+const RETRY_REINSERT_DELAY = 8;
+const MILESTONE_ADVANCE_DELAY_MS = 900;
 const LAST_DECK_KEY = "language-flashcards:last-deck";
 const CONFETTI_COLORS = ["#1769aa", "#46a76f", "#f0bf68", "#e06b5f", "#8f7be8"];
 const QUEUE_BUCKET = {
@@ -200,13 +203,6 @@ function launchConfetti(message) {
   }, 2600);
 }
 
-function celebrateMilestoneIfNeeded() {
-  const message = nextMilestoneMessage();
-  if (!message) return;
-  saveState();
-  launchConfetti(message);
-}
-
 function priorityForWord(word) {
   const progress = state.progress[word.id] || blankProgress();
   const now = Date.now();
@@ -251,6 +247,9 @@ function setControlsEnabled(enabled) {
   for (const id of ["deckSelect", "shuffleBtn"]) {
     $(id).disabled = !enabled;
   }
+  for (const button of document.querySelectorAll(".reset-history")) {
+    button.disabled = !enabled;
+  }
 }
 
 function setAnswerControlsEnabled(enabled) {
@@ -283,7 +282,7 @@ function renderCardReason(word) {
   if (retryIds.has(word.id)) {
     badge.textContent = "再挑戦";
     badge.dataset.kind = "retry";
-    reason.textContent = "先ほど「分からなかった」を選んだため再出題しています";
+    reason.textContent = "先ほど「分からなかった」を選んだため、間を空けて再出題しています";
     return;
   }
 
@@ -418,9 +417,13 @@ function answer(result) {
     progress.mastered = false;
     progress.wrong = Number(progress.wrong || 0) + 1;
     progress.streak = 0;
-    progress.due = 0;
-    retryIds.add(answeredId);
-    queue.splice(Math.min(2, queue.length), 0, answeredId);
+    progress.due = now + UNKNOWN_REVIEW_DAYS * DAY;
+    if (queue.length >= RETRY_REINSERT_DELAY) {
+      retryIds.add(answeredId);
+      queue.splice(RETRY_REINSERT_DELAY, 0, answeredId);
+    } else {
+      retryIds.delete(answeredId);
+    }
   } else if (result === "unsure") {
     progress.mastered = false;
     progress.unsure = Number(progress.unsure || 0) + 1;
@@ -436,9 +439,17 @@ function answer(result) {
     retryIds.delete(answeredId);
   }
 
+  const milestoneMessage = nextMilestoneMessage();
   saveState();
-  nextCard();
-  celebrateMilestoneIfNeeded();
+  updateStats();
+  setAnswerControlsEnabled(false);
+
+  if (milestoneMessage) {
+    launchConfetti(milestoneMessage);
+    window.setTimeout(nextCard, MILESTONE_ADVANCE_DELAY_MS);
+  } else {
+    nextCard();
+  }
 }
 
 function resetLearningHistory() {
@@ -529,7 +540,9 @@ $("unsureBtn").addEventListener("click", () => answer("unsure"));
 $("easyBtn").addEventListener("click", () => answer("easy"));
 $("shuffleBtn").addEventListener("click", buildQueue);
 $("continueBtn").addEventListener("click", buildQueue);
-$("resetAllBtn").addEventListener("click", resetLearningHistory);
+for (const button of document.querySelectorAll(".reset-history")) {
+  button.addEventListener("click", resetLearningHistory);
+}
 $("retryBtn").addEventListener("click", init);
 document.addEventListener("keydown", (event) => {
   if (!currentId || !flipped) return;

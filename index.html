@@ -22,7 +22,10 @@
         <label class="subtitle" for="deckSelect">教材</label>
         <select id="deckSelect" disabled></select>
       </div>
-      <button id="shuffleBtn" class="secondary" disabled>出題順をシャッフル</button>
+      <div class="settings-actions">
+        <button id="shuffleBtn" class="secondary" disabled>出題順をシャッフル</button>
+        <button class="danger-outline reset-history" disabled>学習記録をリセット</button>
+      </div>
       <p class="review-policy">答えを見る前の感覚で「分からなかった・迷った・すぐ分かった」を選びます。</p>
     </section>
 
@@ -65,7 +68,7 @@
         <p id="emptyMessage"></p>
         <div class="empty-actions">
           <button id="continueBtn" class="secondary">もう一周する</button>
-          <button id="resetAllBtn" class="danger-outline">学習記録をリセット</button>
+          <button class="danger-outline reset-history">学習記録をリセット</button>
         </div>
       </div>
     </section>
