@@ -12,7 +12,7 @@
 
 単語データの **Single Source of Truth（正本）** は `data/decks/*.json` です。
 
-- 単語の追加・修正は `data/decks/*.json` を編雀する
+- 単語の追加・修正は `data/decks/*.json` を編集する
 - デッキの追加・並び順・表示名は `data/manifest.json` を編集する
 - `index.html` や `app.js` に単語を直接埋め込まない
 - `exports/` は自動生成物なので直接編集しない
