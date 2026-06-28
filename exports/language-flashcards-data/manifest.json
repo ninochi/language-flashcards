@@ -1,0 +1,49 @@
+{
+  "decks": [
+    {
+      "id": "taigi",
+      "title": "台湾語",
+      "cardCount": 23
+    },
+    {
+      "id": "chinese-lesson-01",
+      "title": "中国語 第1課",
+      "cardCount": 81
+    },
+    {
+      "id": "chinese-lesson-02",
+      "title": "中国語 第2課",
+      "cardCount": 97
+    },
+    {
+      "id": "chinese-lesson-03",
+      "title": "中国語 第3課",
+      "cardCount": 53
+    },
+    {
+      "id": "chinese-lesson-04",
+      "title": "中国語 第4課",
+      "cardCount": 80
+    },
+    {
+      "id": "chinese-lesson-05",
+      "title": "中国語 第5課",
+      "cardCount": 64
+    },
+    {
+      "id": "chinese-lesson-06",
+      "title": "中国語 第6課",
+      "cardCount": 104
+    },
+    {
+      "id": "chinese-lesson-07",
+      "title": "中国語 第7課",
+      "cardCount": 75
+    },
+    {
+      "id": "chinese-lesson-08",
+      "title": "中国語 第8課",
+      "cardCount": 66
+    }
+  ]
+}

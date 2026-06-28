@@ -1,0 +1,647 @@
+id: "chinese-lesson-04"
+language: "zh-CN"
+title: "中国語 第4課"
+frontLanguage: "ja"
+backLanguage: "zh-CN"
+cardCount: 80
+cards:
+  - id: "c4-001"
+    front: "申請する、出願する"
+    back: "申请"
+    reading: "shēnqǐng"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-002"
+    front: "～か所、～校（施設を数える量詞）"
+    back: "所"
+    reading: "suǒ"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-003"
+    front: "有名である"
+    back: "有名"
+    reading: "yǒumíng"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-004"
+    front: "とても"
+    back: "很"
+    reading: "hěn"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-005"
+    front: "最も、一番"
+    back: "最"
+    reading: "zuì"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-006"
+    front: "上がる、通う、行く"
+    back: "上"
+    reading: "shàng"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-007"
+    front: "得意分野、強み"
+    back: "强项"
+    reading: "qiángxiàng"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-008"
+    front: "よい"
+    back: "好"
+    reading: "hǎo"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-009"
+    front: "中国の大学入試"
+    back: "高考"
+    reading: "gāokǎo"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-010"
+    front: "点数、成績"
+    back: "分数"
+    reading: "fēnshù"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-011"
+    front: "高い"
+    back: "高"
+    reading: "gāo"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-012"
+    front: "選ぶ、選択する"
+    back: "选择"
+    reading: "xuǎnzé"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-013"
+    front: "多い"
+    back: "多"
+    reading: "duō"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-014"
+    front: "そうだ、ところで"
+    back: "对了"
+    reading: "duìle"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-015"
+    front: "短期"
+    back: "短期"
+    reading: "duǎnqī"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-016"
+    front: "留学する"
+    back: "留学"
+    reading: "liúxué"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-017"
+    front: "項目、プロジェクト"
+    back: "项目"
+    reading: "xiàngmù"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-018"
+    front: "年"
+    back: "年"
+    reading: "nián"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-019"
+    front: "本当に、実に"
+    back: "真"
+    reading: "zhēn"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-020"
+    front: "すごい、立派である"
+    back: "厉害"
+    reading: "lìhai"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-021"
+    front: "～していない、ない"
+    back: "没"
+    reading: "méi"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-022"
+    front: "尋ねる、質問する"
+    back: "问"
+    reading: "wèn"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-023"
+    front: "～頭（大型動物の量詞）"
+    back: "头"
+    reading: "tóu"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-024"
+    front: "牛"
+    back: "牛"
+    reading: "niú"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-025"
+    front: "～個、～切れ（塊状の物の量詞）"
+    back: "块"
+    reading: "kuài"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-026"
+    front: "ケーキ"
+    back: "蛋糕"
+    reading: "dàngāo"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-027"
+    front: "～匹、～本（細長い物の量詞）"
+    back: "条"
+    reading: "tiáo"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-028"
+    front: "魚"
+    back: "鱼"
+    reading: "yú"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-029"
+    front: "～枚、～切れ"
+    back: "片"
+    reading: "piàn"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-030"
+    front: "パン"
+    back: "面包"
+    reading: "miànbāo"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-031"
+    front: "～枚（紙などの量詞）"
+    back: "张"
+    reading: "zhāng"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-032"
+    front: "紙"
+    back: "纸"
+    reading: "zhǐ"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-033"
+    front: "～本、～つ（柄のある物の量詞）"
+    back: "把"
+    reading: "bǎ"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-034"
+    front: "～本、～台（映画や機械などの量詞）"
+    back: "部"
+    reading: "bù"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-035"
+    front: "映画"
+    back: "电影"
+    reading: "diànyǐng"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-036"
+    front: "発表する、公表する、掲載する"
+    back: "发表"
+    reading: "fābiǎo"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-037"
+    front: "～編、～本（文章の量詞）"
+    back: "篇"
+    reading: "piān"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-038"
+    front: "論文"
+    back: "论文"
+    reading: "lùnwén"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-039"
+    front: "ディズニーランド"
+    back: "迪士尼乐园"
+    reading: "Díshìní Lèyuán"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-040"
+    front: "休みになる、休暇に入る"
+    back: "放假"
+    reading: "fàngjià"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-041"
+    front: "夏休み"
+    back: "暑假"
+    reading: "shǔjià"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-042"
+    front: "上海"
+    back: "上海"
+    reading: "Shànghǎi"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-043"
+    front: "遊ぶ"
+    back: "玩儿"
+    reading: "wánr"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-044"
+    front: "書留郵便"
+    back: "挂号信"
+    reading: "guàhàoxìn"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-045"
+    front: "高い（値段が）"
+    back: "贵"
+    reading: "guì"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-046"
+    front: "普通郵便"
+    back: "平信"
+    reading: "píngxìn"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-047"
+    front: "安い"
+    back: "便宜"
+    reading: "piányi"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-048"
+    front: "兵馬俑"
+    back: "兵马俑"
+    reading: "bīngmǎyǒng"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-049"
+    front: "非常に、とても"
+    back: "非常"
+    reading: "fēicháng"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-050"
+    front: "壮観である"
+    back: "壮观"
+    reading: "zhuàngguān"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-051"
+    front: "暑い、熱い"
+    back: "热"
+    reading: "rè"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-052"
+    front: "広い"
+    back: "宽"
+    reading: "kuān"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-053"
+    front: "書き物机、勉強机"
+    back: "书桌"
+    reading: "shūzhuō"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-054"
+    front: "狭い"
+    back: "窄"
+    reading: "zhǎi"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-055"
+    front: "成都"
+    back: "成都"
+    reading: "Chéngdū"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-056"
+    front: "かわいい"
+    back: "可爱"
+    reading: "kě’ài"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-057"
+    front: "ジャイアントパンダ"
+    back: "大熊猫"
+    reading: "dàxióngmāo"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-058"
+    front: "著名である、有名である"
+    back: "著名"
+    reading: "zhùmíng"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-059"
+    front: "武侯祠"
+    back: "武侯祠"
+    reading: "Wǔhóucí"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-060"
+    front: "知らせ、情報"
+    back: "消息"
+    reading: "xiāoxi"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-061"
+    front: "悪い、壊れている"
+    back: "坏"
+    reading: "huài"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-062"
+    front: "先に、まず"
+    back: "先"
+    reading: "xiān"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-063"
+    front: "ご飯、食事"
+    back: "饭"
+    reading: "fàn"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-064"
+    front: "散歩する"
+    back: "散步"
+    reading: "sànbù"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-065"
+    front: "習慣、慣れる"
+    back: "习惯"
+    reading: "xíguàn"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-066"
+    front: "上海料理"
+    back: "上海菜"
+    reading: "Shànghǎicài"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-067"
+    front: "四川料理"
+    back: "四川菜"
+    reading: "Sìchuāncài"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-068"
+    front: "広東料理"
+    back: "广东菜"
+    reading: "Guǎngdōngcài"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-069"
+    front: "～冊、～本"
+    back: "本"
+    reading: "běn"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-070"
+    front: "荷物"
+    back: "行李"
+    reading: "xíngli"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-071"
+    front: "いつも、たびたび"
+    back: "常常"
+    reading: "chángcháng"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-072"
+    front: "学校へ行く、登校する"
+    back: "上学"
+    reading: "shàngxué"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-073"
+    front: "道中、途中"
+    back: "路上"
+    reading: "lùshang"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-074"
+    front: "背負う、背中に担ぐ"
+    back: "背"
+    reading: "bēi"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-075"
+    front: "暗記する、そらで覚える"
+    back: "背"
+    reading: "bèi"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-076"
+    front: "単語"
+    back: "单词"
+    reading: "dāncí"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-077"
+    front: "新エネルギー車"
+    back: "新能源车"
+    reading: "xīnnéngyuánchē"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-078"
+    front: "流行する、はやる"
+    back: "流行"
+    reading: "liúxíng"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-079"
+    front: "～日（時間を数える量詞）"
+    back: "天"
+    reading: "tiān"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null
+  - id: "c4-080"
+    front: "朝寝坊する、遅くまで寝る"
+    back: "睡懒觉"
+    reading: "shuì lǎnjiào"
+    lesson: 4
+    page: null
+    tags: []
+    notes: null

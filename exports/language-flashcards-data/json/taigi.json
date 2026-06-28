@@ -1,0 +1,240 @@
+{
+  "id": "taigi",
+  "language": "nan-Latn",
+  "title": "台湾語",
+  "frontLanguage": "ja",
+  "backLanguage": "nan-Latn",
+  "cardCount": 23,
+  "cards": [
+    {
+      "id": "t001",
+      "front": "あなた",
+      "back": "lí",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t002",
+      "front": "～である／はい",
+      "back": "sī",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t003",
+      "front": "～か",
+      "back": "sī-bô",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t004",
+      "front": "私",
+      "back": "góa",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t005",
+      "front": "こんにちは",
+      "back": "lí hó",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t006",
+      "front": "両親、父母",
+      "back": "sī-tōa-lâng",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t007",
+      "front": "ありがとう",
+      "back": "to-siā",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t008",
+      "front": "～である（望ましくない意味）",
+      "back": "ē",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t009",
+      "front": "学校",
+      "back": "ha̍k-hāu",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t010",
+      "front": "比較的に、割合に",
+      "back": "khah",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t011",
+      "front": "中、内",
+      "back": "lāi-bīn",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t012",
+      "front": "何、どんな",
+      "back": "sím-mi̍h",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t013",
+      "front": "それ、あれ",
+      "back": "he",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t014",
+      "front": "どういたしまして",
+      "back": "bōe",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t015",
+      "front": "今日",
+      "back": "kin-á-ji̍t",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t016",
+      "front": "暑い",
+      "back": "joa̍h",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t017",
+      "front": "日本",
+      "back": "Ji̍t-pún",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t018",
+      "front": "夏",
+      "back": "joa̍h-thiⁿ",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t019",
+      "front": "～と言う、～と呼ぶ",
+      "back": "kiò-chò",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t020",
+      "front": "高校生",
+      "back": "ko-tiong-seng",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t021",
+      "front": "～と",
+      "back": "kah",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t022",
+      "front": "知り合う",
+      "back": "se̍k-sāi",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "t023",
+      "front": "行く",
+      "back": "lâi-khì",
+      "reading": null,
+      "lesson": null,
+      "page": null,
+      "tags": [],
+      "notes": null
+    }
+  ]
+}

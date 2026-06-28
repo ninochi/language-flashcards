@@ -1,0 +1,431 @@
+id: "chinese-lesson-03"
+language: "zh-CN"
+title: "中国語 第3課"
+frontLanguage: "ja"
+backLanguage: "zh-CN"
+cardCount: 53
+cards:
+  - id: "c3-001"
+    front: "知っている、分かっている"
+    back: "知道"
+    reading: "zhīdào"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-002"
+    front: "どこ"
+    back: "哪儿"
+    reading: "nǎr"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-003"
+    front: "座る、乗り物に乗る"
+    back: "坐"
+    reading: "zuò"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-004"
+    front: "～は？、～については？"
+    back: "呢"
+    reading: "ne"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-005"
+    front: "地下鉄"
+    back: "地铁"
+    reading: "dìtiě"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-006"
+    front: "よい、分かった"
+    back: "好"
+    reading: "hǎo"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-007"
+    front: "待つ"
+    back: "等"
+    reading: "děng"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-008"
+    front: "～しましょう、～でしょう"
+    back: "吧"
+    reading: "ba"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-009"
+    front: "演奏する"
+    back: "演奏"
+    reading: "yǎnzòu"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-010"
+    front: "人"
+    back: "人"
+    reading: "rén"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-011"
+    front: "あなたは？"
+    back: "你呢？"
+    reading: "nǐ ne"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-012"
+    front: "しかし、ただし"
+    back: "不过"
+    reading: "búguò"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-013"
+    front: "その他の"
+    back: "其他"
+    reading: "qítā"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-014"
+    front: "ロッカー、荷物預かり"
+    back: "储物柜"
+    reading: "chǔwùguì"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-015"
+    front: "中、中部"
+    back: "里面"
+    reading: "lǐmiàn"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-016"
+    front: "孫（姓）"
+    back: "孙"
+    reading: "Sūn"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-017"
+    front: "先生、教師"
+    back: "老师"
+    reading: "lǎoshī"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-018"
+    front: "周（姓）"
+    back: "周"
+    reading: "Zhōu"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-019"
+    front: "エレベーター"
+    back: "电梯"
+    reading: "diàntī"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-020"
+    front: "故郷、実家"
+    back: "老家"
+    reading: "lǎojiā"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-021"
+    front: "以前、昔"
+    back: "以前"
+    reading: "yǐqián"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-022"
+    front: "風邪薬"
+    back: "感冒药"
+    reading: "gǎnmàoyào"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-023"
+    front: "ノート"
+    back: "笔记本"
+    reading: "bǐjìběn"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-024"
+    front: "訪問する、訪ねる"
+    back: "拜访"
+    reading: "bàifǎng"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-025"
+    front: "教授"
+    back: "教授"
+    reading: "jiàoshòu"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-026"
+    front: "胡（姓）"
+    back: "胡"
+    reading: "Hú"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-027"
+    front: "住む、泊まる"
+    back: "住"
+    reading: "zhù"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-028"
+    front: "発する、送る"
+    back: "发"
+    reading: "fā"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-029"
+    front: "メール、郵便物"
+    back: "邮件"
+    reading: "yóujiàn"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-030"
+    front: "放送、ラジオ"
+    back: "广播"
+    reading: "guǎngbō"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-031"
+    front: "学ぶ、習う"
+    back: "学"
+    reading: "xué"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-032"
+    front: "ネズミ"
+    back: "鼠"
+    reading: "shǔ"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-033"
+    front: "ブタ"
+    back: "猪"
+    reading: "zhū"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-034"
+    front: "イヤホン、ヘッドホン"
+    back: "耳机"
+    reading: "ěrjī"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-035"
+    front: "身につける、かぶる"
+    back: "戴"
+    reading: "dài"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-036"
+    front: "眼鏡"
+    back: "眼镜"
+    reading: "yǎnjìng"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-037"
+    front: "女の子"
+    back: "女孩子"
+    reading: "nǚháizi"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-038"
+    front: "年下の女性のいとこ"
+    back: "表妹"
+    reading: "biǎomèi"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-039"
+    front: "する、作る"
+    back: "做"
+    reading: "zuò"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-040"
+    front: "建築、建物"
+    back: "建筑"
+    reading: "jiànzhù"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-041"
+    front: "模型、モデル"
+    back: "模型"
+    reading: "móxíng"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-042"
+    front: "台所、キッチン"
+    back: "厨房"
+    reading: "chúfáng"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-043"
+    front: "焼く、あぶる"
+    back: "烤"
+    reading: "kǎo"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-044"
+    front: "サンマ"
+    back: "秋刀鱼"
+    reading: "qiūdāoyú"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-045"
+    front: "味、におい"
+    back: "味道"
+    reading: "wèidào"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-046"
+    front: "週末"
+    back: "周末"
+    reading: "zhōumò"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-047"
+    front: "香山"
+    back: "香山"
+    reading: "Xiāngshān"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-048"
+    front: "歌う"
+    back: "唱"
+    reading: "chàng"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-049"
+    front: "カラオケ"
+    back: "卡拉OK"
+    reading: "kǎlā OK"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-050"
+    front: "どうですか、どのようですか"
+    back: "怎么样"
+    reading: "zěnmeyàng"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-051"
+    front: "野球"
+    back: "棒球"
+    reading: "bàngqiú"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-052"
+    front: "北京"
+    back: "北京"
+    reading: "Běijīng"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
+  - id: "c3-053"
+    front: "旅行する"
+    back: "旅游"
+    reading: "lǚyóu"
+    lesson: 3
+    page: null
+    tags: []
+    notes: null
