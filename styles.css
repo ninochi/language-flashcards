@@ -58,6 +58,14 @@ button:disabled, select:disabled { opacity: 0.45; cursor: not-allowed; }
 .card-reason { color: var(--muted); font-size: 11px; line-height: 1.35; }
 .word { text-align: center; font-size: clamp(34px, 8vw, 60px); font-weight: 750; line-height: 1.35; overflow-wrap: anywhere; }
 .word small { display: block; font-size: .45em; font-weight: 600; margin-top: 12px; color: var(--muted); }
+[data-deck-language="nan-Latn"] #backText {
+  font-family: "Charis SIL", "Noto Serif", "Noto Sans", "DejaVu Serif", "Times New Roman", ui-serif, serif;
+  font-weight: 400;
+  font-feature-settings: "mark" 1, "mkmk" 1;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
+  line-height: 1.5;
+}
 .hint { position: absolute; bottom: 16px; color: var(--muted); font-size: 13px; }
 .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .again { background: color-mix(in srgb, var(--danger) 13%, var(--panel)); color: var(--danger); border: 1px solid color-mix(in srgb, var(--danger) 38%, var(--border)); }
