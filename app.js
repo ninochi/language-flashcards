@@ -1,4 +1,5 @@
 const DAY = 24 * 60 * 60 * 1000;
+const REVIEW_INTERVALS = [1, 3, 7, 14, 30, 60];
 const LAST_DECK_KEY = "language-flashcards:last-deck";
 const $ = (id) => document.getElementById(id);
 
@@ -10,6 +11,7 @@ let state = null;
 let queue = [];
 let currentId = null;
 let flipped = false;
+const retryIds = new Set();
 
 function blankProgress() {
   return { mastered: false, wrong: 0, streak: 0, due: 0 };
@@ -25,6 +27,10 @@ function progressKey() {
   return `language-flashcards:${deckMeta.storageKey}:v1`;
 }
 
+function reviewIntervalDays(streak) {
+  return REVIEW_INTERVALS[Math.min(Math.max(Number(streak || 1) - 1, 0), REVIEW_INTERVALS.length - 1)];
+}
+
 function loadState() {
   let saved = null;
   try {
@@ -35,16 +41,35 @@ function loadState() {
 
   const loaded = saved && typeof saved === "object" ? saved : {};
   loaded.progress = loaded.progress && typeof loaded.progress === "object" ? loaded.progress : {};
-  loaded.srs = Boolean(loaded.srs ?? loaded.settings?.srs ?? false);
 
+  let migrated = false;
   for (const word of words) {
     const existing = loaded.progress[word.id] || blankProgress();
-    if (existing.wrong == null && existing.wrongCount != null) existing.wrong = existing.wrongCount;
+    if (existing.wrong == null && existing.wrongCount != null) {
+      existing.wrong = existing.wrongCount;
+      migrated = true;
+    }
     existing.mastered = Boolean(existing.mastered);
     existing.wrong = Number(existing.wrong || 0);
     existing.streak = Number(existing.streak || 0);
     existing.due = Number(existing.due || existing.dueAt || 0);
+
+    if (existing.mastered && (!Number.isFinite(existing.due) || existing.due <= 0 || existing.due >= Number.MAX_SAFE_INTEGER)) {
+      const effectiveStreak = Math.max(existing.streak, 1);
+      existing.streak = effectiveStreak;
+      existing.due = Date.now() + reviewIntervalDays(effectiveStreak) * DAY;
+      migrated = true;
+    }
+
     loaded.progress[word.id] = existing;
+  }
+
+  if ("srs" in loaded || "settings" in loaded) migrated = true;
+  delete loaded.srs;
+  delete loaded.settings;
+
+  if (migrated) {
+    localStorage.setItem(progressKey(), JSON.stringify(loaded));
   }
   return loaded;
 }
@@ -64,7 +89,7 @@ function shuffle(items) {
 
 function eligible(word) {
   const progress = state.progress[word.id] || blankProgress();
-  return !progress.mastered || (state.srs && progress.due <= Date.now());
+  return !progress.mastered || progress.due <= Date.now();
 }
 
 function currentWord() {
@@ -72,7 +97,7 @@ function currentWord() {
 }
 
 function setControlsEnabled(enabled) {
-  for (const id of ["deckSelect", "srsToggle", "shuffleBtn", "resetSessionBtn", "resetAllBtn"]) {
+  for (const id of ["deckSelect", "shuffleBtn"]) {
     $(id).disabled = !enabled;
   }
 }
@@ -88,6 +113,38 @@ function renderAnswer(word) {
   }
 }
 
+function renderCardReason(word) {
+  const progress = state.progress[word.id] || blankProgress();
+  const badge = $("cardBadge");
+  const reason = $("cardReason");
+
+  if (retryIds.has(word.id)) {
+    badge.textContent = "もう一度";
+    badge.dataset.kind = "retry";
+    reason.textContent = "先ほど「もう一度」を選んだため再出題しています";
+    return;
+  }
+
+  if (progress.mastered && progress.due <= Date.now()) {
+    const days = reviewIntervalDays(progress.streak);
+    badge.textContent = "復習カード";
+    badge.dataset.kind = "review";
+    reason.textContent = `前回正解から${days}日以上経過したため再出題しています`;
+    return;
+  }
+
+  if (!progress.mastered && progress.wrong > 0) {
+    badge.textContent = "再学習カード";
+    badge.dataset.kind = "retry";
+    reason.textContent = "以前「もう一度」を選んだカードです";
+    return;
+  }
+
+  badge.textContent = "新しいカード";
+  badge.dataset.kind = "new";
+  reason.textContent = "";
+}
+
 function updateStats() {
   const values = words.map((word) => state.progress[word.id] || blankProgress());
   $("remainingCount").textContent = String(queue.length + (currentId ? 1 : 0));
@@ -96,26 +153,45 @@ function updateStats() {
   $("totalCount").textContent = String(words.length);
 }
 
+function nextReviewDate() {
+  const future = words
+    .map((word) => state.progress[word.id])
+    .filter((item) => item?.mastered && item.due > Date.now() && Number.isFinite(item.due))
+    .sort((a, b) => a.due - b.due);
+  return future[0]?.due || null;
+}
+
 function renderEmpty() {
   $("studyArea").hidden = true;
   $("emptyArea").hidden = false;
-  const future = words
-    .map((word) => state.progress[word.id])
-    .filter((item) => item?.mastered && item.due > Date.now() && item.due < Number.MAX_SAFE_INTEGER)
-    .sort((a, b) => a.due - b.due);
-  $("emptyMessage").textContent = state.srs && future.length
-    ? `復習対象は現在ありません。次の復習予定は ${new Date(future[0].due).toLocaleDateString("ja-JP")} です。`
-    : "未習得の単語はありません。";
+  const nextDue = nextReviewDate();
+  $("emptyMessage").textContent = nextDue
+    ? `次の復習予定は ${new Date(nextDue).toLocaleDateString("ja-JP")} です。`
+    : "この教材の学習記録をリセットすると、最初から学習できます。";
+}
+
+function resetCardPositionImmediately() {
+  const card = $("card");
+  card.classList.add("no-transition");
+  card.classList.remove("flipped");
+  void card.offsetWidth;
+}
+
+function restoreCardTransition() {
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => $("card").classList.remove("no-transition"));
+  });
 }
 
 function nextCard() {
+  resetCardPositionImmediately();
   flipped = false;
-  $("card").classList.remove("flipped");
   $("againBtn").disabled = true;
   $("knownBtn").disabled = true;
   currentId = queue.shift() || null;
 
   if (!currentId) {
+    restoreCardTransition();
     renderEmpty();
     updateStats();
     return;
@@ -124,12 +200,15 @@ function nextCard() {
   const word = currentWord();
   $("frontText").textContent = word.front;
   renderAnswer(word);
+  renderCardReason(word);
   $("studyArea").hidden = false;
   $("emptyArea").hidden = true;
+  restoreCardTransition();
   updateStats();
 }
 
 function buildQueue() {
+  retryIds.clear();
   queue = shuffle(words.filter(eligible).map((word) => word.id));
   currentId = null;
   nextCard();
@@ -145,27 +224,48 @@ function flipCard() {
 
 function answerAgain() {
   if (!currentId || !flipped) return;
-  const progress = state.progress[currentId];
+  const answeredId = currentId;
+  const progress = state.progress[answeredId];
   progress.mastered = false;
   progress.wrong = Number(progress.wrong || 0) + 1;
   progress.streak = 0;
   progress.due = 0;
-  queue.splice(Math.min(2, queue.length), 0, currentId);
+  retryIds.add(answeredId);
+  queue.splice(Math.min(2, queue.length), 0, answeredId);
   saveState();
   nextCard();
 }
 
 function answerKnown() {
   if (!currentId || !flipped) return;
-  const progress = state.progress[currentId];
+  const answeredId = currentId;
+  const progress = state.progress[answeredId];
   progress.mastered = true;
   progress.streak = Number(progress.streak || 0) + 1;
-  const intervals = [1, 3, 7, 14, 30, 60];
-  progress.due = state.srs
-    ? Date.now() + intervals[Math.min(progress.streak - 1, intervals.length - 1)] * DAY
-    : Number.MAX_SAFE_INTEGER;
+  progress.due = Date.now() + reviewIntervalDays(progress.streak) * DAY;
+  retryIds.delete(answeredId);
   saveState();
   nextCard();
+}
+
+function resetLearningHistory() {
+  if (!confirm("この教材の学習記録をリセットしますか？\n単語データは消えません。覚えた状態・誤答回数・復習予定だけが最初に戻ります。")) {
+    return;
+  }
+  state = { progress: {} };
+  for (const word of words) state.progress[word.id] = blankProgress();
+  saveState();
+  buildQueue();
+}
+
+function showError(error) {
+  console.error(error);
+  $("studyArea").hidden = true;
+  $("emptyArea").hidden = true;
+  $("errorArea").hidden = false;
+  $("errorMessage").textContent = "通信状態を確認して、再読み込みしてください。";
+  $("subtitle").textContent = "教材の読み込みに失敗しました";
+  setControlsEnabled(false);
 }
 
 async function selectDeck(id) {
@@ -179,6 +279,7 @@ async function selectDeck(id) {
   if (!deckMeta) throw new Error(`Unknown deck: ${id}`);
   deck = await fetchJson(`data/${deckMeta.file}`);
   if (deck.cardCount !== deck.cards.length) throw new Error(`${deck.title}: cardCountが一致しません`);
+
   words = deck.cards.map((card) => ({
     id: card.id,
     front: card.front,
@@ -189,7 +290,6 @@ async function selectDeck(id) {
   localStorage.setItem(LAST_DECK_KEY, deckMeta.id);
   $("subtitle").textContent = deckMeta.subtitle;
   $("backLabel").textContent = deckMeta.backLabel;
-  $("srsToggle").checked = state.srs;
   setControlsEnabled(true);
   buildQueue();
 }
@@ -212,13 +312,7 @@ async function init() {
     select.value = initial.id;
     await selectDeck(initial.id);
   } catch (error) {
-    console.error(error);
-    $("studyArea").hidden = true;
-    $("emptyArea").hidden = true;
-    $("errorArea").hidden = false;
-    $("errorMessage").textContent = error.message;
-    $("subtitle").textContent = "読み込みエラー";
-    setControlsEnabled(false);
+    showError(error);
   }
 }
 
@@ -226,9 +320,7 @@ $("deckSelect").addEventListener("change", async (event) => {
   try {
     await selectDeck(event.target.value);
   } catch (error) {
-    console.error(error);
-    $("errorArea").hidden = false;
-    $("errorMessage").textContent = error.message;
+    showError(error);
   }
 });
 $("card").addEventListener("click", flipCard);
@@ -241,20 +333,7 @@ $("card").addEventListener("keydown", (event) => {
 $("againBtn").addEventListener("click", answerAgain);
 $("knownBtn").addEventListener("click", answerKnown);
 $("shuffleBtn").addEventListener("click", buildQueue);
-$("restartBtn").addEventListener("click", buildQueue);
-$("resetSessionBtn").addEventListener("click", buildQueue);
-$("resetAllBtn").addEventListener("click", () => {
-  if (!confirm("この教材の学習履歴を初期化しますか？")) return;
-  state = { progress: {}, srs: state.srs };
-  for (const word of words) state.progress[word.id] = blankProgress();
-  saveState();
-  buildQueue();
-});
-$("srsToggle").addEventListener("change", (event) => {
-  state.srs = event.target.checked;
-  saveState();
-  buildQueue();
-});
+$("resetAllBtn").addEventListener("click", resetLearningHistory);
 $("retryBtn").addEventListener("click", init);
 document.addEventListener("keydown", (event) => {
   if (!currentId || !flipped) return;
