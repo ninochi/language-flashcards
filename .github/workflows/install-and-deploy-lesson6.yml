@@ -1,0 +1,54 @@
+name: Install and deploy Chinese Lesson 6
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/install-and-deploy-lesson6.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  install-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          if '"chinese-6"' not in s:
+              deck = '''{"label":"中国語 第6課","subtitle":"表：日本語 ／ 裏：中国語＋拼音","backLabel":"中国語・拼音","words":[{"id":"c6-001","ja":"思いがけず～する、思いつく","answer":"想到<br><small>xiǎngdào</small>"},{"id":"c6-002","ja":"試験を受ける、考える","answer":"考<br><small>kǎo</small>"},{"id":"c6-003","ja":"入る、進む","answer":"进<br><small>jìn</small>"},{"id":"c6-004","ja":"疲れている","answer":"累<br><small>lèi</small>"},{"id":"c6-005","ja":"置く、放す","answer":"放<br><small>fàng</small>"},{"id":"c6-006","ja":"下りる、下へ行く","answer":"下<br><small>xià</small>"},{"id":"c6-007","ja":"おしゃべりする","answer":"聊天儿<br><small>liáotiānr</small>"},{"id":"c6-008","ja":"しばらく、少しの間","answer":"一会儿<br><small>yíhuìr</small>"},{"id":"c6-009","ja":"見る、～と思う","answer":"看<br><small>kàn</small>"},{"id":"c6-010","ja":"親しい、よく知っている","answer":"熟<br><small>shú</small>"},{"id":"c6-011","ja":"知り合う、知っている","answer":"认识<br><small>rènshi</small>"},{"id":"c6-012","ja":"中学校","answer":"中学<br><small>zhōngxué</small>"},{"id":"c6-013","ja":"中学校前期課程","answer":"初中<br><small>chūzhōng</small>"},{"id":"c6-014","ja":"卒業する","answer":"毕业<br><small>bìyè</small>"},{"id":"c6-015","ja":"転校する","answer":"转学<br><small>zhuǎnxué</small>"},{"id":"c6-016","ja":"その後、後になって","answer":"后来<br><small>hòulái</small>"},{"id":"c6-017","ja":"幸いにも、運よく","answer":"幸好<br><small>xìnghǎo</small>"},{"id":"c6-018","ja":"理系、理科","answer":"理科<br><small>lǐkē</small>"},{"id":"c6-019","ja":"文系、文科","answer":"文科<br><small>wénkē</small>"},{"id":"c6-020","ja":"間違っている、誤り","answer":"错<br><small>cuò</small>"},{"id":"c6-021","ja":"年を取っている、古い","answer":"老<br><small>lǎo</small>"},{"id":"c6-022","ja":"～になる、成る","answer":"成<br><small>chéng</small>"},{"id":"c6-023","ja":"目、目つき","answer":"眼睛<br><small>yǎnjing</small>"},{"id":"c6-024","ja":"私が思うには、私の見るところ","answer":"我看<br><small>wǒ kàn</small>"},{"id":"c6-025","ja":"～する時、～しようとする時","answer":"要～的时候<br><small>yào…de shíhou</small>"},{"id":"c6-026","ja":"単語、言葉","answer":"词<br><small>cí</small>"},{"id":"c6-027","ja":"黒歴史","answer":"黑历史<br><small>hēilìshǐ</small>"},{"id":"c6-028","ja":"分かる、理解する","answer":"明白<br><small>míngbai</small>"},{"id":"c6-029","ja":"あまりに～、とても～","answer":"太<br><small>tài</small>"},{"id":"c6-030","ja":"面白い、興味深い","answer":"有意思<br><small>yǒu yìsi</small>"},{"id":"c6-031","ja":"開ける、スイッチを入れる","answer":"打开<br><small>dǎkāi</small>"},{"id":"c6-032","ja":"冷蔵庫","answer":"冰箱<br><small>bīngxiāng</small>"},{"id":"c6-033","ja":"手に取る、持つ","answer":"拿<br><small>ná</small>"},{"id":"c6-034","ja":"コーラ","answer":"可乐<br><small>kělè</small>"},{"id":"c6-035","ja":"与える、～に","answer":"给<br><small>gěi</small>"},{"id":"c6-036","ja":"座る","answer":"坐<br><small>zuò</small>"},{"id":"c6-037","ja":"話す、おしゃべりする","answer":"聊<br><small>liáo</small>"},{"id":"c6-038","ja":"～句、文を数える量詞","answer":"句<br><small>jù</small>"},{"id":"c6-039","ja":"誕生日","answer":"生日<br><small>shēngrì</small>"},{"id":"c6-040","ja":"贈る、届ける","answer":"送<br><small>sòng</small>"},{"id":"c6-041","ja":"プレゼント","answer":"礼物<br><small>lǐwù</small>"},{"id":"c6-042","ja":"とても～だ、あまりに～すぎる","answer":"太～了<br><small>tài…le</small>"},{"id":"c6-043","ja":"少し話す、ちょっとおしゃべりする","answer":"聊两句<br><small>liáo liǎng jù</small>"},{"id":"c6-044","ja":"運転免許証","answer":"驾照<br><small>jiàzhào</small>"},{"id":"c6-045","ja":"車を運転する","answer":"开车<br><small>kāichē</small>"},{"id":"c6-046","ja":"海辺","answer":"海边儿<br><small>hǎibiānr</small>"},{"id":"c6-047","ja":"ドライブする、気晴らしに出かける","answer":"兜风<br><small>dōufēng</small>"},{"id":"c6-048","ja":"コーヒー","answer":"咖啡<br><small>kāfēi</small>"},{"id":"c6-049","ja":"加える","answer":"加<br><small>jiā</small>"},{"id":"c6-050","ja":"砂糖","answer":"糖<br><small>táng</small>"},{"id":"c6-051","ja":"コーヒーフレッシュ、クリーム","answer":"奶精<br><small>nǎijīng</small>"},{"id":"c6-052","ja":"人の意見や忠告を聞き入れる、言うことを聞く","answer":"听劝<br><small>tīngquàn</small>"},{"id":"c6-053","ja":"登る、這う","answer":"爬<br><small>pá</small>"},{"id":"c6-054","ja":"雪山","answer":"雪山<br><small>xuěshān</small>"},{"id":"c6-055","ja":"満腹である","answer":"饱<br><small>bǎo</small>"},{"id":"c6-056","ja":"終わる、終える","answer":"完<br><small>wán</small>"},{"id":"c6-057","ja":"会う、見える","answer":"见<br><small>jiàn</small>"},{"id":"c6-058","ja":"分かる、理解する","answer":"懂<br><small>dǒng</small>"},{"id":"c6-059","ja":"洗う","answer":"洗<br><small>xǐ</small>"},{"id":"c6-060","ja":"清潔である、きれいである","answer":"干净<br><small>gānjing</small>"},{"id":"c6-061","ja":"遅い、晩の","answer":"晚<br><small>wǎn</small>"},{"id":"c6-062","ja":"一人で、一人","answer":"一个人<br><small>yí ge rén</small>"},{"id":"c6-063","ja":"食堂","answer":"食堂<br><small>shítáng</small>"},{"id":"c6-064","ja":"セットメニュー、定食","answer":"套餐<br><small>tàocān</small>"},{"id":"c6-065","ja":"すでに、もう","answer":"已经<br><small>yǐjīng</small>"},{"id":"c6-066","ja":"飽きる、しつこく感じる","answer":"腻<br><small>nì</small>"},{"id":"c6-067","ja":"たった今、さっき","answer":"刚才<br><small>gāngcái</small>"},{"id":"c6-068","ja":"話、言葉","answer":"话<br><small>huà</small>"},{"id":"c6-069","ja":"はっきりしている","answer":"清楚<br><small>qīngchu</small>"},{"id":"c6-070","ja":"修理する、直す","answer":"修<br><small>xiū</small>"},{"id":"c6-071","ja":"夏","answer":"夏天<br><small>xiàtiān</small>"},{"id":"c6-072","ja":"天気","answer":"天气<br><small>tiānqì</small>"},{"id":"c6-073","ja":"アルバイトをする、働く","answer":"打工<br><small>dǎgōng</small>"},{"id":"c6-074","ja":"みんな","answer":"大家<br><small>dàjiā</small>"},{"id":"c6-075","ja":"～と感じる、～と思う","answer":"觉得<br><small>juéde</small>"},{"id":"c6-076","ja":"難しい","answer":"难<br><small>nán</small>"},{"id":"c6-077","ja":"父母、両親","answer":"父母<br><small>fùmǔ</small>"},{"id":"c6-078","ja":"相談する、話し合う","answer":"商量<br><small>shāngliang</small>"},{"id":"c6-079","ja":"監督、演出家","answer":"导演<br><small>dǎoyǎn</small>"},{"id":"c6-080","ja":"新作","answer":"新作<br><small>xīnzuò</small>"},{"id":"c6-081","ja":"ついに、とうとう","answer":"终于<br><small>zhōngyú</small>"},{"id":"c6-082","ja":"観客、大衆","answer":"观众<br><small>guānzhòng</small>"},{"id":"c6-083","ja":"囲碁を打つ","answer":"下（围棋）<br><small>xià</small>"},{"id":"c6-084","ja":"囲碁","answer":"围棋<br><small>wéiqí</small>"},{"id":"c6-085","ja":"勝つ","answer":"赢<br><small>yíng</small>"},{"id":"c6-086","ja":"成功する","answer":"成功<br><small>chénggōng</small>"},{"id":"c6-087","ja":"運、運勢","answer":"运气<br><small>yùnqi</small>"},{"id":"c6-088","ja":"関係","answer":"关系<br><small>guānxi</small>"},{"id":"c6-089","ja":"普段、いつも","answer":"平时<br><small>píngshí</small>"},{"id":"c6-090","ja":"プーアル茶","answer":"普洱茶<br><small>Pǔ’ěrchá</small>"},{"id":"c6-091","ja":"解熱剤","answer":"退烧药<br><small>tuìshāoyào</small>"},{"id":"c6-092","ja":"プログラミング","answer":"编程<br><small>biānchéng</small>"},{"id":"c6-093","ja":"信頼できる、確かである","answer":"可靠<br><small>kěkào</small>"},{"id":"c6-094","ja":"～試合、～回、場所を数える量詞","answer":"场<br><small>chǎng</small>"},{"id":"c6-095","ja":"素晴らしい、見事である","answer":"精彩<br><small>jīngcǎi</small>"},{"id":"c6-096","ja":"心、考え、心の働き","answer":"心眼儿<br><small>xīnyǎnr</small>"},{"id":"c6-097","ja":"小さい","answer":"小<br><small>xiǎo</small>"},{"id":"c6-098","ja":"～問、道や問題を数える量詞","answer":"道<br><small>dào</small>"},{"id":"c6-099","ja":"問題、題","answer":"题<br><small>tí</small>"},{"id":"c6-100","ja":"答える","answer":"答<br><small>dá</small>"},{"id":"c6-101","ja":"受験生","answer":"考生<br><small>kǎoshēng</small>"},{"id":"c6-102","ja":"休む、休憩する","answer":"休息<br><small>xiūxi</small>"},{"id":"c6-103","ja":"日本語","answer":"日文<br><small>Rìwén</small>"},{"id":"c6-104","ja":"～時間","answer":"钟头<br><small>zhōngtóu</small>"}]}'''
+              marker = '};\nconst DAY='
+              if marker not in s:
+                  raise SystemExit('DECKS marker not found')
+              s = s.replace(marker, ',"chinese-6":' + deck + '};\nconst DAY=', 1)
+              p.write_text(s, encoding='utf-8')
+      - name: Commit lesson data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "Add Chinese lesson 6 deck"
+          git push
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
