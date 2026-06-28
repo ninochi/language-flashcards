@@ -1,0 +1,96 @@
+{
+  "version": 1,
+  "totalCardCount": 643,
+  "decks": [
+    {
+      "id": "taigi",
+      "title": "台湾語",
+      "file": "decks/taigi.json",
+      "storageKey": "taigi",
+      "subtitle": "表：日本語 ／ 裏：台湾語ローマ字",
+      "backLabel": "TÂI-GÍ",
+      "cardCount": 23,
+      "order": 1
+    },
+    {
+      "id": "chinese-lesson-01",
+      "title": "中国語 第1課",
+      "file": "decks/chinese-lesson-01.json",
+      "storageKey": "chinese-1",
+      "subtitle": "表：日本語 ／ 裏：中国語＋拼音",
+      "backLabel": "中国語・拼音",
+      "cardCount": 81,
+      "order": 2
+    },
+    {
+      "id": "chinese-lesson-02",
+      "title": "中国語 第2課",
+      "file": "decks/chinese-lesson-02.json",
+      "storageKey": "chinese-2",
+      "subtitle": "表：日本語 ／ 裏：中国語＋拼音",
+      "backLabel": "中国語・拼音",
+      "cardCount": 97,
+      "order": 3
+    },
+    {
+      "id": "chinese-lesson-03",
+      "title": "中国語 第3課",
+      "file": "decks/chinese-lesson-03.json",
+      "storageKey": "chinese-3",
+      "subtitle": "表：日本語 ／ 裏：中国語＋拼音",
+      "backLabel": "中国語・拼音",
+      "cardCount": 53,
+      "order": 4
+    },
+    {
+      "id": "chinese-lesson-04",
+      "title": "中国語 第4課",
+      "file": "decks/chinese-lesson-04.json",
+      "storageKey": "chinese-4",
+      "subtitle": "表：日本語 ／ 裏：中国語＋拼音",
+      "backLabel": "中国語・拼音",
+      "cardCount": 80,
+      "order": 5
+    },
+    {
+      "id": "chinese-lesson-05",
+      "title": "中国語 第5課",
+      "file": "decks/chinese-lesson-05.json",
+      "storageKey": "chinese-5",
+      "subtitle": "表：日本語 ／ 裏：中国語＋拼音",
+      "backLabel": "中国語・拼音",
+      "cardCount": 64,
+      "order": 6
+    },
+    {
+      "id": "chinese-lesson-06",
+      "title": "中国語 第6課",
+      "file": "decks/chinese-lesson-06.json",
+      "storageKey": "chinese-6",
+      "subtitle": "表：日本語 ／ 裏：中国語＋拼音",
+      "backLabel": "中国語・拼音",
+      "cardCount": 104,
+      "order": 7
+    },
+    {
+      "id": "chinese-lesson-07",
+      "title": "中国語 第7課",
+      "file": "decks/chinese-lesson-07.json",
+      "storageKey": "chinese-7",
+      "subtitle": "表：日本語 ／ 裏：中国語＋拼音",
+      "backLabel": "中国語・拼音",
+      "cardCount": 75,
+      "order": 8
+    },
+    {
+      "id": "chinese-lesson-08",
+      "title": "中国語 第8課",
+      "file": "decks/chinese-lesson-08.json",
+      "storageKey": "chinese-8",
+      "subtitle": "表：日本語 ／ 裏：中国語＋拼音",
+      "backLabel": "中国語・拼音",
+      "cardCount": 66,
+      "order": 9
+    }
+  ]
+}
