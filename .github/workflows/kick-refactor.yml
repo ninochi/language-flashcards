@@ -1,0 +1,19 @@
+name: Kick JSON refactor
+
+on:
+  push:
+    paths:
+      - '.github/workflows/kick-refactor.yml'
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - run: gh workflow run refactor-json-source.yml --repo "$GITHUB_REPOSITORY"
+        env:
+          GH_TOKEN: ${{ github.token }}
