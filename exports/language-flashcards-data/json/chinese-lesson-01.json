@@ -1,0 +1,820 @@
+{
+  "id": "chinese-lesson-01",
+  "language": "zh-CN",
+  "title": "中国語 第1課",
+  "frontLanguage": "ja",
+  "backLanguage": "zh-CN",
+  "cardCount": 81,
+  "cards": [
+    {
+      "id": "c1-001",
+      "front": "これ",
+      "back": "这",
+      "reading": "zhè",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-002",
+      "front": "～である",
+      "back": "是",
+      "reading": "shì",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-003",
+      "front": "あなた",
+      "back": "你",
+      "reading": "nǐ",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-004",
+      "front": "本",
+      "back": "书",
+      "reading": "shū",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-005",
+      "front": "こんにちは",
+      "back": "你好",
+      "reading": "nǐ hǎo",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-006",
+      "front": "私",
+      "back": "我",
+      "reading": "wǒ",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-007",
+      "front": "見る",
+      "back": "看",
+      "reading": "kàn",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-008",
+      "front": "中国語",
+      "back": "汉语",
+      "reading": "Hànyǔ",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-009",
+      "front": "教科書",
+      "back": "课本",
+      "reading": "kèběn",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-010",
+      "front": "留学生",
+      "back": "留学生",
+      "reading": "liúxuéshēng",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-011",
+      "front": "正しい、～に対して",
+      "back": "对",
+      "reading": "duì",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-012",
+      "front": "日本",
+      "back": "日本",
+      "reading": "Rìběn",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-013",
+      "front": "～という、～と呼ぶ",
+      "back": "叫",
+      "reading": "jiào",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-014",
+      "front": "方（姓）",
+      "back": "方",
+      "reading": "Fāng",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-015",
+      "front": "姓、名字の姓",
+      "back": "姓",
+      "reading": "xìng",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-016",
+      "front": "速成",
+      "back": "速成",
+      "reading": "sùchéng",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-017",
+      "front": "学院、大学・学部",
+      "back": "学院",
+      "reading": "xuéyuàn",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-018",
+      "front": "一、1",
+      "back": "一",
+      "reading": "yī",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-019",
+      "front": "学年",
+      "back": "年级",
+      "reading": "niánjí",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-020",
+      "front": "学生",
+      "back": "学生",
+      "reading": "xuésheng",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-021",
+      "front": "対外、外国向けの",
+      "back": "对外",
+      "reading": "duìwài",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-022",
+      "front": "学科、学系",
+      "back": "系",
+      "reading": "xì",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-023",
+      "front": "今後、これから",
+      "back": "今后",
+      "reading": "jīnhòu",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-024",
+      "front": "どうぞ、お願いする",
+      "back": "请",
+      "reading": "qǐng",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-025",
+      "front": "多く、もっと",
+      "back": "多",
+      "reading": "duō",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-026",
+      "front": "指導する",
+      "back": "指教",
+      "reading": "zhǐjiào",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-027",
+      "front": "客、顧客",
+      "back": "顾客",
+      "reading": "gùkè",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-028",
+      "front": "店員、サービス係",
+      "back": "服务员",
+      "reading": "fúwùyuán",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-029",
+      "front": "アメリカ人",
+      "back": "美国人",
+      "reading": "Měiguórén",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-030",
+      "front": "黄（姓）",
+      "back": "黄",
+      "reading": "Huáng",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-031",
+      "front": "王（姓）",
+      "back": "王",
+      "reading": "Wáng",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-032",
+      "front": "小～、若い～",
+      "back": "小",
+      "reading": "xiǎo",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-033",
+      "front": "張（姓）",
+      "back": "张",
+      "reading": "Zhāng",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-034",
+      "front": "学ぶ、勉強する",
+      "back": "学习",
+      "reading": "xuéxí",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-035",
+      "front": "物理",
+      "back": "物理",
+      "reading": "wùlǐ",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-036",
+      "front": "毎日",
+      "back": "每天",
+      "reading": "měitiān",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-037",
+      "front": "する、打つ",
+      "back": "打",
+      "reading": "dǎ",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-038",
+      "front": "太極拳",
+      "back": "太极拳",
+      "reading": "tàijíquán",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-039",
+      "front": "ハーブティー",
+      "back": "香草茶",
+      "reading": "xiāngcǎochá",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-040",
+      "front": "水仙",
+      "back": "水仙",
+      "reading": "shuǐxiān",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-041",
+      "front": "ニラ",
+      "back": "韭菜",
+      "reading": "jiǔcài",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-042",
+      "front": "大阪",
+      "back": "大阪",
+      "reading": "Dàbǎn",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-043",
+      "front": "駅",
+      "back": "车站",
+      "reading": "chēzhàn",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-044",
+      "front": "梅田",
+      "back": "梅田",
+      "reading": "Méitián",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-045",
+      "front": "月餅",
+      "back": "月饼",
+      "reading": "yuèbing",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-046",
+      "front": "～にいる、～にある",
+      "back": "在",
+      "reading": "zài",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-047",
+      "front": "学校",
+      "back": "学校",
+      "reading": "xuéxiào",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-048",
+      "front": "買う",
+      "back": "买",
+      "reading": "mǎi",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-049",
+      "front": "腕時計",
+      "back": "手表",
+      "reading": "shǒubiǎo",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-050",
+      "front": "コンピューター",
+      "back": "电脑",
+      "reading": "diànnǎo",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-051",
+      "front": "図書館",
+      "back": "图书馆",
+      "reading": "túshūguǎn",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-052",
+      "front": "博物館",
+      "back": "博物馆",
+      "reading": "bówùguǎn",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-053",
+      "front": "展示品",
+      "back": "展品",
+      "reading": "zhǎnpǐn",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-054",
+      "front": "会社",
+      "back": "公司",
+      "reading": "gōngsī",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-055",
+      "front": "お母さん",
+      "back": "妈妈",
+      "reading": "māma",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-056",
+      "front": "友達",
+      "back": "朋友",
+      "reading": "péngyou",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-057",
+      "front": "木材、木",
+      "back": "木头",
+      "reading": "mùtou",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-058",
+      "front": "箱",
+      "back": "箱子",
+      "reading": "xiāngzi",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-059",
+      "front": "亜麻、リネン",
+      "back": "亚麻",
+      "reading": "yàmá",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-060",
+      "front": "シャツ",
+      "back": "衬衫",
+      "reading": "chènshān",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-061",
+      "front": "学者",
+      "back": "学者",
+      "reading": "xuézhě",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-062",
+      "front": "ベトナム",
+      "back": "越南",
+      "reading": "Yuènán",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-063",
+      "front": "同級生、学友",
+      "back": "同学",
+      "reading": "tóngxué",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-064",
+      "front": "広東人",
+      "back": "广东人",
+      "reading": "Guǎngdōngrén",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-065",
+      "front": "福建人",
+      "back": "福建人",
+      "reading": "Fújiànrén",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-066",
+      "front": "中国",
+      "back": "中国",
+      "reading": "Zhōngguó",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-067",
+      "front": "韓国",
+      "back": "韩国",
+      "reading": "Hánguó",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-068",
+      "front": "参加する",
+      "back": "参加",
+      "reading": "cānjiā",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-069",
+      "front": "明日",
+      "back": "明天",
+      "reading": "míngtiān",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-070",
+      "front": "新入生を歓迎する",
+      "back": "迎新",
+      "reading": "yíngxīn",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-071",
+      "front": "夜の会、パーティー",
+      "back": "晚会",
+      "reading": "wǎnhuì",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-072",
+      "front": "陳（姓）",
+      "back": "陈",
+      "reading": "Chén",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-073",
+      "front": "一人っ子である",
+      "back": "独生",
+      "reading": "dúshēng",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-074",
+      "front": "子女、子ども",
+      "back": "子女",
+      "reading": "zǐnǚ",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-075",
+      "front": "李（姓）",
+      "back": "李",
+      "reading": "Lǐ",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-076",
+      "front": "魯迅",
+      "back": "鲁迅",
+      "reading": "Lǔ Xùn",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-077",
+      "front": "文学者",
+      "back": "文学家",
+      "reading": "wénxuéjiā",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-078",
+      "front": "思想家",
+      "back": "思想家",
+      "reading": "sīxiǎngjiā",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-079",
+      "front": "教える",
+      "back": "教",
+      "reading": "jiāo",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-080",
+      "front": "英語",
+      "back": "英语",
+      "reading": "Yīngyǔ",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c1-081",
+      "front": "好きである",
+      "back": "喜欢",
+      "reading": "xǐhuan",
+      "lesson": 1,
+      "page": null,
+      "tags": [],
+      "notes": null
+    }
+  ]
+}

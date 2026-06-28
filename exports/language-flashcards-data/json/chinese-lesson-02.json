@@ -1,0 +1,980 @@
+{
+  "id": "chinese-lesson-02",
+  "language": "zh-CN",
+  "title": "中国語 第2課",
+  "frontLanguage": "ja",
+  "backLanguage": "zh-CN",
+  "cardCount": 97,
+  "cards": [
+    {
+      "id": "c2-001",
+      "front": "キャンパス、校区",
+      "back": "校区",
+      "reading": "xiàoqū",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-002",
+      "front": "ある、いる、持っている",
+      "back": "有",
+      "reading": "yǒu",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-003",
+      "front": "演奏会、コンサート",
+      "back": "演奏会",
+      "reading": "yǎnzòuhuì",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-004",
+      "front": "講演、スピーチをする",
+      "back": "演讲",
+      "reading": "yǎnjiǎng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-005",
+      "front": "試合、競技、コンテスト",
+      "back": "比赛",
+      "reading": "bǐsài",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-006",
+      "front": "朝、午前",
+      "back": "早上",
+      "reading": "zǎoshang",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-007",
+      "front": "～名（人を数える丁寧な量詞）",
+      "back": "位",
+      "reading": "wèi",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-008",
+      "front": "おはよう",
+      "back": "早",
+      "reading": "zǎo",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-009",
+      "front": "楊（姓）",
+      "back": "杨",
+      "reading": "Yáng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-010",
+      "front": "初めて",
+      "back": "初次",
+      "reading": "chūcì",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-011",
+      "front": "会う、顔を合わせる",
+      "back": "见面",
+      "reading": "jiànmiàn",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-012",
+      "front": "世話をする、よろしく取り計らう",
+      "back": "关照",
+      "reading": "guānzhào",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-013",
+      "front": "～したい、～しようと思う",
+      "back": "想",
+      "reading": "xiǎng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-014",
+      "front": "聞く、聴く",
+      "back": "听",
+      "reading": "tīng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-015",
+      "front": "何、どんな",
+      "back": "什么",
+      "reading": "shénme",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-016",
+      "front": "時、ころ",
+      "back": "时候",
+      "reading": "shíhou",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-017",
+      "front": "ネット、網",
+      "back": "网",
+      "reading": "wǎng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-018",
+      "front": "通知、知らせる",
+      "back": "通知",
+      "reading": "tōngzhī",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-019",
+      "front": "～日、番号",
+      "back": "号",
+      "reading": "hào",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-020",
+      "front": "夜、晩",
+      "back": "晚上",
+      "reading": "wǎnshang",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-021",
+      "front": "～時",
+      "back": "点",
+      "reading": "diǎn",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-022",
+      "front": "半分、30分",
+      "back": "半",
+      "reading": "bàn",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-023",
+      "front": "始まる、始める",
+      "back": "开始",
+      "reading": "kāishǐ",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-024",
+      "front": "曜日、週",
+      "back": "星期",
+      "reading": "xīngqī",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-025",
+      "front": "家、家庭",
+      "back": "家",
+      "reading": "jiā",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-026",
+      "front": "用事、事柄",
+      "back": "事",
+      "reading": "shì",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-027",
+      "front": "週",
+      "back": "周",
+      "reading": "zhōu",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-028",
+      "front": "時間",
+      "back": "时间",
+      "reading": "shíjiān",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-029",
+      "front": "現在、目下",
+      "back": "目前",
+      "reading": "mùqián",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-030",
+      "front": "ない、持っていない",
+      "back": "没有",
+      "reading": "méiyǒu",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-031",
+      "front": "手配する、予定を組む",
+      "back": "安排",
+      "reading": "ānpái",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-032",
+      "front": "それなら、では",
+      "back": "那",
+      "reading": "nà",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-033",
+      "front": "ちょうどよい",
+      "back": "正好",
+      "reading": "zhènghǎo",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-034",
+      "front": "2人、2つ",
+      "back": "俩",
+      "reading": "liǎ",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-035",
+      "front": "一緒に",
+      "back": "一起",
+      "reading": "yìqǐ",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-036",
+      "front": "行く",
+      "back": "去",
+      "reading": "qù",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-037",
+      "front": "建物、階",
+      "back": "楼",
+      "reading": "lóu",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-038",
+      "front": "コピー機",
+      "back": "复印机",
+      "reading": "fùyìnjī",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-039",
+      "front": "大学",
+      "back": "大学",
+      "reading": "dàxué",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-040",
+      "front": "医学部、医科大学",
+      "back": "医学院",
+      "reading": "yīxuéyuàn",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-041",
+      "front": "サークル、団体",
+      "back": "社团",
+      "reading": "shètuán",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-042",
+      "front": "活動",
+      "back": "活动",
+      "reading": "huódòng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-043",
+      "front": "兄弟",
+      "back": "兄弟",
+      "reading": "xiōngdì",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-044",
+      "front": "姉妹",
+      "back": "姐妹",
+      "reading": "jiěmèi",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-045",
+      "front": "西安",
+      "back": "西安",
+      "reading": "Xī’ān",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-046",
+      "front": "洛陽",
+      "back": "洛阳",
+      "reading": "Luòyáng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-047",
+      "front": "古都",
+      "back": "古都",
+      "reading": "gǔdū",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-048",
+      "front": "旅行する",
+      "back": "旅行",
+      "reading": "lǚxíng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-049",
+      "front": "漫画",
+      "back": "漫画",
+      "reading": "mànhuà",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-050",
+      "front": "『西遊記』",
+      "back": "西游记",
+      "reading": "Xīyóujì",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-051",
+      "front": "『水滸伝』",
+      "back": "水浒传",
+      "reading": "Shuǐhǔzhuàn",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-052",
+      "front": "『三国志演義』",
+      "back": "三国演义",
+      "reading": "Sānguóyǎnyì",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-053",
+      "front": "『紅楼夢』",
+      "back": "红楼梦",
+      "reading": "Hónglóumèng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-054",
+      "front": "文学",
+      "back": "文学",
+      "reading": "wénxué",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-055",
+      "front": "名作、名著",
+      "back": "名著",
+      "reading": "míngzhù",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-056",
+      "front": "トイレ、洗面所",
+      "back": "洗手间",
+      "reading": "xǐshǒujiān",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-057",
+      "front": "休暇を取る、休みを願い出る",
+      "back": "请假",
+      "reading": "qǐngjià",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-058",
+      "front": "出勤する、仕事をする",
+      "back": "上班",
+      "reading": "shàngbān",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-059",
+      "front": "大～、年上の～",
+      "back": "大",
+      "reading": "dà",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-060",
+      "front": "SF、サイエンスフィクション",
+      "back": "科幻",
+      "reading": "kēhuàn",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-061",
+      "front": "作家",
+      "back": "作家",
+      "reading": "zuòjiā",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-062",
+      "front": "探す、見つける",
+      "back": "找",
+      "reading": "zhǎo",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-063",
+      "front": "傘",
+      "back": "雨伞",
+      "reading": "yǔsǎn",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-064",
+      "front": "食べる",
+      "back": "吃",
+      "reading": "chī",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-065",
+      "front": "飲む",
+      "back": "喝",
+      "reading": "hē",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-066",
+      "front": "飲み物",
+      "back": "饮料",
+      "reading": "yǐnliào",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-067",
+      "front": "出発する",
+      "back": "出发",
+      "reading": "chūfā",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-068",
+      "front": "昨日",
+      "back": "昨天",
+      "reading": "zuótiān",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-069",
+      "front": "積雪",
+      "back": "积雪",
+      "reading": "jīxuě",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-070",
+      "front": "センチメートル",
+      "back": "厘米",
+      "reading": "límǐ",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-071",
+      "front": "今、現在",
+      "back": "现在",
+      "reading": "xiànzài",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-072",
+      "front": "時、時計",
+      "back": "钟",
+      "reading": "zhōng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-073",
+      "front": "分",
+      "back": "分",
+      "reading": "fēn",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-074",
+      "front": "2、2つ",
+      "back": "两",
+      "reading": "liǎng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-075",
+      "front": "15分、四分の一時間",
+      "back": "刻",
+      "reading": "kè",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-076",
+      "front": "～分前、不足する、違う",
+      "back": "差",
+      "reading": "chà",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-077",
+      "front": "ゼロ",
+      "back": "零",
+      "reading": "líng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-078",
+      "front": "ビル、大きな建物",
+      "back": "大楼",
+      "reading": "dàlóu",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-079",
+      "front": "広場",
+      "back": "广场",
+      "reading": "guǎngchǎng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-080",
+      "front": "公園",
+      "back": "公园",
+      "reading": "gōngyuán",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-081",
+      "front": "山",
+      "back": "山",
+      "reading": "shān",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-082",
+      "front": "海",
+      "back": "海",
+      "reading": "hǎi",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-083",
+      "front": "門のそば、入口の脇",
+      "back": "门旁",
+      "reading": "ménpáng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-084",
+      "front": "道端、道路のそば",
+      "back": "路旁",
+      "reading": "lùpáng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-085",
+      "front": "床",
+      "back": "地板",
+      "reading": "dìbǎn",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-086",
+      "front": "水",
+      "back": "水",
+      "reading": "shuǐ",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-087",
+      "front": "気をつける、注意する",
+      "back": "小心",
+      "reading": "xiǎoxīn",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-088",
+      "front": "郵便受け、メールボックス",
+      "back": "信箱",
+      "reading": "xìnxiāng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-089",
+      "front": "手紙",
+      "back": "信",
+      "reading": "xìn",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-090",
+      "front": "今日",
+      "back": "今天",
+      "reading": "jīntiān",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-091",
+      "front": "子ども",
+      "back": "小朋友",
+      "reading": "xiǎopéngyou",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-092",
+      "front": "～歳",
+      "back": "岁",
+      "reading": "suì",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-093",
+      "front": "欲しい、～したい、必要である",
+      "back": "要",
+      "reading": "yào",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-094",
+      "front": "ビール",
+      "back": "啤酒",
+      "reading": "píjiǔ",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-095",
+      "front": "瓶、～本",
+      "back": "瓶",
+      "reading": "píng",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-096",
+      "front": "第～",
+      "back": "第",
+      "reading": "dì",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c2-097",
+      "front": "ページ",
+      "back": "页",
+      "reading": "yè",
+      "lesson": 2,
+      "page": null,
+      "tags": [],
+      "notes": null
+    }
+  ]
+}

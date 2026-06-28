@@ -1,0 +1,839 @@
+id: "chinese-lesson-06"
+language: "zh-CN"
+title: "中国語 第6課"
+frontLanguage: "ja"
+backLanguage: "zh-CN"
+cardCount: 104
+cards:
+  - id: "c6-001"
+    front: "思いがけず～する、思いつく"
+    back: "想到"
+    reading: "xiǎngdào"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-002"
+    front: "試験を受ける、考える"
+    back: "考"
+    reading: "kǎo"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-003"
+    front: "入る、進む"
+    back: "进"
+    reading: "jìn"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-004"
+    front: "疲れている"
+    back: "累"
+    reading: "lèi"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-005"
+    front: "置く、放す"
+    back: "放"
+    reading: "fàng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-006"
+    front: "下りる、下へ行く"
+    back: "下"
+    reading: "xià"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-007"
+    front: "おしゃべりする"
+    back: "聊天儿"
+    reading: "liáotiānr"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-008"
+    front: "しばらく、少しの間"
+    back: "一会儿"
+    reading: "yíhuìr"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-009"
+    front: "見る、～と思う"
+    back: "看"
+    reading: "kàn"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-010"
+    front: "親しい、よく知っている"
+    back: "熟"
+    reading: "shú"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-011"
+    front: "知り合う、知っている"
+    back: "认识"
+    reading: "rènshi"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-012"
+    front: "中学校"
+    back: "中学"
+    reading: "zhōngxué"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-013"
+    front: "中学校前期課程"
+    back: "初中"
+    reading: "chūzhōng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-014"
+    front: "卒業する"
+    back: "毕业"
+    reading: "bìyè"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-015"
+    front: "転校する"
+    back: "转学"
+    reading: "zhuǎnxué"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-016"
+    front: "その後、後になって"
+    back: "后来"
+    reading: "hòulái"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-017"
+    front: "幸いにも、運よく"
+    back: "幸好"
+    reading: "xìnghǎo"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-018"
+    front: "理系、理科"
+    back: "理科"
+    reading: "lǐkē"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-019"
+    front: "文系、文科"
+    back: "文科"
+    reading: "wénkē"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-020"
+    front: "間違っている、誤り"
+    back: "错"
+    reading: "cuò"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-021"
+    front: "年を取っている、古い"
+    back: "老"
+    reading: "lǎo"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-022"
+    front: "～になる、成る"
+    back: "成"
+    reading: "chéng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-023"
+    front: "目、目つき"
+    back: "眼睛"
+    reading: "yǎnjing"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-024"
+    front: "私が思うには、私の見るところ"
+    back: "我看"
+    reading: "wǒ kàn"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-025"
+    front: "～する時、～しようとする時"
+    back: "要～的时候"
+    reading: "yào…de shíhou"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-026"
+    front: "単語、言葉"
+    back: "词"
+    reading: "cí"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-027"
+    front: "黒歴史"
+    back: "黑历史"
+    reading: "hēilìshǐ"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-028"
+    front: "分かる、理解する"
+    back: "明白"
+    reading: "míngbai"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-029"
+    front: "あまりに～、とても～"
+    back: "太"
+    reading: "tài"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-030"
+    front: "面白い、興味深い"
+    back: "有意思"
+    reading: "yǒu yìsi"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-031"
+    front: "開ける、スイッチを入れる"
+    back: "打开"
+    reading: "dǎkāi"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-032"
+    front: "冷蔵庫"
+    back: "冰箱"
+    reading: "bīngxiāng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-033"
+    front: "手に取る、持つ"
+    back: "拿"
+    reading: "ná"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-034"
+    front: "コーラ"
+    back: "可乐"
+    reading: "kělè"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-035"
+    front: "与える、～に"
+    back: "给"
+    reading: "gěi"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-036"
+    front: "座る"
+    back: "坐"
+    reading: "zuò"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-037"
+    front: "話す、おしゃべりする"
+    back: "聊"
+    reading: "liáo"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-038"
+    front: "～句、文を数える量詞"
+    back: "句"
+    reading: "jù"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-039"
+    front: "誕生日"
+    back: "生日"
+    reading: "shēngrì"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-040"
+    front: "贈る、届ける"
+    back: "送"
+    reading: "sòng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-041"
+    front: "プレゼント"
+    back: "礼物"
+    reading: "lǐwù"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-042"
+    front: "とても～だ、あまりに～すぎる"
+    back: "太～了"
+    reading: "tài…le"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-043"
+    front: "少し話す、ちょっとおしゃべりする"
+    back: "聊两句"
+    reading: "liáo liǎng jù"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-044"
+    front: "運転免許証"
+    back: "驾照"
+    reading: "jiàzhào"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-045"
+    front: "車を運転する"
+    back: "开车"
+    reading: "kāichē"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-046"
+    front: "海辺"
+    back: "海边儿"
+    reading: "hǎibiānr"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-047"
+    front: "ドライブする、気晴らしに出かける"
+    back: "兜风"
+    reading: "dōufēng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-048"
+    front: "コーヒー"
+    back: "咖啡"
+    reading: "kāfēi"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-049"
+    front: "加える"
+    back: "加"
+    reading: "jiā"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-050"
+    front: "砂糖"
+    back: "糖"
+    reading: "táng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-051"
+    front: "コーヒーフレッシュ、クリーム"
+    back: "奶精"
+    reading: "nǎijīng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-052"
+    front: "人の意見や忠告を聞き入れる、言うことを聞く"
+    back: "听劝"
+    reading: "tīngquàn"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-053"
+    front: "登る、這う"
+    back: "爬"
+    reading: "pá"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-054"
+    front: "雪山"
+    back: "雪山"
+    reading: "xuěshān"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-055"
+    front: "満腹である"
+    back: "饱"
+    reading: "bǎo"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-056"
+    front: "終わる、終える"
+    back: "完"
+    reading: "wán"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-057"
+    front: "会う、見える"
+    back: "见"
+    reading: "jiàn"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-058"
+    front: "分かる、理解する"
+    back: "懂"
+    reading: "dǒng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-059"
+    front: "洗う"
+    back: "洗"
+    reading: "xǐ"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-060"
+    front: "清潔である、きれいである"
+    back: "干净"
+    reading: "gānjing"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-061"
+    front: "遅い、晩の"
+    back: "晚"
+    reading: "wǎn"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-062"
+    front: "一人で、一人"
+    back: "一个人"
+    reading: "yí ge rén"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-063"
+    front: "食堂"
+    back: "食堂"
+    reading: "shítáng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-064"
+    front: "セットメニュー、定食"
+    back: "套餐"
+    reading: "tàocān"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-065"
+    front: "すでに、もう"
+    back: "已经"
+    reading: "yǐjīng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-066"
+    front: "飽きる、しつこく感じる"
+    back: "腻"
+    reading: "nì"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-067"
+    front: "たった今、さっき"
+    back: "刚才"
+    reading: "gāngcái"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-068"
+    front: "話、言葉"
+    back: "话"
+    reading: "huà"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-069"
+    front: "はっきりしている"
+    back: "清楚"
+    reading: "qīngchu"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-070"
+    front: "修理する、直す"
+    back: "修"
+    reading: "xiū"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-071"
+    front: "夏"
+    back: "夏天"
+    reading: "xiàtiān"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-072"
+    front: "天気"
+    back: "天气"
+    reading: "tiānqì"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-073"
+    front: "アルバイトをする、働く"
+    back: "打工"
+    reading: "dǎgōng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-074"
+    front: "みんな"
+    back: "大家"
+    reading: "dàjiā"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-075"
+    front: "～と感じる、～と思う"
+    back: "觉得"
+    reading: "juéde"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-076"
+    front: "難しい"
+    back: "难"
+    reading: "nán"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-077"
+    front: "父母、両親"
+    back: "父母"
+    reading: "fùmǔ"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-078"
+    front: "相談する、話し合う"
+    back: "商量"
+    reading: "shāngliang"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-079"
+    front: "監督、演出家"
+    back: "导演"
+    reading: "dǎoyǎn"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-080"
+    front: "新作"
+    back: "新作"
+    reading: "xīnzuò"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-081"
+    front: "ついに、とうとう"
+    back: "终于"
+    reading: "zhōngyú"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-082"
+    front: "観客、大衆"
+    back: "观众"
+    reading: "guānzhòng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-083"
+    front: "囲碁を打つ"
+    back: "下（围棋）"
+    reading: "xià"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-084"
+    front: "囲碁"
+    back: "围棋"
+    reading: "wéiqí"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-085"
+    front: "勝つ"
+    back: "赢"
+    reading: "yíng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-086"
+    front: "成功する"
+    back: "成功"
+    reading: "chénggōng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-087"
+    front: "運、運勢"
+    back: "运气"
+    reading: "yùnqi"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-088"
+    front: "関係"
+    back: "关系"
+    reading: "guānxi"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-089"
+    front: "普段、いつも"
+    back: "平时"
+    reading: "píngshí"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-090"
+    front: "プーアル茶"
+    back: "普洱茶"
+    reading: "Pǔ’ěrchá"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-091"
+    front: "解熱剤"
+    back: "退烧药"
+    reading: "tuìshāoyào"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-092"
+    front: "プログラミング"
+    back: "编程"
+    reading: "biānchéng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-093"
+    front: "信頼できる、確かである"
+    back: "可靠"
+    reading: "kěkào"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-094"
+    front: "～試合、～回、場所を数える量詞"
+    back: "场"
+    reading: "chǎng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-095"
+    front: "素晴らしい、見事である"
+    back: "精彩"
+    reading: "jīngcǎi"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-096"
+    front: "心、考え、心の働き"
+    back: "心眼儿"
+    reading: "xīnyǎnr"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-097"
+    front: "小さい"
+    back: "小"
+    reading: "xiǎo"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-098"
+    front: "～問、道や問題を数える量詞"
+    back: "道"
+    reading: "dào"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-099"
+    front: "問題、題"
+    back: "题"
+    reading: "tí"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-100"
+    front: "答える"
+    back: "答"
+    reading: "dá"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-101"
+    front: "受験生"
+    back: "考生"
+    reading: "kǎoshēng"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-102"
+    front: "休む、休憩する"
+    back: "休息"
+    reading: "xiūxi"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-103"
+    front: "日本語"
+    back: "日文"
+    reading: "Rìwén"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null
+  - id: "c6-104"
+    front: "～時間"
+    back: "钟头"
+    reading: "zhōngtóu"
+    lesson: 6
+    page: null
+    tags: []
+    notes: null

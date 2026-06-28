@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Language Flashcard Deck",
+  "type": "object",
+  "required": [
+    "id",
+    "language",
+    "title",
+    "frontLanguage",
+    "backLanguage",
+    "cardCount",
+    "cards"
+  ],
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "frontLanguage": {
+      "type": "string"
+    },
+    "backLanguage": {
+      "type": "string"
+    },
+    "cardCount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "front",
+          "back",
+          "reading",
+          "lesson",
+          "page",
+          "tags",
+          "notes"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "front": {
+            "type": "string"
+          },
+          "back": {
+            "type": "string"
+          },
+          "reading": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "lesson": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "page": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

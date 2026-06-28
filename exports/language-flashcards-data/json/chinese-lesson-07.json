@@ -1,0 +1,760 @@
+{
+  "id": "chinese-lesson-07",
+  "language": "zh-CN",
+  "title": "中国語 第7課",
+  "frontLanguage": "ja",
+  "backLanguage": "zh-CN",
+  "cardCount": 75,
+  "cards": [
+    {
+      "id": "c7-001",
+      "front": "顔色",
+      "back": "脸色",
+      "reading": "liǎnsè",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-002",
+      "front": "病気になる、病む",
+      "back": "病",
+      "reading": "bìng",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-003",
+      "front": "熱が出る",
+      "back": "发烧",
+      "reading": "fāshāo",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-004",
+      "front": "頭",
+      "back": "头",
+      "reading": "tóu",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-005",
+      "front": "痛い、痛む",
+      "back": "疼",
+      "reading": "téng",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-006",
+      "front": "薬",
+      "back": "药",
+      "reading": "yào",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-007",
+      "front": "授業、科目",
+      "back": "课",
+      "reading": "kè",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-008",
+      "front": "頑張り続ける、堅持する",
+      "back": "坚持",
+      "reading": "jiānchí",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-009",
+      "front": "病院",
+      "back": "医院",
+      "reading": "yīyuàn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-010",
+      "front": "検査する、調べる",
+      "back": "检查",
+      "reading": "jiǎnchá",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-011",
+      "front": "ちょっと、一度",
+      "back": "一下",
+      "reading": "yíxià",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-012",
+      "front": "連れていく、携帯する",
+      "back": "带",
+      "reading": "dài",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-013",
+      "front": "付き添う",
+      "back": "陪",
+      "reading": "péi",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-014",
+      "front": "ありがとう",
+      "back": "谢谢",
+      "reading": "xièxie",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-015",
+      "front": "遠慮する、客に対して丁寧である",
+      "back": "客气",
+      "reading": "kèqi",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-016",
+      "front": "出前を取る、デリバリーを頼む",
+      "back": "叫（外卖）",
+      "reading": "jiào",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-017",
+      "front": "出前、フードデリバリー",
+      "back": "外卖",
+      "reading": "wàimài",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-018",
+      "front": "下る、降りる、下す",
+      "back": "下",
+      "reading": "xià",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-019",
+      "front": "～回、～往復",
+      "back": "趟",
+      "reading": "tàng",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-020",
+      "front": "茶碗、どんぶり",
+      "back": "碗",
+      "reading": "wǎn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-021",
+      "front": "おかゆ",
+      "back": "粥",
+      "reading": "zhōu",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-022",
+      "front": "～人前、～份",
+      "back": "份儿",
+      "reading": "fènr",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-023",
+      "front": "石焼きビビンバ",
+      "back": "石锅拌饭",
+      "reading": "shíguōbànfàn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-024",
+      "front": "ゾウ",
+      "back": "大象",
+      "reading": "dàxiàng",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-025",
+      "front": "鼻",
+      "back": "鼻子",
+      "reading": "bízi",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-026",
+      "front": "名勝、景勝地",
+      "back": "名胜",
+      "reading": "míngshèng",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-027",
+      "front": "史跡、旧跡",
+      "back": "古迹",
+      "reading": "gǔjì",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-028",
+      "front": "スカート",
+      "back": "裙子",
+      "reading": "qúnzi",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-029",
+      "front": "型、デザイン、様式",
+      "back": "款式",
+      "reading": "kuǎnshì",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-030",
+      "front": "斬新である、目新しい",
+      "back": "新颖",
+      "reading": "xīnyǐng",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-031",
+      "front": "～軒（店などを数える量詞）",
+      "back": "家",
+      "reading": "jiā",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-032",
+      "front": "レストラン、食堂",
+      "back": "餐馆",
+      "reading": "cānguǎn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-033",
+      "front": "価格、値段",
+      "back": "价格",
+      "reading": "jiàgé",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-034",
+      "front": "合理的である、妥当である",
+      "back": "合理",
+      "reading": "hélǐ",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-035",
+      "front": "経験",
+      "back": "经验",
+      "reading": "jīngyàn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-036",
+      "front": "豊富である",
+      "back": "丰富",
+      "reading": "fēngfù",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-037",
+      "front": "働く、仕事",
+      "back": "工作",
+      "reading": "gōngzuò",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-038",
+      "front": "比較的、わりに",
+      "back": "比较",
+      "reading": "bǐjiào",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-039",
+      "front": "文章",
+      "back": "文章",
+      "reading": "wénzhāng",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-040",
+      "front": "観点、見解",
+      "back": "观点",
+      "reading": "guāndiǎn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-041",
+      "front": "古くさい、時代遅れである",
+      "back": "陈旧",
+      "reading": "chénjiù",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-042",
+      "front": "心配する",
+      "back": "担心",
+      "reading": "dānxīn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-043",
+      "front": "病気",
+      "back": "病",
+      "reading": "bìng",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-044",
+      "front": "廊下",
+      "back": "走廊",
+      "reading": "zǒuláng",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-045",
+      "front": "走る",
+      "back": "跑",
+      "reading": "pǎo",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-046",
+      "front": "歩く",
+      "back": "走路",
+      "reading": "zǒulù",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-047",
+      "front": "一寸の光陰は一寸の金",
+      "back": "一寸光阴一寸金",
+      "reading": "yí cùn guāngyīn yí cùn jīn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-048",
+      "front": "浪費する、無駄にする",
+      "back": "浪费",
+      "reading": "làngfèi",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-049",
+      "front": "～回、～度",
+      "back": "次",
+      "reading": "cì",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-050",
+      "front": "会議を開く、会議に出る",
+      "back": "开会",
+      "reading": "kāihuì",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-051",
+      "front": "結論",
+      "back": "结论",
+      "reading": "jiélùn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-052",
+      "front": "退勤する、仕事が終わる",
+      "back": "下班",
+      "reading": "xiàbān",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-053",
+      "front": "スーパーマーケット",
+      "back": "超市",
+      "reading": "chāoshì",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-054",
+      "front": "～回（最初から最後まで行う回数）",
+      "back": "遍",
+      "reading": "biàn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-055",
+      "front": "食事時、食事の時間",
+      "back": "饭点儿",
+      "reading": "fàndiǎnr",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-056",
+      "front": "～食、～回（食事の量詞）",
+      "back": "顿",
+      "reading": "dùn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-057",
+      "front": "簡単な食事、日常の食事",
+      "back": "便饭",
+      "reading": "biànfàn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-058",
+      "front": "～節、～コマ",
+      "back": "节",
+      "reading": "jié",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-059",
+      "front": "とどまる、残す",
+      "back": "留",
+      "reading": "liú",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-060",
+      "front": "宿題、課題",
+      "back": "作业",
+      "reading": "zuòyè",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-061",
+      "front": "シンガポール",
+      "back": "新加坡",
+      "reading": "Xīnjiāpō",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-062",
+      "front": "物価",
+      "back": "物价",
+      "reading": "wùjià",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-063",
+      "front": "ひどい、まずい",
+      "back": "糟糕",
+      "reading": "zāogāo",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-064",
+      "front": "大丈夫、何でもない",
+      "back": "没事儿",
+      "reading": "méi shìr",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-065",
+      "front": "郵送する",
+      "back": "寄",
+      "reading": "jì",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-066",
+      "front": "宅配便、速達便",
+      "back": "快递",
+      "reading": "kuàidì",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-067",
+      "front": "秦（姓）",
+      "back": "秦",
+      "reading": "Qín",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-068",
+      "front": "承諾する、返事する",
+      "back": "答应",
+      "reading": "dāying",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-069",
+      "front": "推薦状",
+      "back": "推荐信",
+      "reading": "tuījiànxìn",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-070",
+      "front": "しょっちゅう、よく",
+      "back": "经常",
+      "reading": "jīngcháng",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-071",
+      "front": "話す、説明する",
+      "back": "讲",
+      "reading": "jiǎng",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-072",
+      "front": "過去、以前／通り過ぎる",
+      "back": "过去",
+      "reading": "guòqù",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-073",
+      "front": "気が引ける、申し訳なく思う",
+      "back": "好意思",
+      "reading": "hǎoyìsi",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-074",
+      "front": "加える、増やす",
+      "back": "添",
+      "reading": "tiān",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    },
+    {
+      "id": "c7-075",
+      "front": "面倒、厄介／迷惑をかける",
+      "back": "麻烦",
+      "reading": "máfan",
+      "lesson": 7,
+      "page": null,
+      "tags": [],
+      "notes": null
+    }
+  ]
+}
