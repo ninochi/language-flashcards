@@ -1,0 +1,54 @@
+name: Install and deploy Chinese Lesson 7
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/install-and-deploy-lesson7.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  install-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('index.html')
+          s = p.read_text(encoding='utf-8')
+          if '"chinese-7"' not in s:
+              deck = '''{"label":"中国語 第7課","subtitle":"表：日本語 ／ 裏：中国語＋拼音","backLabel":"中国語・拼音","words":[{"id":"c7-001","ja":"顔色","answer":"脸色<br><small>liǎnsè</small>"},{"id":"c7-002","ja":"病気になる、病む","answer":"病<br><small>bìng</small>"},{"id":"c7-003","ja":"熱が出る","answer":"发烧<br><small>fāshāo</small>"},{"id":"c7-004","ja":"頭","answer":"头<br><small>tóu</small>"},{"id":"c7-005","ja":"痛い、痛む","answer":"疼<br><small>téng</small>"},{"id":"c7-006","ja":"薬","answer":"药<br><small>yào</small>"},{"id":"c7-007","ja":"授業、科目","answer":"课<br><small>kè</small>"},{"id":"c7-008","ja":"頑張り続ける、堅持する","answer":"坚持<br><small>jiānchí</small>"},{"id":"c7-009","ja":"病院","answer":"医院<br><small>yīyuàn</small>"},{"id":"c7-010","ja":"検査する、調べる","answer":"检查<br><small>jiǎnchá</small>"},{"id":"c7-011","ja":"ちょっと、一度","answer":"一下<br><small>yíxià</small>"},{"id":"c7-012","ja":"連れていく、携帯する","answer":"带<br><small>dài</small>"},{"id":"c7-013","ja":"付き添う","answer":"陪<br><small>péi</small>"},{"id":"c7-014","ja":"ありがとう","answer":"谢谢<br><small>xièxie</small>"},{"id":"c7-015","ja":"遠慮する、客に対して丁寧である","answer":"客气<br><small>kèqi</small>"},{"id":"c7-016","ja":"出前を取る、デリバリーを頼む","answer":"叫（外卖）<br><small>jiào</small>"},{"id":"c7-017","ja":"出前、フードデリバリー","answer":"外卖<br><small>wàimài</small>"},{"id":"c7-018","ja":"下る、降りる、下す","answer":"下<br><small>xià</small>"},{"id":"c7-019","ja":"～回、～往復","answer":"趟<br><small>tàng</small>"},{"id":"c7-020","ja":"茶碗、どんぶり","answer":"碗<br><small>wǎn</small>"},{"id":"c7-021","ja":"おかゆ","answer":"粥<br><small>zhōu</small>"},{"id":"c7-022","ja":"～人前、～份","answer":"份儿<br><small>fènr</small>"},{"id":"c7-023","ja":"石焼きビビンバ","answer":"石锅拌饭<br><small>shíguōbànfàn</small>"},{"id":"c7-024","ja":"ゾウ","answer":"大象<br><small>dàxiàng</small>"},{"id":"c7-025","ja":"鼻","answer":"鼻子<br><small>bízi</small>"},{"id":"c7-026","ja":"名勝、景勝地","answer":"名胜<br><small>míngshèng</small>"},{"id":"c7-027","ja":"史跡、旧跡","answer":"古迹<br><small>gǔjì</small>"},{"id":"c7-028","ja":"スカート","answer":"裙子<br><small>qúnzi</small>"},{"id":"c7-029","ja":"型、デザイン、様式","answer":"款式<br><small>kuǎnshì</small>"},{"id":"c7-030","ja":"斬新である、目新しい","answer":"新颖<br><small>xīnyǐng</small>"},{"id":"c7-031","ja":"～軒（店などを数える量詞）","answer":"家<br><small>jiā</small>"},{"id":"c7-032","ja":"レストラン、食堂","answer":"餐馆<br><small>cānguǎn</small>"},{"id":"c7-033","ja":"価格、値段","answer":"价格<br><small>jiàgé</small>"},{"id":"c7-034","ja":"合理的である、妥当である","answer":"合理<br><small>hélǐ</small>"},{"id":"c7-035","ja":"経験","answer":"经验<br><small>jīngyàn</small>"},{"id":"c7-036","ja":"豊富である","answer":"丰富<br><small>fēngfù</small>"},{"id":"c7-037","ja":"働く、仕事","answer":"工作<br><small>gōngzuò</small>"},{"id":"c7-038","ja":"比較的、わりに","answer":"比较<br><small>bǐjiào</small>"},{"id":"c7-039","ja":"文章","answer":"文章<br><small>wénzhāng</small>"},{"id":"c7-040","ja":"観点、見解","answer":"观点<br><small>guāndiǎn</small>"},{"id":"c7-041","ja":"古くさい、時代遅れである","answer":"陈旧<br><small>chénjiù</small>"},{"id":"c7-042","ja":"心配する","answer":"担心<br><small>dānxīn</small>"},{"id":"c7-043","ja":"病気","answer":"病<br><small>bìng</small>"},{"id":"c7-044","ja":"廊下","answer":"走廊<br><small>zǒuláng</small>"},{"id":"c7-045","ja":"走る","answer":"跑<br><small>pǎo</small>"},{"id":"c7-046","ja":"歩く","answer":"走路<br><small>zǒulù</small>"},{"id":"c7-047","ja":"一寸の光陰は一寸の金","answer":"一寸光阴一寸金<br><small>yí cùn guāngyīn yí cùn jīn</small>"},{"id":"c7-048","ja":"浪費する、無駄にする","answer":"浪费<br><small>làngfèi</small>"},{"id":"c7-049","ja":"～回、～度","answer":"次<br><small>cì</small>"},{"id":"c7-050","ja":"会議を開く、会議に出る","answer":"开会<br><small>kāihuì</small>"},{"id":"c7-051","ja":"結論","answer":"结论<br><small>jiélùn</small>"},{"id":"c7-052","ja":"退勤する、仕事が終わる","answer":"下班<br><small>xiàbān</small>"},{"id":"c7-053","ja":"スーパーマーケット","answer":"超市<br><small>chāoshì</small>"},{"id":"c7-054","ja":"～回（最初から最後まで行う回数）","answer":"遍<br><small>biàn</small>"},{"id":"c7-055","ja":"食事時、食事の時間","answer":"饭点儿<br><small>fàndiǎnr</small>"},{"id":"c7-056","ja":"～食、～回（食事の量詞）","answer":"顿<br><small>dùn</small>"},{"id":"c7-057","ja":"簡単な食事、日常の食事","answer":"便饭<br><small>biànfàn</small>"},{"id":"c7-058","ja":"～節、～コマ","answer":"节<br><small>jié</small>"},{"id":"c7-059","ja":"とどまる、残す","answer":"留<br><small>liú</small>"},{"id":"c7-060","ja":"宿題、課題","answer":"作业<br><small>zuòyè</small>"},{"id":"c7-061","ja":"シンガポール","answer":"新加坡<br><small>Xīnjiāpō</small>"},{"id":"c7-062","ja":"物価","answer":"物价<br><small>wùjià</small>"},{"id":"c7-063","ja":"ひどい、まずい","answer":"糟糕<br><small>zāogāo</small>"},{"id":"c7-064","ja":"大丈夫、何でもない","answer":"没事儿<br><small>méi shìr</small>"},{"id":"c7-065","ja":"郵送する","answer":"寄<br><small>jì</small>"},{"id":"c7-066","ja":"宅配便、速達便","answer":"快递<br><small>kuàidì</small>"},{"id":"c7-067","ja":"秦（姓）","answer":"秦<br><small>Qín</small>"},{"id":"c7-068","ja":"承諾する、返事する","answer":"答应<br><small>dāying</small>"},{"id":"c7-069","ja":"推薦状","answer":"推荐信<br><small>tuījiànxìn</small>"},{"id":"c7-070","ja":"しょっちゅう、よく","answer":"经常<br><small>jīngcháng</small>"},{"id":"c7-071","ja":"話す、説明する","answer":"讲<br><small>jiǎng</small>"},{"id":"c7-072","ja":"過去、以前／通り過ぎる","answer":"过去<br><small>guòqù</small>"},{"id":"c7-073","ja":"気が引ける、申し訳なく思う","answer":"好意思<br><small>hǎoyìsi</small>"},{"id":"c7-074","ja":"加える、増やす","answer":"添<br><small>tiān</small>"},{"id":"c7-075","ja":"面倒、厄介／迷惑をかける","answer":"麻烦<br><small>máfan</small>"}]}'''
+              marker = '};\nconst DAY='
+              if marker not in s:
+                  raise SystemExit('DECKS marker not found')
+              s = s.replace(marker, ',"chinese-7":' + deck + '};\nconst DAY=', 1)
+              p.write_text(s, encoding='utf-8')
+      - name: Commit lesson data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --cached --quiet || git commit -m "Add Chinese lesson 7 deck"
+          git push
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
