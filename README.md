@@ -27,6 +27,7 @@ language-flashcards/
 ├── index.html                  # 画面のHTML
 ├── styles.css                 # 見た目
 ├── app.js                     # 学習・自動復習ロジックとJSON読込
+├── taigi-rendering.js         # 台湾語の結合文字・言語属性の表示補助
 ├── data/
 │   ├── manifest.json          # デッキ一覧、表示順、互換用storageKey
 │   ├── schema.json            # JSON Schema
@@ -108,6 +109,17 @@ language-flashcards:chinese-1:v1
 
 旧版で復習日が設定されていなかった習得済みカードには、移行した日を基準として次回復習日を設定します。カードIDと `storageKey` は変わらないため、習得状態や誤答回数は失われません。
 
+## 台湾語ローマ字の表示
+
+台湾語には `a` と結合記号 `◌̍` のように、複数のUnicode文字を重ねて表示する綴りがあります。端末標準フォントによっては記号がずれて表示されるため、次の対策を行っています。
+
+- 台湾語の裏面に `nan-Latn` の言語属性を設定
+- 表示前にUnicodeをNFCで正規化
+- 台湾語の裏面だけ、Charis SIL、Noto、DejaVu、Times New Romanなど結合記号に対応しやすいフォントを優先
+- 台湾語の文字は過度な太字を避けて表示
+
+この処理は `taigi-rendering.js` と `styles.css` にあります。単語データ内の声調記号を別の記号へ置換しないでください。
+
 ## 編集手順
 
 1. 対象の `data/decks/*.json` を編集
@@ -175,4 +187,5 @@ python3 scripts/build_exports.py
 - IDと `storageKey` の互換性を維持する
 - 変更後に `python3 scripts/validate_data.py` を必ず実行する
 - UI変更時は `index.html` 内のIDと `app.js` の参照先が一致していることを確認する
+- `taigi-rendering.js` を変更した場合は、台湾語の `ha̍k-hāu`、`joa̍h`、`se̍k-sāi` などで表示を確認する
 - 生成物だけを直して正本を直さない、という変更は禁止
