@@ -1,6 +1,17 @@
 const DAY = 24 * 60 * 60 * 1000;
 const REVIEW_INTERVALS = [1, 3, 7, 14, 30, 60];
+const UNCERTAIN_REVIEW_DAYS = 1;
 const LAST_DECK_KEY = "language-flashcards:last-deck";
+const CONFETTI_COLORS = ["#1769aa", "#46a76f", "#f0bf68", "#e06b5f", "#8f7be8"];
+const QUEUE_BUCKET = {
+  RETRY: 0,
+  UNKNOWN_DUE: 1,
+  UNSURE_DUE: 2,
+  REVIEW_DUE: 3,
+  UNSURE_RECENT: 4,
+  NEW: 5,
+  LONG_UNSEEN: 6,
+};
 const $ = (id) => document.getElementById(id);
 
 let manifest = null;
@@ -14,7 +25,18 @@ let flipped = false;
 const retryIds = new Set();
 
 function blankProgress() {
-  return { mastered: false, wrong: 0, streak: 0, due: 0 };
+  return {
+    mastered: false,
+    wrong: 0,
+    unsure: 0,
+    streak: 0,
+    due: 0,
+    seen: 0,
+    lastSeenAt: 0,
+    lastResult: null,
+    everEasy: false,
+    firstEasyAt: 0,
+  };
 }
 
 async function fetchJson(path) {
@@ -31,6 +53,62 @@ function reviewIntervalDays(streak) {
   return REVIEW_INTERVALS[Math.min(Math.max(Number(streak || 1) - 1, 0), REVIEW_INTERVALS.length - 1)];
 }
 
+function normalizeProgress(savedProgress) {
+  const existing = savedProgress && typeof savedProgress === "object" ? savedProgress : blankProgress();
+  let migrated = false;
+
+  if (existing.wrong == null && existing.wrongCount != null) {
+    existing.wrong = existing.wrongCount;
+    migrated = true;
+  }
+  if (existing.unsure == null && existing.unsureCount != null) {
+    existing.unsure = existing.unsureCount;
+    migrated = true;
+  }
+  if (existing.seen == null && existing.seenCount != null) {
+    existing.seen = existing.seenCount;
+    migrated = true;
+  }
+
+  existing.mastered = Boolean(existing.mastered);
+  existing.wrong = Number(existing.wrong || 0);
+  existing.unsure = Number(existing.unsure || 0);
+  existing.streak = Number(existing.streak || 0);
+  existing.due = Number(existing.due || existing.dueAt || 0);
+  existing.seen = Number(existing.seen || 0);
+  existing.lastSeenAt = Number(existing.lastSeenAt || 0);
+  existing.firstEasyAt = Number(existing.firstEasyAt || 0);
+  existing.everEasy = Boolean(existing.everEasy || existing.mastered);
+
+  if (existing.lastResult == null) {
+    const inferredResult = existing.mastered ? "easy" : existing.wrong > 0 ? "unknown" : null;
+    if (existing.lastResult !== inferredResult) migrated = true;
+    existing.lastResult = inferredResult;
+  } else if (!["unknown", "unsure", "easy"].includes(existing.lastResult)) {
+    existing.lastResult = null;
+    migrated = true;
+  }
+
+  if (existing.seen <= 0 && (existing.mastered || existing.wrong > 0 || existing.unsure > 0 || existing.due > 0)) {
+    existing.seen = 1;
+    migrated = true;
+  }
+
+  if (existing.everEasy && existing.firstEasyAt <= 0) {
+    existing.firstEasyAt = existing.lastSeenAt || Date.now();
+    migrated = true;
+  }
+
+  if (existing.mastered && (!Number.isFinite(existing.due) || existing.due <= 0 || existing.due >= Number.MAX_SAFE_INTEGER)) {
+    const effectiveStreak = Math.max(existing.streak, 1);
+    existing.streak = effectiveStreak;
+    existing.due = Date.now() + reviewIntervalDays(effectiveStreak) * DAY;
+    migrated = true;
+  }
+
+  return { progress: existing, migrated };
+}
+
 function loadState() {
   let saved = null;
   try {
@@ -41,27 +119,13 @@ function loadState() {
 
   const loaded = saved && typeof saved === "object" ? saved : {};
   loaded.progress = loaded.progress && typeof loaded.progress === "object" ? loaded.progress : {};
+  loaded.milestones = loaded.milestones && typeof loaded.milestones === "object" ? loaded.milestones : {};
 
   let migrated = false;
   for (const word of words) {
-    const existing = loaded.progress[word.id] || blankProgress();
-    if (existing.wrong == null && existing.wrongCount != null) {
-      existing.wrong = existing.wrongCount;
-      migrated = true;
-    }
-    existing.mastered = Boolean(existing.mastered);
-    existing.wrong = Number(existing.wrong || 0);
-    existing.streak = Number(existing.streak || 0);
-    existing.due = Number(existing.due || existing.dueAt || 0);
-
-    if (existing.mastered && (!Number.isFinite(existing.due) || existing.due <= 0 || existing.due >= Number.MAX_SAFE_INTEGER)) {
-      const effectiveStreak = Math.max(existing.streak, 1);
-      existing.streak = effectiveStreak;
-      existing.due = Date.now() + reviewIntervalDays(effectiveStreak) * DAY;
-      migrated = true;
-    }
-
-    loaded.progress[word.id] = existing;
+    const normalized = normalizeProgress(loaded.progress[word.id]);
+    if (normalized.migrated) migrated = true;
+    loaded.progress[word.id] = normalized.progress;
   }
 
   if ("srs" in loaded || "settings" in loaded) migrated = true;
@@ -78,18 +142,105 @@ function saveState() {
   localStorage.setItem(progressKey(), JSON.stringify(state));
 }
 
-function shuffle(items) {
-  const copy = [...items];
-  for (let i = copy.length - 1; i > 0; i -= 1) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
+function hasReachedAllSeen() {
+  return words.length > 0 && words.every((word) => Number(state.progress[word.id]?.seen || 0) > 0);
 }
 
-function eligible(word) {
+function hasReachedAllEasy() {
+  return words.length > 0 && words.every((word) => Boolean(state.progress[word.id]?.everEasy));
+}
+
+function nextMilestoneMessage() {
+  state.milestones = state.milestones && typeof state.milestones === "object" ? state.milestones : {};
+  const now = Date.now();
+
+  if (!state.milestones.allEasyAt && hasReachedAllEasy()) {
+    state.milestones.allEasyAt = now;
+    if (!state.milestones.allSeenAt) state.milestones.allSeenAt = now;
+    return "全カードを一度すぐ思い出せました";
+  }
+
+  if (!state.milestones.allSeenAt && hasReachedAllSeen()) {
+    state.milestones.allSeenAt = now;
+    return "このデッキを一周しました";
+  }
+
+  return null;
+}
+
+function launchConfetti(message) {
+  const celebration = $("celebration");
+  const stage = $("confettiStage");
+  $("celebrationMessage").textContent = message;
+  stage.replaceChildren();
+  celebration.hidden = false;
+  celebration.classList.remove("show");
+  void celebration.offsetWidth;
+  celebration.classList.add("show");
+
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    for (let i = 0; i < 36; i += 1) {
+      const piece = document.createElement("span");
+      piece.className = "confetti-piece";
+      piece.style.left = `${8 + Math.random() * 84}%`;
+      piece.style.background = CONFETTI_COLORS[i % CONFETTI_COLORS.length];
+      piece.style.animationDelay = `${Math.random() * 0.18}s`;
+      piece.style.setProperty("--fall-x", `${Math.random() * 180 - 90}px`);
+      piece.style.setProperty("--spin", `${Math.random() * 540 + 180}deg`);
+      stage.append(piece);
+    }
+  }
+
+  window.setTimeout(() => {
+    celebration.classList.remove("show");
+    window.setTimeout(() => {
+      celebration.hidden = true;
+      stage.replaceChildren();
+    }, 250);
+  }, 2600);
+}
+
+function celebrateMilestoneIfNeeded() {
+  const message = nextMilestoneMessage();
+  if (!message) return;
+  saveState();
+  launchConfetti(message);
+}
+
+function priorityForWord(word) {
   const progress = state.progress[word.id] || blankProgress();
-  return !progress.mastered || progress.due <= Date.now();
+  const now = Date.now();
+
+  if (retryIds.has(word.id)) {
+    return { bucket: QUEUE_BUCKET.RETRY, score: 0 };
+  }
+  if (progress.seen && progress.due <= now) {
+    if (progress.lastResult === "unknown") {
+      return { bucket: QUEUE_BUCKET.UNKNOWN_DUE, score: progress.due || 0 };
+    }
+    if (progress.lastResult === "unsure") {
+      return { bucket: QUEUE_BUCKET.UNSURE_DUE, score: progress.due || 0 };
+    }
+    return { bucket: QUEUE_BUCKET.REVIEW_DUE, score: progress.due || 0 };
+  }
+  if (progress.lastResult === "unsure") {
+    return { bucket: QUEUE_BUCKET.UNSURE_RECENT, score: -(progress.lastSeenAt || 0) };
+  }
+  if (!progress.seen) {
+    return { bucket: QUEUE_BUCKET.NEW, score: 0 };
+  }
+  return { bucket: QUEUE_BUCKET.LONG_UNSEEN, score: progress.lastSeenAt || 0 };
+}
+
+function buildPrioritizedQueue() {
+  return words
+    .map((word) => ({ id: word.id, random: Math.random(), priority: priorityForWord(word) }))
+    .sort((a, b) =>
+      a.priority.bucket - b.priority.bucket
+      || a.priority.score - b.priority.score
+      || a.random - b.random
+    )
+    .map((item) => item.id);
 }
 
 function currentWord() {
@@ -100,6 +251,17 @@ function setControlsEnabled(enabled) {
   for (const id of ["deckSelect", "shuffleBtn"]) {
     $(id).disabled = !enabled;
   }
+}
+
+function setAnswerControlsEnabled(enabled) {
+  for (const id of ["unknownBtn", "unsureBtn", "easyBtn"]) {
+    $(id).disabled = !enabled;
+  }
+}
+
+function updateCardFaceAccessibility() {
+  $("cardFront").setAttribute("aria-hidden", String(flipped));
+  $("cardBack").setAttribute("aria-hidden", String(!flipped));
 }
 
 function renderAnswer(word) {
@@ -119,24 +281,44 @@ function renderCardReason(word) {
   const reason = $("cardReason");
 
   if (retryIds.has(word.id)) {
-    badge.textContent = "もう一度";
+    badge.textContent = "再挑戦";
     badge.dataset.kind = "retry";
-    reason.textContent = "先ほど「もう一度」を選んだため再出題しています";
+    reason.textContent = "先ほど「分からなかった」を選んだため再出題しています";
     return;
   }
 
-  if (progress.mastered && progress.due <= Date.now()) {
-    const days = reviewIntervalDays(progress.streak);
+  if (progress.seen && progress.due <= Date.now()) {
     badge.textContent = "復習カード";
-    badge.dataset.kind = "review";
-    reason.textContent = `前回正解から${days}日以上経過したため再出題しています`;
+    badge.dataset.kind = progress.lastResult === "unknown" ? "retry" : "review";
+    if (progress.lastResult === "unsure") {
+      reason.textContent = "前回迷ったため短めの間隔で再出題しています";
+    } else if (progress.lastResult === "unknown") {
+      reason.textContent = "前回分からなかったカードです";
+    } else {
+      const days = reviewIntervalDays(progress.streak);
+      reason.textContent = `前回正解から${days}日以上経過したため再出題しています`;
+    }
     return;
   }
 
-  if (!progress.mastered && progress.wrong > 0) {
+  if (progress.lastResult === "unsure") {
+    badge.textContent = "迷いカード";
+    badge.dataset.kind = "unsure";
+    reason.textContent = "前回「迷った」を選んだカードです";
+    return;
+  }
+
+  if (progress.lastResult === "unknown") {
     badge.textContent = "再学習カード";
     badge.dataset.kind = "retry";
-    reason.textContent = "以前「もう一度」を選んだカードです";
+    reason.textContent = "以前「分からなかった」を選んだカードです";
+    return;
+  }
+
+  if (progress.seen) {
+    badge.textContent = "練習カード";
+    badge.dataset.kind = "practice";
+    reason.textContent = "復習予定前ですが、もう一周として出題しています";
     return;
   }
 
@@ -148,15 +330,15 @@ function renderCardReason(word) {
 function updateStats() {
   const values = words.map((word) => state.progress[word.id] || blankProgress());
   $("remainingCount").textContent = String(queue.length + (currentId ? 1 : 0));
-  $("masteredCount").textContent = String(values.filter((item) => item.mastered).length);
-  $("wrongCount").textContent = String(values.reduce((sum, item) => sum + Number(item.wrong || 0), 0));
+  $("easyCount").textContent = String(values.filter((item) => item.everEasy).length);
+  $("unsureCount").textContent = String(values.filter((item) => item.lastResult === "unsure").length);
   $("totalCount").textContent = String(words.length);
 }
 
 function nextReviewDate() {
   const future = words
     .map((word) => state.progress[word.id])
-    .filter((item) => item?.mastered && item.due > Date.now() && Number.isFinite(item.due))
+    .filter((item) => item?.seen && item.due > Date.now() && Number.isFinite(item.due))
     .sort((a, b) => a.due - b.due);
   return future[0]?.due || null;
 }
@@ -166,8 +348,8 @@ function renderEmpty() {
   $("emptyArea").hidden = false;
   const nextDue = nextReviewDate();
   $("emptyMessage").textContent = nextDue
-    ? `次の復習予定は ${new Date(nextDue).toLocaleDateString("ja-JP")} です。`
-    : "この教材の学習記録をリセットすると、最初から学習できます。";
+    ? `次の復習予定は ${new Date(nextDue).toLocaleDateString("ja-JP")} です。まだ続けたい場合は、もう一周できます。`
+    : "まだ続けたい場合は、出題順を変えてもう一周できます。";
 }
 
 function resetCardPositionImmediately() {
@@ -186,8 +368,8 @@ function restoreCardTransition() {
 function nextCard() {
   resetCardPositionImmediately();
   flipped = false;
-  $("againBtn").disabled = true;
-  $("knownBtn").disabled = true;
+  setAnswerControlsEnabled(false);
+  updateCardFaceAccessibility();
   currentId = queue.shift() || null;
 
   if (!currentId) {
@@ -209,7 +391,7 @@ function nextCard() {
 
 function buildQueue() {
   retryIds.clear();
-  queue = shuffle(words.filter(eligible).map((word) => word.id));
+  queue = buildPrioritizedQueue();
   currentId = null;
   nextCard();
 }
@@ -218,42 +400,54 @@ function flipCard() {
   if (!currentId) return;
   flipped = !flipped;
   $("card").classList.toggle("flipped", flipped);
-  $("againBtn").disabled = !flipped;
-  $("knownBtn").disabled = !flipped;
+  setAnswerControlsEnabled(flipped);
+  updateCardFaceAccessibility();
 }
 
-function answerAgain() {
+function answer(result) {
   if (!currentId || !flipped) return;
   const answeredId = currentId;
   const progress = state.progress[answeredId];
-  progress.mastered = false;
-  progress.wrong = Number(progress.wrong || 0) + 1;
-  progress.streak = 0;
-  progress.due = 0;
-  retryIds.add(answeredId);
-  queue.splice(Math.min(2, queue.length), 0, answeredId);
-  saveState();
-  nextCard();
-}
+  const now = Date.now();
 
-function answerKnown() {
-  if (!currentId || !flipped) return;
-  const answeredId = currentId;
-  const progress = state.progress[answeredId];
-  progress.mastered = true;
-  progress.streak = Number(progress.streak || 0) + 1;
-  progress.due = Date.now() + reviewIntervalDays(progress.streak) * DAY;
-  retryIds.delete(answeredId);
+  progress.seen = Number(progress.seen || 0) + 1;
+  progress.lastSeenAt = now;
+  progress.lastResult = result;
+
+  if (result === "unknown") {
+    progress.mastered = false;
+    progress.wrong = Number(progress.wrong || 0) + 1;
+    progress.streak = 0;
+    progress.due = 0;
+    retryIds.add(answeredId);
+    queue.splice(Math.min(2, queue.length), 0, answeredId);
+  } else if (result === "unsure") {
+    progress.mastered = false;
+    progress.unsure = Number(progress.unsure || 0) + 1;
+    progress.streak = Math.max(Number(progress.streak || 0), 0);
+    progress.due = now + UNCERTAIN_REVIEW_DAYS * DAY;
+    retryIds.delete(answeredId);
+  } else {
+    progress.mastered = true;
+    progress.everEasy = true;
+    if (!progress.firstEasyAt) progress.firstEasyAt = now;
+    progress.streak = Number(progress.streak || 0) + 1;
+    progress.due = now + reviewIntervalDays(progress.streak) * DAY;
+    retryIds.delete(answeredId);
+  }
+
   saveState();
   nextCard();
+  celebrateMilestoneIfNeeded();
 }
 
 function resetLearningHistory() {
-  if (!confirm("この教材の学習記録をリセットしますか？\n単語データは消えません。覚えた状態・誤答回数・復習予定だけが最初に戻ります。")) {
+  if (!confirm("この教材の学習記録をリセットしますか？\n単語データは消えません。回答結果・迷いカード・復習予定だけが最初に戻ります。")) {
     return;
   }
   state = { progress: {} };
   for (const word of words) state.progress[word.id] = blankProgress();
+  state.milestones = {};
   saveState();
   buildQueue();
 }
@@ -330,15 +524,18 @@ $("card").addEventListener("keydown", (event) => {
     flipCard();
   }
 });
-$("againBtn").addEventListener("click", answerAgain);
-$("knownBtn").addEventListener("click", answerKnown);
+$("unknownBtn").addEventListener("click", () => answer("unknown"));
+$("unsureBtn").addEventListener("click", () => answer("unsure"));
+$("easyBtn").addEventListener("click", () => answer("easy"));
 $("shuffleBtn").addEventListener("click", buildQueue);
+$("continueBtn").addEventListener("click", buildQueue);
 $("resetAllBtn").addEventListener("click", resetLearningHistory);
 $("retryBtn").addEventListener("click", init);
 document.addEventListener("keydown", (event) => {
   if (!currentId || !flipped) return;
-  if (event.key === "1") answerAgain();
-  if (event.key === "2") answerKnown();
+  if (event.key === "1") answer("unknown");
+  if (event.key === "2") answer("unsure");
+  if (event.key === "3") answer("easy");
 });
 
 init();

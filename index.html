@@ -23,20 +23,20 @@
         <select id="deckSelect" disabled></select>
       </div>
       <button id="shuffleBtn" class="secondary" disabled>出題順をシャッフル</button>
-      <p class="review-policy">覚えたカードは、1・3・7・14・30・60日後に自動で復習します。</p>
+      <p class="review-policy">答えを見る前の感覚で「分からなかった・迷った・すぐ分かった」を選びます。</p>
     </section>
 
     <section class="stats" aria-label="学習状況">
       <div class="stat"><strong id="remainingCount">0</strong><span>今回の残り</span></div>
-      <div class="stat"><strong id="masteredCount">0</strong><span>習得済み</span></div>
-      <div class="stat"><strong id="wrongCount">0</strong><span>誤答回数</span></div>
+      <div class="stat"><strong id="easyCount">0</strong><span>すぐ分かった</span></div>
+      <div class="stat"><strong id="unsureCount">0</strong><span>迷いカード</span></div>
       <div class="stat"><strong id="totalCount">0</strong><span>全単語</span></div>
     </section>
 
     <section id="studyArea" hidden>
       <div class="card-wrap">
         <div id="card" class="card" tabindex="0" role="button" aria-label="カードをめくる">
-          <div class="face front">
+          <div id="cardFront" class="face front" aria-hidden="false">
             <span class="face-label">日本語</span>
             <div class="card-meta">
               <span id="cardBadge" class="card-badge" data-kind="new">新しいカード</span>
@@ -45,7 +45,7 @@
             <div id="frontText" class="word"></div>
             <span class="hint">タップして答えを見る</span>
           </div>
-          <div class="face back">
+          <div id="cardBack" class="face back" aria-hidden="true">
             <span id="backLabel" class="face-label"></span>
             <div id="backText" class="word"></div>
             <span class="hint">結果を選んで次へ</span>
@@ -53,16 +53,20 @@
         </div>
       </div>
       <div class="controls">
-        <button id="againBtn" class="again" disabled>もう一度</button>
-        <button id="knownBtn" class="known" disabled>覚えた</button>
+        <button id="unknownBtn" class="unknown" disabled>分からなかった</button>
+        <button id="unsureBtn" class="unsure" disabled>迷った</button>
+        <button id="easyBtn" class="easy" disabled>すぐ分かった</button>
       </div>
     </section>
 
     <section id="emptyArea" class="empty" hidden>
       <div>
-        <h2>現在、学習するカードはありません</h2>
+        <h2>この回のカードを一通り見ました</h2>
         <p id="emptyMessage"></p>
-        <button id="resetAllBtn" class="danger-outline">学習記録をリセット</button>
+        <div class="empty-actions">
+          <button id="continueBtn" class="secondary">もう一周する</button>
+          <button id="resetAllBtn" class="danger-outline">学習記録をリセット</button>
+        </div>
       </div>
     </section>
 
@@ -73,6 +77,11 @@
         <button id="retryBtn" class="secondary">再読み込み</button>
       </div>
     </section>
+
+    <div id="celebration" class="celebration" role="status" aria-live="polite" hidden>
+      <div id="confettiStage" class="confetti-stage" aria-hidden="true"></div>
+      <div id="celebrationMessage" class="celebration-message"></div>
+    </div>
   </main>
 </body>
 </html>
