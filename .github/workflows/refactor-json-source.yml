@@ -1,0 +1,974 @@
+name: Refactor to JSON source of truth
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/refactor-json-source.yml'
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  refactor:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Refactor repository
+        shell: python
+        run: |
+          from pathlib import Path
+          import json, shutil, textwrap
+
+          repo = Path('.')
+          source = repo / 'exports' / 'language-flashcards-data' / 'json'
+          if not source.exists():
+              raise SystemExit('Existing exported JSON source was not found')
+
+          data_dir = repo / 'data' / 'decks'
+          data_dir.mkdir(parents=True, exist_ok=True)
+
+          expected = {
+              'taigi.json': 23,
+              'chinese-lesson-01.json': 81,
+              'chinese-lesson-02.json': 97,
+              'chinese-lesson-03.json': 53,
+              'chinese-lesson-04.json': 80,
+              'chinese-lesson-05.json': 64,
+              'chinese-lesson-06.json': 104,
+              'chinese-lesson-07.json': 75,
+              'chinese-lesson-08.json': 66,
+          }
+
+          manifest_decks = []
+          for order, (name, count) in enumerate(expected.items(), start=1):
+              src = source / name
+              if not src.exists():
+                  raise SystemExit(f'Missing source deck: {src}')
+              deck = json.loads(src.read_text(encoding='utf-8'))
+              if len(deck.get('cards', [])) != count or deck.get('cardCount') != count:
+                  raise SystemExit(f'Card count mismatch before migration: {name}')
+              dst = data_dir / name
+              dst.write_text(json.dumps(deck, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+              if name == 'taigi.json':
+                  storage_key = 'taigi'
+                  back_label = 'TÂI-GÍ'
+                  subtitle = '表：日本語 ／ 裏：台湾語ローマ字'
+              else:
+                  lesson = int(name[-7:-5])
+                  storage_key = f'chinese-{lesson}'
+                  back_label = '中国語・拼音'
+                  subtitle = '表：日本語 ／ 裏：中国語＋拼音'
+              manifest_decks.append({
+                  'id': deck['id'],
+                  'title': deck['title'],
+                  'file': f'decks/{name}',
+                  'storageKey': storage_key,
+                  'subtitle': subtitle,
+                  'backLabel': back_label,
+                  'cardCount': count,
+                  'order': order,
+              })
+
+          manifest = {
+              'version': 1,
+              'totalCardCount': sum(d['cardCount'] for d in manifest_decks),
+              'decks': manifest_decks,
+          }
+          (repo / 'data' / 'manifest.json').write_text(
+              json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8'
+          )
+          shutil.copy2(repo / 'exports' / 'language-flashcards-data' / 'schema.json', repo / 'data' / 'schema.json')
+
+          index_html = '''<!DOCTYPE html>
+          <html lang="ja">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta name="theme-color" content="#1769aa">
+            <title>語学フラッシュカード</title>
+            <link rel="stylesheet" href="styles.css">
+            <script src="app.js" defer></script>
+          </head>
+          <body>
+            <main class="app">
+              <header>
+                <h1>語学フラッシュカード</h1>
+                <div id="subtitle" class="subtitle">教材を読み込んでいます…</div>
+              </header>
+
+              <section class="panel settings">
+                <div>
+                  <label class="subtitle" for="deckSelect">教材</label>
+                  <select id="deckSelect" disabled></select>
+                </div>
+                <label class="toggle-row">
+                  <input id="srsToggle" type="checkbox">
+                  <span><strong>忘却曲線モード</strong><br><small class="subtitle">復習日に再出題</small></span>
+                </label>
+                <button id="shuffleBtn" class="secondary" disabled>順番をシャッフル</button>
+              </section>
+
+              <section class="stats" aria-label="学習状況">
+                <div class="stat"><strong id="remainingCount">0</strong><span>今回の残り</span></div>
+                <div class="stat"><strong id="masteredCount">0</strong><span>習得済み</span></div>
+                <div class="stat"><strong id="wrongCount">0</strong><span>誤答回数</span></div>
+                <div class="stat"><strong id="totalCount">0</strong><span>全単語</span></div>
+              </section>
+
+              <section id="studyArea" hidden>
+                <div class="card-wrap">
+                  <div id="card" class="card" tabindex="0" role="button" aria-label="カードをめくる">
+                    <div class="face front">
+                      <span class="face-label">日本語</span>
+                      <div id="frontText" class="word"></div>
+                      <span class="hint">タップして答えを見る</span>
+                    </div>
+                    <div class="face back">
+                      <span id="backLabel" class="face-label"></span>
+                      <div id="backText" class="word"></div>
+                      <span class="hint">結果を選んで次へ</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="controls">
+                  <button id="againBtn" class="again" disabled>もう一度</button>
+                  <button id="knownBtn" class="known" disabled>覚えた</button>
+                </div>
+              </section>
+
+              <section id="emptyArea" class="empty" hidden>
+                <div>
+                  <h2>今回の学習は完了です</h2>
+                  <p id="emptyMessage">未習得の単語はありません。</p>
+                  <button id="restartBtn" class="secondary">再開</button>
+                </div>
+              </section>
+
+              <section id="errorArea" class="empty" hidden>
+                <div>
+                  <h2>データを読み込めませんでした</h2>
+                  <p id="errorMessage"></p>
+                  <button id="retryBtn" class="secondary">再読み込み</button>
+                </div>
+              </section>
+
+              <section class="small-actions">
+                <button id="resetSessionBtn" class="secondary" disabled>今回の順番を作り直す</button>
+                <button id="resetAllBtn" class="secondary" disabled>この教材の履歴を初期化</button>
+              </section>
+            </main>
+          </body>
+          </html>
+          '''
+          (repo / 'index.html').write_text(textwrap.dedent(index_html), encoding='utf-8')
+
+          styles = '''
+          :root {
+            color-scheme: light dark;
+            --bg: #f4f6f8;
+            --panel: #ffffff;
+            --text: #18212b;
+            --muted: #687684;
+            --border: #dce3e9;
+            --primary: #1769aa;
+            --danger: #b3261e;
+            --shadow: 0 14px 38px rgba(21, 37, 53, 0.12);
+          }
+          @media (prefers-color-scheme: dark) {
+            :root {
+              --bg: #101418;
+              --panel: #1a2026;
+              --text: #edf2f6;
+              --muted: #a9b4be;
+              --border: #34404a;
+              --primary: #66b5ff;
+              --danger: #ff9b94;
+              --shadow: 0 14px 38px rgba(0, 0, 0, 0.34);
+            }
+          }
+          * { box-sizing: border-box; }
+          body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--bg);
+            color: var(--text);
+          }
+          .app { width: min(760px, calc(100% - 28px)); margin: auto; padding: 24px 0 50px; }
+          h1 { margin: 0 0 5px; font-size: clamp(22px, 5vw, 32px); }
+          .subtitle { color: var(--muted); font-size: 14px; }
+          .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow); padding: 18px; }
+          .settings { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 18px 0; }
+          select, button { appearance: none; border-radius: 13px; padding: 13px 14px; font: inherit; font-weight: 700; }
+          select { width: 100%; background: var(--panel); color: var(--text); border: 1px solid var(--border); }
+          button { border: 0; cursor: pointer; }
+          button:disabled, select:disabled { opacity: 0.45; cursor: not-allowed; }
+          .toggle-row { display: flex; align-items: center; gap: 10px; }
+          .toggle-row input { width: 20px; height: 20px; }
+          .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-bottom: 18px; }
+          .stat { padding: 12px 8px; text-align: center; border: 1px solid var(--border); border-radius: 13px; background: var(--panel); }
+          .stat strong { display: block; font-size: 21px; }
+          .stat span { color: var(--muted); font-size: 12px; }
+          .card-wrap { perspective: 1200px; margin: 18px 0; }
+          .card { min-height: 330px; position: relative; transform-style: preserve-3d; transition: transform .45s; cursor: pointer; user-select: none; }
+          .card.flipped { transform: rotateY(180deg); }
+          .face { position: absolute; inset: 0; display: grid; place-items: center; padding: 30px; border-radius: 24px; border: 1px solid var(--border); background: var(--panel); box-shadow: var(--shadow); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+          .back { transform: rotateY(180deg); }
+          .face-label { position: absolute; top: 18px; left: 20px; color: var(--muted); font-size: 13px; }
+          .word { text-align: center; font-size: clamp(34px, 8vw, 60px); font-weight: 750; line-height: 1.35; overflow-wrap: anywhere; }
+          .word small { display: block; font-size: .45em; font-weight: 600; margin-top: 12px; color: var(--muted); }
+          .hint { position: absolute; bottom: 16px; color: var(--muted); font-size: 13px; }
+          .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+          .again { background: color-mix(in srgb, var(--danger) 13%, var(--panel)); color: var(--danger); border: 1px solid color-mix(in srgb, var(--danger) 38%, var(--border)); }
+          .known { background: var(--primary); color: white; }
+          .secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+          .small-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+          .small-actions button { padding: 10px 12px; font-size: 13px; }
+          .empty { min-height: 330px; display: grid; place-items: center; text-align: center; border: 1px dashed var(--border); border-radius: 24px; background: var(--panel); padding: 30px; }
+          .empty p { color: var(--muted); line-height: 1.7; }
+          @media (max-width: 560px) {
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .settings { grid-template-columns: 1fr; }
+            .card, .empty { min-height: 300px; }
+          }
+          '''
+          (repo / 'styles.css').write_text(textwrap.dedent(styles).lstrip(), encoding='utf-8')
+
+          app_js = r'''
+          const DAY = 24 * 60 * 60 * 1000;
+          const LAST_DECK_KEY = "language-flashcards:last-deck";
+          const $ = (id) => document.getElementById(id);
+
+          let manifest = null;
+          let deckMeta = null;
+          let deck = null;
+          let words = [];
+          let state = null;
+          let queue = [];
+          let currentId = null;
+          let flipped = false;
+
+          function blankProgress() {
+            return { mastered: false, wrong: 0, streak: 0, due: 0 };
+          }
+
+          async function fetchJson(path) {
+            const response = await fetch(path, { cache: "no-store" });
+            if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
+            return response.json();
+          }
+
+          function progressKey() {
+            return `language-flashcards:${deckMeta.storageKey}:v1`;
+          }
+
+          function loadState() {
+            let saved = null;
+            try {
+              saved = JSON.parse(localStorage.getItem(progressKey()));
+            } catch (error) {
+              console.warn("学習履歴を読み込めませんでした。", error);
+            }
+
+            const loaded = saved && typeof saved === "object" ? saved : {};
+            loaded.progress = loaded.progress && typeof loaded.progress === "object" ? loaded.progress : {};
+            loaded.srs = Boolean(loaded.srs ?? loaded.settings?.srs ?? false);
+
+            for (const word of words) {
+              const existing = loaded.progress[word.id] || blankProgress();
+              if (existing.wrong == null && existing.wrongCount != null) existing.wrong = existing.wrongCount;
+              existing.mastered = Boolean(existing.mastered);
+              existing.wrong = Number(existing.wrong || 0);
+              existing.streak = Number(existing.streak || 0);
+              existing.due = Number(existing.due || existing.dueAt || 0);
+              loaded.progress[word.id] = existing;
+            }
+            return loaded;
+          }
+
+          function saveState() {
+            localStorage.setItem(progressKey(), JSON.stringify(state));
+          }
+
+          function shuffle(items) {
+            const copy = [...items];
+            for (let i = copy.length - 1; i > 0; i -= 1) {
+              const j = Math.floor(Math.random() * (i + 1));
+              [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+          }
+
+          function eligible(word) {
+            const progress = state.progress[word.id] || blankProgress();
+            return !progress.mastered || (state.srs && progress.due <= Date.now());
+          }
+
+          function currentWord() {
+            return words.find((word) => word.id === currentId) || null;
+          }
+
+          function setControlsEnabled(enabled) {
+            for (const id of ["deckSelect", "shuffleBtn", "resetSessionBtn", "resetAllBtn"]) {
+              $(id).disabled = !enabled;
+            }
+          }
+
+          function renderAnswer(word) {
+            const container = $("backText");
+            container.replaceChildren();
+            container.append(document.createTextNode(word.back));
+            if (word.reading) {
+              const reading = document.createElement("small");
+              reading.textContent = word.reading;
+              container.append(reading);
+            }
+          }
+
+          function updateStats() {
+            const values = words.map((word) => state.progress[word.id] || blankProgress());
+            $("remainingCount").textContent = String(queue.length + (currentId ? 1 : 0));
+            $("masteredCount").textContent = String(values.filter((item) => item.mastered).length);
+            $("wrongCount").textContent = String(values.reduce((sum, item) => sum + Number(item.wrong || 0), 0));
+            $("totalCount").textContent = String(words.length);
+          }
+
+          function renderEmpty() {
+            $("studyArea").hidden = true;
+            $("emptyArea").hidden = false;
+            const future = words
+              .map((word) => state.progress[word.id])
+              .filter((item) => item?.mastered && item.due > Date.now() && item.due < Number.MAX_SAFE_INTEGER)
+              .sort((a, b) => a.due - b.due);
+            $("emptyMessage").textContent = state.srs && future.length
+              ? `復習対象は現在ありません。次の復習予定は ${new Date(future[0].due).toLocaleDateString("ja-JP")} です。`
+              : "未習得の単語はありません。";
+          }
+
+          function nextCard() {
+            flipped = false;
+            $("card").classList.remove("flipped");
+            $("againBtn").disabled = true;
+            $("knownBtn").disabled = true;
+            currentId = queue.shift() || null;
+
+            if (!currentId) {
+              renderEmpty();
+              updateStats();
+              return;
+            }
+
+            const word = currentWord();
+            $("frontText").textContent = word.front;
+            renderAnswer(word);
+            $("studyArea").hidden = false;
+            $("emptyArea").hidden = true;
+            updateStats();
+          }
+
+          function buildQueue() {
+            queue = shuffle(words.filter(eligible).map((word) => word.id));
+            currentId = null;
+            nextCard();
+          }
+
+          function flipCard() {
+            if (!currentId) return;
+            flipped = !flipped;
+            $("card").classList.toggle("flipped", flipped);
+            $("againBtn").disabled = !flipped;
+            $("knownBtn").disabled = !flipped;
+          }
+
+          function answerAgain() {
+            if (!currentId || !flipped) return;
+            const progress = state.progress[currentId];
+            progress.mastered = false;
+            progress.wrong = Number(progress.wrong || 0) + 1;
+            progress.streak = 0;
+            progress.due = 0;
+            queue.splice(Math.min(2, queue.length), 0, currentId);
+            saveState();
+            nextCard();
+          }
+
+          function answerKnown() {
+            if (!currentId || !flipped) return;
+            const progress = state.progress[currentId];
+            progress.mastered = true;
+            progress.streak = Number(progress.streak || 0) + 1;
+            const intervals = [1, 3, 7, 14, 30, 60];
+            progress.due = state.srs
+              ? Date.now() + intervals[Math.min(progress.streak - 1, intervals.length - 1)] * DAY
+              : Number.MAX_SAFE_INTEGER;
+            saveState();
+            nextCard();
+          }
+
+          async function selectDeck(id) {
+            setControlsEnabled(false);
+            $("studyArea").hidden = true;
+            $("emptyArea").hidden = true;
+            $("errorArea").hidden = true;
+            $("subtitle").textContent = "教材を読み込んでいます…";
+
+            deckMeta = manifest.decks.find((item) => item.id === id);
+            if (!deckMeta) throw new Error(`Unknown deck: ${id}`);
+            deck = await fetchJson(`data/${deckMeta.file}`);
+            words = deck.cards.map((card) => ({
+              id: card.id,
+              front: card.front,
+              back: card.back,
+              reading: card.reading,
+            }));
+            state = loadState();
+            localStorage.setItem(LAST_DECK_KEY, deckMeta.id);
+            $("subtitle").textContent = deckMeta.subtitle;
+            $("backLabel").textContent = deckMeta.backLabel;
+            $("srsToggle").checked = state.srs;
+            setControlsEnabled(true);
+            buildQueue();
+          }
+
+          async function init() {
+            try {
+              manifest = await fetchJson("data/manifest.json");
+              const select = $("deckSelect");
+              select.replaceChildren();
+              for (const item of [...manifest.decks].sort((a, b) => a.order - b.order)) {
+                const option = document.createElement("option");
+                option.value = item.id;
+                option.textContent = item.title;
+                select.append(option);
+              }
+
+              const remembered = localStorage.getItem(LAST_DECK_KEY);
+              const initial = manifest.decks.find((item) => item.id === remembered || item.storageKey === remembered)
+                || manifest.decks[0];
+              select.value = initial.id;
+              await selectDeck(initial.id);
+            } catch (error) {
+              console.error(error);
+              $("studyArea").hidden = true;
+              $("emptyArea").hidden = true;
+              $("errorArea").hidden = false;
+              $("errorMessage").textContent = error.message;
+              $("subtitle").textContent = "読み込みエラー";
+              setControlsEnabled(false);
+            }
+          }
+
+          $("deckSelect").addEventListener("change", async (event) => {
+            try { await selectDeck(event.target.value); } catch (error) { console.error(error); await init(); }
+          });
+          $("card").addEventListener("click", flipCard);
+          $("card").addEventListener("keydown", (event) => {
+            if (event.code === "Space" || event.code === "Enter") {
+              event.preventDefault();
+              flipCard();
+            }
+          });
+          $("againBtn").addEventListener("click", answerAgain);
+          $("knownBtn").addEventListener("click", answerKnown);
+          $("shuffleBtn").addEventListener("click", buildQueue);
+          $("restartBtn").addEventListener("click", buildQueue);
+          $("resetSessionBtn").addEventListener("click", buildQueue);
+          $("resetAllBtn").addEventListener("click", () => {
+            if (!confirm("この教材の学習履歴を初期化しますか？")) return;
+            state = { progress: {}, srs: state.srs };
+            for (const word of words) state.progress[word.id] = blankProgress();
+            saveState();
+            buildQueue();
+          });
+          $("srsToggle").addEventListener("change", (event) => {
+            state.srs = event.target.checked;
+            saveState();
+            buildQueue();
+          });
+          $("retryBtn").addEventListener("click", init);
+          document.addEventListener("keydown", (event) => {
+            if (!currentId || !flipped) return;
+            if (event.key === "1") answerAgain();
+            if (event.key === "2") answerKnown();
+          });
+
+          init();
+          '''
+          (repo / 'app.js').write_text(textwrap.dedent(app_js).lstrip(), encoding='utf-8')
+
+          scripts = repo / 'scripts'
+          scripts.mkdir(exist_ok=True)
+
+          validate_py = r'''
+          from pathlib import Path
+          import json, re, sys
+
+          ROOT = Path(__file__).resolve().parents[1]
+          manifest_path = ROOT / 'data' / 'manifest.json'
+          manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+          errors = []
+          deck_ids = set()
+          storage_keys = set()
+          global_card_ids = set()
+          total = 0
+
+          if manifest.get('version') != 1:
+              errors.append('manifest.version must be 1')
+
+          for meta in manifest.get('decks', []):
+              for key in ('id','title','file','storageKey','subtitle','backLabel','cardCount','order'):
+                  if key not in meta:
+                      errors.append(f'manifest deck missing {key}: {meta}')
+              if meta.get('id') in deck_ids:
+                  errors.append(f'duplicate deck id: {meta.get("id")}')
+              deck_ids.add(meta.get('id'))
+              if meta.get('storageKey') in storage_keys:
+                  errors.append(f'duplicate storageKey: {meta.get("storageKey")}')
+              storage_keys.add(meta.get('storageKey'))
+
+              path = ROOT / 'data' / meta['file']
+              if not path.exists():
+                  errors.append(f'missing deck file: {path}')
+                  continue
+              deck = json.loads(path.read_text(encoding='utf-8'))
+              required = ('id','language','title','frontLanguage','backLanguage','cardCount','cards')
+              for key in required:
+                  if key not in deck:
+                      errors.append(f'{path}: missing {key}')
+              if deck.get('id') != meta.get('id'):
+                  errors.append(f'{path}: id does not match manifest')
+              cards = deck.get('cards', [])
+              if deck.get('cardCount') != len(cards) or meta.get('cardCount') != len(cards):
+                  errors.append(f'{path}: cardCount mismatch')
+              total += len(cards)
+              local_ids = set()
+              for i, card in enumerate(cards, start=1):
+                  prefix = f'{path}: card {i}'
+                  for key in ('id','front','back','reading','lesson','page','tags','notes'):
+                      if key not in card:
+                          errors.append(f'{prefix}: missing {key}')
+                  cid = card.get('id')
+                  if cid in local_ids:
+                      errors.append(f'{path}: duplicate card id {cid}')
+                  local_ids.add(cid)
+                  if cid in global_card_ids:
+                      errors.append(f'global duplicate card id {cid}')
+                  global_card_ids.add(cid)
+                  for key in ('front','back'):
+                      value = card.get(key)
+                      if not isinstance(value, str) or not value.strip():
+                          errors.append(f'{prefix}: {key} must be non-empty string')
+                      if isinstance(value, str) and re.search(r'<[^>]+>', value):
+                          errors.append(f'{prefix}: HTML is not allowed in {key}')
+                  if card.get('reading') is not None and not isinstance(card.get('reading'), str):
+                      errors.append(f'{prefix}: reading must be string or null')
+                  if not isinstance(card.get('tags'), list):
+                      errors.append(f'{prefix}: tags must be an array')
+
+          if manifest.get('totalCardCount') != total:
+              errors.append(f'manifest totalCardCount mismatch: expected {total}')
+
+          if errors:
+              print('\n'.join(f'ERROR: {error}' for error in errors))
+              sys.exit(1)
+          print(f'Validated {len(deck_ids)} decks and {total} cards.')
+          '''
+          (scripts / 'validate_data.py').write_text(textwrap.dedent(validate_py).lstrip(), encoding='utf-8')
+
+          build_py = r'''
+          from pathlib import Path
+          import json, shutil, zipfile
+
+          ROOT = Path(__file__).resolve().parents[1]
+          manifest = json.loads((ROOT / 'data' / 'manifest.json').read_text(encoding='utf-8'))
+          output = ROOT / 'exports' / 'language-flashcards-data'
+          if output.exists():
+              shutil.rmtree(output)
+          (output / 'json').mkdir(parents=True)
+          (output / 'yaml').mkdir(parents=True)
+
+          def scalar(value):
+              if value is None:
+                  return 'null'
+              if isinstance(value, bool):
+                  return 'true' if value else 'false'
+              if isinstance(value, (int, float)):
+                  return str(value)
+              return json.dumps(str(value), ensure_ascii=False)
+
+          def to_yaml(deck):
+              lines = []
+              for key in ('id','language','title','frontLanguage','backLanguage','cardCount'):
+                  lines.append(f'{key}: {scalar(deck[key])}')
+              lines.append('cards:')
+              for card in deck['cards']:
+                  lines.append(f'  - id: {scalar(card["id"])}')
+                  for key in ('front','back','reading','lesson','page'):
+                      lines.append(f'    {key}: {scalar(card[key])}')
+                  lines.append('    tags:')
+                  if card['tags']:
+                      for tag in card['tags']:
+                          lines.append(f'      - {scalar(tag)}')
+                  else:
+                      lines[-1] = '    tags: []'
+                  lines.append(f'    notes: {scalar(card["notes"])}')
+              return '\n'.join(lines) + '\n'
+
+          export_manifest = {'decks': []}
+          for meta in manifest['decks']:
+              source = ROOT / 'data' / meta['file']
+              deck = json.loads(source.read_text(encoding='utf-8'))
+              name = source.name
+              (output / 'json' / name).write_text(json.dumps(deck, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+              (output / 'yaml' / name.replace('.json','.yaml')).write_text(to_yaml(deck), encoding='utf-8')
+              export_manifest['decks'].append({'id': deck['id'], 'title': deck['title'], 'cardCount': deck['cardCount']})
+
+          shutil.copy2(ROOT / 'data' / 'schema.json', output / 'schema.json')
+          (output / 'manifest.json').write_text(json.dumps(export_manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          total = sum(item['cardCount'] for item in export_manifest['decks'])
+          (output / 'README.md').write_text(
+              '# Language Flashcards Data\n\n'
+              'このディレクトリは `data/` 以下の正本JSONから自動生成されます。直接編集しないでください。\n\n'
+              f'- デッキ数: {len(export_manifest["decks"])}\n'
+              f'- 合計カード数: {total}\n'
+              '- JSON: プログラム利用向け\n'
+              '- YAML: 閲覧・手編集の参考向け\n'
+              '- 学習履歴は含みません\n',
+              encoding='utf-8'
+          )
+
+          zip_path = ROOT / 'exports' / 'language-flashcards-data.zip'
+          if zip_path.exists():
+              zip_path.unlink()
+          with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as archive:
+              for path in sorted(output.rglob('*')):
+                  if path.is_file():
+                      archive.write(path, path.relative_to(output.parent))
+          print(f'Built {zip_path}')
+          '''
+          (scripts / 'build_exports.py').write_text(textwrap.dedent(build_py).lstrip(), encoding='utf-8')
+
+          readme = f'''# Language Flashcards
+
+台湾語と中国語の単語を学習する、GitHub Pages上のフラッシュカードアプリです。
+
+- 公開URL: https://ninochi.github.io/language-flashcards/
+- 収録デッキ: 台湾語、中国語 第1課〜第8課
+- 合計カード数: {manifest['totalCardCount']}
+- 表面: 日本語
+- 裏面: 台湾語ローマ字、または中国語＋拼音
+
+## 重要: 正本は `data/` 以下のJSON
+
+単語データの **Single Source of Truth（正本）** は `data/decks/*.json` です。
+
+- 単語の追加・修正は `data/decks/*.json` を編集する
+- デッキの追加・並び順・表示名は `data/manifest.json` を編集する
+- `index.html` や `app.js` に単語を直接埋め込まない
+- `exports/` は自動生成物なので直接編集しない
+
+このルールを守れば、GitHub上の直接編集、別のChatGPTセッション、Codex、Claude Codeなど、どのエージェントからでも同じデータを安全に更新できます。
+
+## リポジトリ構成
+
+```text
+language-flashcards/
+├── index.html                  # 画面のHTML
+├── styles.css                 # 見た目
+├── app.js                     # 学習ロジックとJSON読込
+├── data/
+│   ├── manifest.json          # デッキ一覧、表示順、互換用storageKey
+│   ├── schema.json            # JSON Schema
+│   └── decks/                 # 正本の単語データ
+│       ├── taigi.json
+│       ├── chinese-lesson-01.json
+│       └── ... chinese-lesson-08.json
+├── scripts/
+│   ├── validate_data.py       # データ検証
+│   └── build_exports.py       # JSON/YAML/ZIP生成
+├── exports/                   # 自動生成物
+│   ├── language-flashcards-data/
+│   └── language-flashcards-data.zip
+└── .github/workflows/
+    ├── validate-data.yml      # PR/Push時の検証
+    ├── deploy-pages.yml       # 検証後にGitHub Pagesへ公開
+    └── build-exports.yml      # JSONからYAMLとZIPを再生成
+```
+
+## データ形式
+
+各デッキは次の形式です。
+
+```json
+{{
+  "id": "chinese-lesson-08",
+  "language": "zh-CN",
+  "title": "中国語 第8課",
+  "frontLanguage": "ja",
+  "backLanguage": "zh-CN",
+  "cardCount": 66,
+  "cards": [
+    {{
+      "id": "c8-001",
+      "front": "支払う、渡す",
+      "back": "付",
+      "reading": "fù",
+      "lesson": 8,
+      "page": null,
+      "tags": [],
+      "notes": null
+    }}
+  ]
+}}
+```
+
+### フィールド
+
+- `id`: 永続的なデッキID・カードID。既存IDは変更しない
+- `front`: 表面の日本語
+- `back`: 裏面の台湾語ローマ字または中国語
+- `reading`: 中国語の拼音。台湾語は `null`
+- `lesson`: 課番号。台湾語は `null`
+- `page`: 教科書ページ。現行データは未保持のため多くが `null`
+- `tags`: 分類タグ
+- `notes`: 補足
+
+## 既存の学習履歴を壊さないためのルール
+
+学習履歴はブラウザの `localStorage` に保存されます。端末間では自動同期されません。
+
+- カードIDを変更・再利用しない
+- `data/manifest.json` の `storageKey` を変更しない
+- 既存カードを修正する場合は、原則として同じIDを維持する
+
+現在の保存キーは次の形式です。
+
+```text
+language-flashcards:<storageKey>:v1
+```
+
+例:
+
+```text
+language-flashcards:taigi:v1
+language-flashcards:chinese-1:v1
+```
+
+この互換設計により、HTML埋め込み版で作られた既存の進捗も引き継がれます。
+
+## 編集手順
+
+1. 対象の `data/decks/*.json` を編集
+2. `cardCount` を実際のカード数に合わせる
+3. ローカルで検証
+
+```bash
+python3 scripts/validate_data.py
+```
+
+4. 必要ならエクスポートを再生成
+
+```bash
+python3 scripts/build_exports.py
+```
+
+5. Commit / Pull Requestを作成
+
+`main` へのPush後、GitHub Actionsが検証、Pages公開、ZIP再生成を行います。
+
+## 新しい中国語課を追加する
+
+1. `data/decks/chinese-lesson-09.json` を追加
+2. デッキ内のカードIDを `c9-001` のように一意にする
+3. `data/manifest.json` に次のような項目を追加
+
+```json
+{{
+  "id": "chinese-lesson-09",
+  "title": "中国語 第9課",
+  "file": "decks/chinese-lesson-09.json",
+  "storageKey": "chinese-9",
+  "subtitle": "表：日本語 ／ 裏：中国語＋拼音",
+  "backLabel": "中国語・拼音",
+  "cardCount": 0,
+  "order": 10
+}}
+```
+
+4. `manifest.totalCardCount` も更新
+5. `python3 scripts/validate_data.py` を実行
+
+## 自動生成物
+
+次は直接編集しません。
+
+- `exports/language-flashcards-data/json/`
+- `exports/language-flashcards-data/yaml/`
+- `exports/language-flashcards-data.zip`
+
+これらは `python3 scripts/build_exports.py` またはGitHub Actionsによって正本JSONから生成されます。
+
+## アプリの動作
+
+- 不正解は数枚後に再出題
+- 「覚えた」は通常の出題対象から除外
+- 忘却曲線モードでは 1、3、7、14、30、60日後に再出題
+- 最後に開いた教材を記憶
+- 学習履歴は教材ごとに分離
+- ダークモード対応
+
+## エージェント向け注意
+
+- 変更前に `README.md` と `data/manifest.json` を読む
+- 正本JSON以外を単語データの編集元にしない
+- IDと `storageKey` の互換性を維持する
+- 変更後に `python3 scripts/validate_data.py` を必ず実行する
+- 生成物だけを直して正本を直さない、という変更は禁止
+'''
+          (repo / 'README.md').write_text(readme, encoding='utf-8')
+
+          workflows = repo / '.github' / 'workflows'
+          workflows.mkdir(parents=True, exist_ok=True)
+          for path in workflows.glob('*.yml'):
+              if path.name != 'refactor-json-source.yml':
+                  path.unlink()
+
+          validate_workflow = '''name: Validate data
+
+          on:
+            pull_request:
+              paths:
+                - 'data/**'
+                - 'scripts/validate_data.py'
+                - '.github/workflows/validate-data.yml'
+            push:
+              branches: ["main"]
+              paths:
+                - 'data/**'
+                - 'scripts/validate_data.py'
+                - '.github/workflows/validate-data.yml'
+
+          permissions:
+            contents: read
+
+          jobs:
+            validate:
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v6
+                - run: python3 scripts/validate_data.py
+          '''
+          (workflows / 'validate-data.yml').write_text(textwrap.dedent(validate_workflow), encoding='utf-8')
+
+          deploy_workflow = '''name: Deploy Pages
+
+          on:
+            workflow_dispatch:
+            push:
+              branches: ["main"]
+              paths:
+                - 'index.html'
+                - 'styles.css'
+                - 'app.js'
+                - 'data/**'
+                - 'scripts/validate_data.py'
+                - '.github/workflows/deploy-pages.yml'
+
+          permissions:
+            contents: read
+            pages: write
+            id-token: write
+
+          concurrency:
+            group: pages
+            cancel-in-progress: true
+
+          jobs:
+            deploy:
+              environment:
+                name: github-pages
+                url: ${{ steps.deployment.outputs.page_url }}
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v6
+                - run: python3 scripts/validate_data.py
+                - uses: actions/configure-pages@v5
+                - uses: actions/upload-pages-artifact@v3
+                  with:
+                    path: .
+                - id: deployment
+                  uses: actions/deploy-pages@v4
+          '''
+          (workflows / 'deploy-pages.yml').write_text(textwrap.dedent(deploy_workflow), encoding='utf-8')
+
+          exports_workflow = '''name: Build exports
+
+          on:
+            workflow_dispatch:
+            push:
+              branches: ["main"]
+              paths:
+                - 'data/**'
+                - 'scripts/build_exports.py'
+                - 'scripts/validate_data.py'
+                - '.github/workflows/build-exports.yml'
+
+          permissions:
+            contents: write
+
+          jobs:
+            build:
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v6
+                - run: python3 scripts/validate_data.py
+                - run: python3 scripts/build_exports.py
+                - name: Commit generated exports
+                  run: |
+                    git config user.name "github-actions[bot]"
+                    git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                    git add exports
+                    git diff --cached --quiet || git commit -m "Rebuild flashcard exports"
+                    git push
+          '''
+          (workflows / 'build-exports.yml').write_text(textwrap.dedent(exports_workflow), encoding='utf-8')
+
+          # This one-time workflow removes itself after the migration commit.
+          (workflows / 'refactor-json-source.yml').unlink()
+
+      - name: Validate migrated data
+        run: python3 scripts/validate_data.py
+
+      - name: Rebuild exports
+        run: python3 scripts/build_exports.py
+
+      - name: Commit refactor
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Refactor flashcards to JSON source of truth"
+          git push
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
