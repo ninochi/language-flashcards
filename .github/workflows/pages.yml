@@ -1,4 +1,4 @@
-name: Dispatch JSON refactor
+name: Run JSON refactor and deploy
 
 on:
   push:
@@ -6,14 +6,54 @@ on:
   workflow_dispatch:
 
 permissions:
-  actions: write
-  contents: read
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
-  dispatch:
+  refactor-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Start refactor workflow
-        run: gh workflow run refactor-json-source.yml --repo "$GITHUB_REPOSITORY"
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - uses: actions/checkout@v6
+
+      - name: Execute migration script stored in refactor workflow
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path('.github/workflows/refactor-json-source.yml')
+          lines = path.read_text(encoding='utf-8').splitlines()
+          start = next(i for i, line in enumerate(lines) if line.strip() == '- name: Refactor repository')
+          run_line = next(i for i in range(start + 1, len(lines)) if lines[i].strip() == 'run: |')
+          end = next(i for i in range(run_line + 1, len(lines)) if lines[i].strip() == '- name: Validate migrated data')
+          script_lines = lines[run_line + 1:end]
+          script = '\n'.join(line[10:] if line.startswith('          ') else line for line in script_lines)
+          exec(compile(script, str(path), 'exec'))
+
+      - name: Validate migrated data
+        run: python3 scripts/validate_data.py
+
+      - name: Rebuild exports
+        run: python3 scripts/build_exports.py
+
+      - name: Commit refactor
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Refactor flashcards to JSON source of truth"
+          git push
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4
