@@ -2,12 +2,11 @@ const DAY = 24 * 60 * 60 * 1000;
 const REVIEW_INTERVALS = [1, 3, 7, 14, 30, 60];
 const UNCERTAIN_REVIEW_DAYS = 1;
 const UNKNOWN_REVIEW_DAYS = 1;
-const RETRY_REINSERT_DELAY = 8;
+const RETRY_MIN_GAP = 8;
 const MILESTONE_ADVANCE_DELAY_MS = 900;
 const LAST_DECK_KEY = "language-flashcards:last-deck";
 const CONFETTI_COLORS = ["#1769aa", "#46a76f", "#f0bf68", "#e06b5f", "#8f7be8"];
 const QUEUE_BUCKET = {
-  RETRY: 0,
   UNKNOWN_DUE: 1,
   UNSURE_DUE: 2,
   REVIEW_DUE: 3,
@@ -23,9 +22,13 @@ let deck = null;
 let words = [];
 let state = null;
 let queue = [];
+let retryQueue = [];
 let currentId = null;
+let currentSource = null;
 let flipped = false;
 const retryIds = new Set();
+let answeredCount = 0;
+let mainShownSinceRetry = 0;
 
 function blankProgress() {
   return {
@@ -54,6 +57,12 @@ function progressKey() {
 
 function reviewIntervalDays(streak) {
   return REVIEW_INTERVALS[Math.min(Math.max(Number(streak || 1) - 1, 0), REVIEW_INTERVALS.length - 1)];
+}
+
+function retryMixInterval() {
+  if (words.length <= 30) return 2;
+  if (words.length <= 80) return 3;
+  return 4;
 }
 
 function normalizeProgress(savedProgress) {
@@ -207,9 +216,6 @@ function priorityForWord(word) {
   const progress = state.progress[word.id] || blankProgress();
   const now = Date.now();
 
-  if (retryIds.has(word.id)) {
-    return { bucket: QUEUE_BUCKET.RETRY, score: 0 };
-  }
   if (progress.seen && progress.due <= now) {
     if (progress.lastResult === "unknown") {
       return { bucket: QUEUE_BUCKET.UNKNOWN_DUE, score: progress.due || 0 };
@@ -279,7 +285,7 @@ function renderCardReason(word) {
   const badge = $("cardBadge");
   const reason = $("cardReason");
 
-  if (retryIds.has(word.id)) {
+  if (currentSource === "retry" && currentId === word.id) {
     badge.textContent = "再挑戦";
     badge.dataset.kind = "retry";
     reason.textContent = "先ほど「分からなかった」を選んだため、間を空けて再出題しています";
@@ -326,9 +332,9 @@ function renderCardReason(word) {
   reason.textContent = "";
 }
 
-function updateStats() {
+function updateStats(includeCurrent = Boolean(currentId)) {
   const values = words.map((word) => state.progress[word.id] || blankProgress());
-  $("remainingCount").textContent = String(queue.length + (currentId ? 1 : 0));
+  $("remainingCount").textContent = String(queue.length + retryQueue.length + (includeCurrent ? 1 : 0));
   $("easyCount").textContent = String(values.filter((item) => item.everEasy).length);
   $("unsureCount").textContent = String(values.filter((item) => item.lastResult === "unsure").length);
   $("totalCount").textContent = String(words.length);
@@ -364,12 +370,45 @@ function restoreCardTransition() {
   });
 }
 
+function scheduleRetry(id) {
+  retryQueue = retryQueue.filter((item) => item.id !== id);
+  retryIds.add(id);
+  retryQueue.push({ id, readyAfter: answeredCount + RETRY_MIN_GAP });
+}
+
+function takeReadyRetry(ignoreReadiness = false) {
+  const retryIndex = retryQueue.findIndex((item) => ignoreReadiness || item.readyAfter <= answeredCount);
+  if (retryIndex < 0) return null;
+  const [entry] = retryQueue.splice(retryIndex, 1);
+  retryIds.delete(entry.id);
+  return entry.id;
+}
+
+function chooseNextCard() {
+  const canMixRetry = retryQueue.length > 0
+    && mainShownSinceRetry >= retryMixInterval()
+    && retryQueue.some((item) => item.readyAfter <= answeredCount);
+
+  if (queue.length > 0 && canMixRetry) {
+    const retryId = takeReadyRetry();
+    if (retryId) return { id: retryId, source: "retry" };
+  }
+
+  const mainId = queue.shift();
+  if (mainId) return { id: mainId, source: "main" };
+
+  const retryId = takeReadyRetry(true);
+  return retryId ? { id: retryId, source: "retry" } : { id: null, source: null };
+}
+
 function nextCard() {
   resetCardPositionImmediately();
   flipped = false;
   setAnswerControlsEnabled(false);
   updateCardFaceAccessibility();
-  currentId = queue.shift() || null;
+  const next = chooseNextCard();
+  currentId = next.id;
+  currentSource = next.source;
 
   if (!currentId) {
     restoreCardTransition();
@@ -390,8 +429,12 @@ function nextCard() {
 
 function buildQueue() {
   retryIds.clear();
+  retryQueue = [];
   queue = buildPrioritizedQueue();
   currentId = null;
+  currentSource = null;
+  answeredCount = 0;
+  mainShownSinceRetry = 0;
   nextCard();
 }
 
@@ -406,9 +449,16 @@ function flipCard() {
 function answer(result) {
   if (!currentId || !flipped) return;
   const answeredId = currentId;
+  const answeredSource = currentSource;
   const progress = state.progress[answeredId];
   const now = Date.now();
 
+  answeredCount += 1;
+  if (answeredSource === "retry") {
+    mainShownSinceRetry = 0;
+  } else {
+    mainShownSinceRetry += 1;
+  }
   progress.seen = Number(progress.seen || 0) + 1;
   progress.lastSeenAt = now;
   progress.lastResult = result;
@@ -418,12 +468,7 @@ function answer(result) {
     progress.wrong = Number(progress.wrong || 0) + 1;
     progress.streak = 0;
     progress.due = now + UNKNOWN_REVIEW_DAYS * DAY;
-    if (queue.length >= RETRY_REINSERT_DELAY) {
-      retryIds.add(answeredId);
-      queue.splice(RETRY_REINSERT_DELAY, 0, answeredId);
-    } else {
-      retryIds.delete(answeredId);
-    }
+    scheduleRetry(answeredId);
   } else if (result === "unsure") {
     progress.mastered = false;
     progress.unsure = Number(progress.unsure || 0) + 1;
@@ -441,7 +486,7 @@ function answer(result) {
 
   const milestoneMessage = nextMilestoneMessage();
   saveState();
-  updateStats();
+  updateStats(false);
   setAnswerControlsEnabled(false);
 
   if (milestoneMessage) {
