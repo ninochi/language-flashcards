@@ -47,6 +47,7 @@ select { width: 100%; background: var(--panel); color: var(--text); border: 1px 
 button { border: 0; cursor: pointer; }
 button:disabled, select:disabled { opacity: 0.45; cursor: not-allowed; }
 .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; margin-bottom: 18px; }
+.stats[data-mode="quiz"] { grid-template-columns: repeat(2, 1fr); }
 .stat { padding: 12px 8px; text-align: center; border: 1px solid var(--border); border-radius: 13px; background: var(--panel); }
 .stat strong { display: block; font-size: 21px; }
 .stat span { color: var(--muted); font-size: 12px; }

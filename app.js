@@ -1,5 +1,6 @@
 const LAST_DECK_KEY = "language-flashcards:last-deck";
 const STORAGE_VERSION = 3;
+const QUIZ_SESSION_SIZE = 20;
 const MILESTONE_ADVANCE_DELAY_MS = 900;
 const CONFETTI_COLORS = ["#1769aa", "#46a76f", "#f0bf68", "#e06b5f", "#8f7be8"];
 const MODES = {
@@ -18,6 +19,7 @@ let mode = MODES.ALL;
 let queue = [];
 let currentId = null;
 let currentQuiz = null;
+let quizSession = null;
 let flipped = false;
 let celebrationRun = 0;
 
@@ -144,9 +146,7 @@ function buildCardQueue(nextMode) {
 }
 
 function buildQuizQueue() {
-  const wrong = shuffle(state.quizWrongIds.filter((id) => wordById(id)));
-  const rest = shuffle(words.map((word) => word.id).filter((id) => !state.quizWrongIds.includes(id)));
-  return interleaveMarkedIds(wrong, rest);
+  return shuffle(words.map((word) => word.id)).slice(0, Math.min(QUIZ_SESSION_SIZE, words.length));
 }
 
 function setControlsEnabled(enabled) {
@@ -212,6 +212,28 @@ function renderCardReason(word) {
 }
 
 function updateStats(includeCurrent = Boolean(currentId || currentQuiz)) {
+  if (mode === MODES.QUIZ) {
+    document.querySelector(".stats").dataset.mode = "quiz";
+    $("remainingStat").hidden = false;
+    $("unknownStat").hidden = false;
+    $("quizWrongStat").hidden = true;
+    $("totalStat").hidden = true;
+    $("remainingLabel").textContent = "正解数";
+    $("unknownLabel").textContent = "間違えた数";
+    $("remainingCount").textContent = String(quizSession?.correct || 0);
+    $("unknownCount").textContent = String(quizSession?.wrong || 0);
+    return;
+  }
+
+  document.querySelector(".stats").dataset.mode = "cards";
+  $("remainingStat").hidden = false;
+  $("unknownStat").hidden = false;
+  $("quizWrongStat").hidden = false;
+  $("totalStat").hidden = false;
+  $("remainingLabel").textContent = "今回の残り";
+  $("unknownLabel").textContent = "分からなかった";
+  $("quizWrongLabel").textContent = "クイズ間違い";
+  $("totalLabel").textContent = "全単語";
   $("remainingCount").textContent = String(queue.length + (includeCurrent ? 1 : 0));
   $("unknownCount").textContent = String(state.unknownIds.length);
   $("quizWrongCount").textContent = String(state.quizWrongIds.length);
@@ -277,12 +299,20 @@ function hideAllStudySurfaces() {
   $("emptyArea").hidden = true;
 }
 
-function renderEmpty(title, message) {
+function setEmptyActions(context = "card") {
+  $("continueBtn").hidden = false;
+  $("continueBtn").textContent = context === "quiz-result" ? "はい、もう一度挑戦する" : "もう一周する";
+  $("emptyUnknownBtn").hidden = context === "quiz-result";
+  $("emptyQuizBtn").hidden = context === "quiz-result";
+}
+
+function renderEmpty(title, message, context = "card") {
   $("studyArea").hidden = true;
   $("quizArea").hidden = true;
   $("emptyArea").hidden = false;
   $("emptyTitle").textContent = title;
   $("emptyMessage").textContent = message;
+  setEmptyActions(context);
   updateStats(false);
 }
 
@@ -301,6 +331,7 @@ function restoreCardTransition() {
 
 function nextCard() {
   currentQuiz = null;
+  quizSession = null;
   resetCardPositionImmediately();
   flipped = false;
   setAnswerControlsEnabled(false);
@@ -340,6 +371,7 @@ function startCardMode(nextMode) {
   queue = buildCardQueue(mode);
   currentId = null;
   currentQuiz = null;
+  quizSession = null;
   nextCard();
 }
 
@@ -398,19 +430,25 @@ function renderQuiz() {
   const nextId = queue.shift() || null;
   if (!nextId) {
     currentQuiz = null;
-    renderEmpty("クイズを一通り解きました", "もう一度解く場合はクイズモードを続けられます。");
+    renderQuizResult();
     return;
   }
 
   currentQuiz = createQuizForWord(wordById(nextId));
   const isWrong = state.quizWrongIds.includes(nextId);
+  const questionNumber = (quizSession?.answered || 0) + 1;
+  const totalQuestions = quizSession?.total || 0;
   $("quizBadge").textContent = isWrong ? "前回間違えた問題" : "クイズ";
   $("quizBadge").dataset.kind = isWrong ? "retry" : "new";
-  $("quizReason").textContent = isWrong ? "前回のクイズで間違えた問題です" : "";
+  $("quizReason").textContent = [
+    isWrong ? "前回のクイズで間違えた問題です" : "",
+    totalQuestions ? `${questionNumber} / ${totalQuestions}` : "",
+  ].filter(Boolean).join(" · ");
   $("quizPrompt").textContent = currentQuiz.word.front;
   $("quizFeedback").textContent = "";
   $("quizFeedback").dataset.kind = "";
   $("quizNextBtn").hidden = true;
+  $("quizNextBtn").textContent = "次の問題";
 
   const optionContainer = $("quizOptions");
   optionContainer.replaceChildren();
@@ -434,8 +472,30 @@ function startQuizMode() {
   mode = MODES.QUIZ;
   updateModeButtons();
   queue = buildQuizQueue();
+  quizSession = {
+    total: queue.length,
+    answered: 0,
+    correct: 0,
+    wrong: 0,
+  };
   currentId = null;
   renderQuiz();
+}
+
+function renderQuizResult() {
+  const total = quizSession?.total || 0;
+  const correct = quizSession?.correct || 0;
+  const wrong = quizSession?.wrong || 0;
+  const isPerfect = total > 0 && wrong === 0;
+  const title = isPerfect ? "全問正解です" : "残念";
+  const message = `${total}問中${correct}問正解、${wrong}問間違いでした。再度挑戦しますか？`;
+
+  renderEmpty(title, message, "quiz-result");
+  if (isPerfect) {
+    launchConfetti("全問正解です");
+  } else {
+    hideCelebration();
+  }
 }
 
 function answerQuiz(selectedId, selectedButton) {
@@ -443,12 +503,15 @@ function answerQuiz(selectedId, selectedButton) {
   currentQuiz.answered = true;
   const correctId = currentQuiz.word.id;
   const isCorrect = selectedId === correctId;
+  if (quizSession) quizSession.answered += 1;
 
   if (isCorrect) {
+    if (quizSession) quizSession.correct += 1;
     setIdMembership("quizWrongIds", correctId, false);
     $("quizFeedback").textContent = "正解";
     $("quizFeedback").dataset.kind = "correct";
   } else {
+    if (quizSession) quizSession.wrong += 1;
     setIdMembership("quizWrongIds", correctId, true);
     $("quizFeedback").textContent = `不正解。正解は ${choiceLabel(currentQuiz.word)} です。`;
     $("quizFeedback").dataset.kind = "wrong";
@@ -463,6 +526,7 @@ function answerQuiz(selectedId, selectedButton) {
 
   saveState();
   updateStats();
+  $("quizNextBtn").textContent = queue.length ? "次の問題" : "結果を見る";
   $("quizNextBtn").hidden = false;
 }
 
