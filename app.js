@@ -235,14 +235,46 @@ function priorityForWord(word) {
 }
 
 function buildPrioritizedQueue() {
-  return words
+  const items = words
     .map((word) => ({ id: word.id, random: Math.random(), priority: priorityForWord(word) }))
     .sort((a, b) =>
       a.priority.bucket - b.priority.bucket
       || a.priority.score - b.priority.score
       || a.random - b.random
-    )
-    .map((item) => item.id);
+    );
+  return interleavePriorityAndFreshItems(items).map((item) => item.id);
+}
+
+function interleavePriorityAndFreshItems(items) {
+  const priorityItems = items.filter((item) => item.priority.bucket < QUEUE_BUCKET.NEW);
+  const freshItems = items.filter((item) => item.priority.bucket >= QUEUE_BUCKET.NEW);
+  if (!priorityItems.length || !freshItems.length) return items;
+
+  const balanced = [];
+  const priorityBatchSize = retryMixInterval();
+  let priorityIndex = 0;
+  let freshIndex = 0;
+
+  while (priorityIndex < priorityItems.length || freshIndex < freshItems.length) {
+    for (let i = 0; i < priorityBatchSize && priorityIndex < priorityItems.length; i += 1) {
+      balanced.push(priorityItems[priorityIndex]);
+      priorityIndex += 1;
+    }
+    if (freshIndex < freshItems.length) {
+      balanced.push(freshItems[freshIndex]);
+      freshIndex += 1;
+    }
+    if (priorityIndex >= priorityItems.length) {
+      balanced.push(...freshItems.slice(freshIndex));
+      break;
+    }
+    if (freshIndex >= freshItems.length) {
+      balanced.push(...priorityItems.slice(priorityIndex));
+      break;
+    }
+  }
+
+  return balanced;
 }
 
 function currentWord() {
