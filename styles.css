@@ -38,6 +38,9 @@ h1 { margin: 0 0 5px; font-size: clamp(22px, 5vw, 32px); }
 .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow); padding: 18px; }
 .settings { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; align-items: end; margin: 18px 0; }
 .settings-actions { display: flex; gap: 10px; align-items: stretch; }
+.mode-tabs { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 4px; border: 1px solid var(--border); border-radius: 16px; background: var(--bg); }
+.mode-tab { background: transparent; color: var(--muted); border: 1px solid transparent; padding: 10px 8px; border-radius: 12px; }
+.mode-tab.active { background: var(--panel); color: var(--primary); border-color: color-mix(in srgb, var(--primary) 35%, var(--border)); box-shadow: 0 6px 16px rgba(21, 37, 53, 0.08); }
 .review-policy { grid-column: 1 / -1; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
 select, button { appearance: none; border-radius: 13px; padding: 13px 14px; font: inherit; font-weight: 700; }
 select { width: 100%; background: var(--panel); color: var(--text); border: 1px solid var(--border); }
@@ -56,14 +59,13 @@ button:disabled, select:disabled { opacity: 0.45; cursor: not-allowed; }
 .face-label { position: absolute; top: 18px; left: 20px; color: var(--muted); font-size: 13px; }
 .card-meta { position: absolute; top: 15px; right: 18px; max-width: calc(100% - 105px); display: flex; flex-direction: column; align-items: flex-end; gap: 4px; text-align: right; }
 .card-badge { display: inline-flex; align-items: center; min-height: 25px; padding: 4px 9px; border-radius: 999px; border: 1px solid var(--border); font-size: 12px; font-weight: 750; line-height: 1; background: var(--bg); color: var(--muted); }
-.card-badge[data-kind="review"] { color: var(--primary); border-color: color-mix(in srgb, var(--primary) 45%, var(--border)); background: color-mix(in srgb, var(--primary) 10%, var(--panel)); }
 .card-badge[data-kind="retry"] { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 45%, var(--border)); background: color-mix(in srgb, var(--danger) 10%, var(--panel)); }
-.card-badge[data-kind="unsure"] { color: var(--caution); border-color: color-mix(in srgb, var(--caution) 45%, var(--border)); background: color-mix(in srgb, var(--caution) 12%, var(--panel)); }
 .card-badge[data-kind="practice"] { color: var(--muted); border-color: var(--border); background: color-mix(in srgb, var(--muted) 8%, var(--panel)); }
 .card-reason { color: var(--muted); font-size: 11px; line-height: 1.35; }
 .word { text-align: center; font-size: clamp(34px, 8vw, 60px); font-weight: 750; line-height: 1.35; overflow-wrap: anywhere; }
 .word small { display: block; font-size: .45em; font-weight: 600; margin-top: 12px; color: var(--muted); }
-[data-deck-language="nan-Latn"] #backText {
+[data-deck-language="nan-Latn"] #backText,
+[data-deck-language="nan-Latn"] .quiz-option {
   font-family: "Charis SIL", "Noto Serif", "Noto Sans", "DejaVu Serif", "Times New Roman", ui-serif, serif;
   font-weight: 400;
   font-feature-settings: "mark" 1, "mkmk" 1;
@@ -72,12 +74,20 @@ button:disabled, select:disabled { opacity: 0.45; cursor: not-allowed; }
   line-height: 1.5;
 }
 .hint { position: absolute; bottom: 16px; color: var(--muted); font-size: 13px; }
-.controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.controls { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
 .unknown { background: color-mix(in srgb, var(--danger) 13%, var(--panel)); color: var(--danger); border: 1px solid color-mix(in srgb, var(--danger) 38%, var(--border)); }
-.unsure { background: color-mix(in srgb, var(--caution) 14%, var(--panel)); color: var(--caution); border: 1px solid color-mix(in srgb, var(--caution) 38%, var(--border)); }
 .easy { background: var(--primary); color: white; }
 .secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
 .danger-outline { background: transparent; color: var(--danger); border: 1px solid color-mix(in srgb, var(--danger) 45%, var(--border)); }
+.quiz-card { position: relative; min-height: 430px; display: grid; gap: 18px; align-content: start; padding: 58px 24px 24px; border-radius: 24px; border: 1px solid var(--border); background: var(--panel); box-shadow: var(--shadow); }
+.quiz-meta { top: 15px; right: 18px; }
+.quiz-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.quiz-option { min-height: 72px; background: var(--bg); color: var(--text); border: 1px solid var(--border); line-height: 1.35; white-space: pre-wrap; }
+.quiz-option.correct { background: color-mix(in srgb, var(--primary) 14%, var(--panel)); color: var(--primary); border-color: color-mix(in srgb, var(--primary) 45%, var(--border)); }
+.quiz-option.wrong { background: color-mix(in srgb, var(--danger) 14%, var(--panel)); color: var(--danger); border-color: color-mix(in srgb, var(--danger) 45%, var(--border)); }
+.quiz-feedback { min-height: 28px; color: var(--muted); font-weight: 750; text-align: center; }
+.quiz-feedback[data-kind="correct"] { color: var(--primary); }
+.quiz-feedback[data-kind="wrong"] { color: var(--danger); }
 .empty { min-height: 260px; display: grid; place-items: center; text-align: center; border: 1px dashed var(--border); border-radius: 24px; background: var(--panel); padding: 30px; }
 .empty h2 { margin-top: 0; font-size: clamp(20px, 4vw, 26px); }
 .empty p { color: var(--muted); line-height: 1.7; }
@@ -130,6 +140,7 @@ button:disabled, select:disabled { opacity: 0.45; cursor: not-allowed; }
   .stats { grid-template-columns: repeat(2, 1fr); }
   .settings { grid-template-columns: 1fr; align-items: stretch; }
   .settings-actions { flex-direction: column; }
+  .mode-tabs { grid-template-columns: 1fr; }
   .review-policy { grid-column: 1; }
   .card-wrap { margin: 12px 0; }
   .card { min-height: 270px; }
@@ -138,5 +149,8 @@ button:disabled, select:disabled { opacity: 0.45; cursor: not-allowed; }
   .card-meta { top: 48px; left: 20px; right: 20px; max-width: none; align-items: flex-start; text-align: left; }
   .controls { gap: 7px; }
   .controls button { padding: 12px 7px; font-size: 13px; line-height: 1.2; }
+  .quiz-card { min-height: 430px; padding: 92px 18px 20px; }
+  .quiz-meta { top: 48px; left: 20px; right: 20px; max-width: none; align-items: flex-start; text-align: left; }
+  .quiz-options { grid-template-columns: 1fr; }
   .empty-actions { flex-direction: column; }
 }

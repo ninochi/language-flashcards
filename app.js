@@ -1,18 +1,11 @@
-const DAY = 24 * 60 * 60 * 1000;
-const REVIEW_INTERVALS = [1, 3, 7, 14, 30, 60];
-const UNCERTAIN_REVIEW_DAYS = 1;
-const UNKNOWN_REVIEW_DAYS = 1;
-const RETRY_MIN_GAP = 8;
-const MILESTONE_ADVANCE_DELAY_MS = 900;
 const LAST_DECK_KEY = "language-flashcards:last-deck";
+const STORAGE_VERSION = 3;
+const MILESTONE_ADVANCE_DELAY_MS = 900;
 const CONFETTI_COLORS = ["#1769aa", "#46a76f", "#f0bf68", "#e06b5f", "#8f7be8"];
-const QUEUE_BUCKET = {
-  UNKNOWN_DUE: 1,
-  UNSURE_DUE: 2,
-  REVIEW_DUE: 3,
-  UNSURE_RECENT: 4,
-  NEW: 5,
-  LONG_UNSEEN: 6,
+const MODES = {
+  ALL: "all",
+  UNKNOWN: "unknown",
+  QUIZ: "quiz",
 };
 const $ = (id) => document.getElementById(id);
 
@@ -21,27 +14,19 @@ let deckMeta = null;
 let deck = null;
 let words = [];
 let state = null;
+let mode = MODES.ALL;
 let queue = [];
-let retryQueue = [];
 let currentId = null;
-let currentSource = null;
+let currentQuiz = null;
 let flipped = false;
-const retryIds = new Set();
-let answeredCount = 0;
-let mainShownSinceRetry = 0;
+let celebrationRun = 0;
 
-function blankProgress() {
+function blankState() {
   return {
-    mastered: false,
-    wrong: 0,
-    unsure: 0,
-    streak: 0,
-    due: 0,
-    seen: 0,
-    lastSeenAt: 0,
-    lastResult: null,
-    everEasy: false,
-    firstEasyAt: 0,
+    version: STORAGE_VERSION,
+    unknownIds: [],
+    seenIds: [],
+    quizWrongIds: [],
   };
 }
 
@@ -52,73 +37,12 @@ async function fetchJson(path) {
 }
 
 function progressKey() {
-  return `language-flashcards:${deckMeta.storageKey}:v1`;
+  return `language-flashcards:${deckMeta.storageKey}:v${STORAGE_VERSION}`;
 }
 
-function reviewIntervalDays(streak) {
-  return REVIEW_INTERVALS[Math.min(Math.max(Number(streak || 1) - 1, 0), REVIEW_INTERVALS.length - 1)];
-}
-
-function retryMixInterval() {
-  if (words.length <= 30) return 2;
-  if (words.length <= 80) return 3;
-  return 4;
-}
-
-function normalizeProgress(savedProgress) {
-  const existing = savedProgress && typeof savedProgress === "object" ? savedProgress : blankProgress();
-  let migrated = false;
-
-  if (existing.wrong == null && existing.wrongCount != null) {
-    existing.wrong = existing.wrongCount;
-    migrated = true;
-  }
-  if (existing.unsure == null && existing.unsureCount != null) {
-    existing.unsure = existing.unsureCount;
-    migrated = true;
-  }
-  if (existing.seen == null && existing.seenCount != null) {
-    existing.seen = existing.seenCount;
-    migrated = true;
-  }
-
-  existing.mastered = Boolean(existing.mastered);
-  existing.wrong = Number(existing.wrong || 0);
-  existing.unsure = Number(existing.unsure || 0);
-  existing.streak = Number(existing.streak || 0);
-  existing.due = Number(existing.due || existing.dueAt || 0);
-  existing.seen = Number(existing.seen || 0);
-  existing.lastSeenAt = Number(existing.lastSeenAt || 0);
-  existing.firstEasyAt = Number(existing.firstEasyAt || 0);
-  existing.everEasy = Boolean(existing.everEasy || existing.mastered);
-
-  if (existing.lastResult == null) {
-    const inferredResult = existing.mastered ? "easy" : existing.wrong > 0 ? "unknown" : null;
-    if (existing.lastResult !== inferredResult) migrated = true;
-    existing.lastResult = inferredResult;
-  } else if (!["unknown", "unsure", "easy"].includes(existing.lastResult)) {
-    existing.lastResult = null;
-    migrated = true;
-  }
-
-  if (existing.seen <= 0 && (existing.mastered || existing.wrong > 0 || existing.unsure > 0 || existing.due > 0)) {
-    existing.seen = 1;
-    migrated = true;
-  }
-
-  if (existing.everEasy && existing.firstEasyAt <= 0) {
-    existing.firstEasyAt = existing.lastSeenAt || Date.now();
-    migrated = true;
-  }
-
-  if (existing.mastered && (!Number.isFinite(existing.due) || existing.due <= 0 || existing.due >= Number.MAX_SAFE_INTEGER)) {
-    const effectiveStreak = Math.max(existing.streak, 1);
-    existing.streak = effectiveStreak;
-    existing.due = Date.now() + reviewIntervalDays(effectiveStreak) * DAY;
-    migrated = true;
-  }
-
-  return { progress: existing, migrated };
+function uniqueKnownIds(ids) {
+  const validIds = new Set(words.map((word) => word.id));
+  return [...new Set(Array.isArray(ids) ? ids : [])].filter((id) => validIds.has(id));
 }
 
 function loadState() {
@@ -129,58 +53,174 @@ function loadState() {
     console.warn("学習履歴を読み込めませんでした。", error);
   }
 
-  const loaded = saved && typeof saved === "object" ? saved : {};
-  loaded.progress = loaded.progress && typeof loaded.progress === "object" ? loaded.progress : {};
-  loaded.milestones = loaded.milestones && typeof loaded.milestones === "object" ? loaded.milestones : {};
-
-  let migrated = false;
-  for (const word of words) {
-    const normalized = normalizeProgress(loaded.progress[word.id]);
-    if (normalized.migrated) migrated = true;
-    loaded.progress[word.id] = normalized.progress;
-  }
-
-  if ("srs" in loaded || "settings" in loaded) migrated = true;
-  delete loaded.srs;
-  delete loaded.settings;
-
-  if (migrated) {
-    localStorage.setItem(progressKey(), JSON.stringify(loaded));
-  }
-  return loaded;
+  const loaded = saved && typeof saved === "object" ? saved : blankState();
+  return {
+    version: STORAGE_VERSION,
+    unknownIds: uniqueKnownIds(loaded.unknownIds),
+    seenIds: uniqueKnownIds(loaded.seenIds),
+    quizWrongIds: uniqueKnownIds(loaded.quizWrongIds),
+  };
 }
 
 function saveState() {
   localStorage.setItem(progressKey(), JSON.stringify(state));
 }
 
-function hasReachedAllSeen() {
-  return words.length > 0 && words.every((word) => Number(state.progress[word.id]?.seen || 0) > 0);
+function shuffle(items) {
+  return [...items]
+    .map((item) => ({ item, random: Math.random() }))
+    .sort((a, b) => a.random - b.random)
+    .map(({ item }) => item);
 }
 
-function hasReachedAllEasy() {
-  return words.length > 0 && words.every((word) => Boolean(state.progress[word.id]?.everEasy));
+function wordById(id) {
+  return words.find((word) => word.id === id) || null;
 }
 
-function nextMilestoneMessage() {
-  state.milestones = state.milestones && typeof state.milestones === "object" ? state.milestones : {};
-  const now = Date.now();
+function idsForUnknownMode() {
+  return state.unknownIds.filter((id) => wordById(id));
+}
 
-  if (!state.milestones.allEasyAt && hasReachedAllEasy()) {
-    state.milestones.allEasyAt = now;
-    if (!state.milestones.allSeenAt) state.milestones.allSeenAt = now;
-    return "全カードを一度すぐ思い出せました";
+function isUnknown(id) {
+  return state.unknownIds.includes(id);
+}
+
+function setIdMembership(key, id, enabled) {
+  const ids = new Set(state[key]);
+  if (enabled) ids.add(id);
+  else ids.delete(id);
+  state[key] = [...ids].filter((itemId) => wordById(itemId));
+}
+
+function markSeen(id) {
+  setIdMembership("seenIds", id, true);
+}
+
+function choiceLabel(word) {
+  return word.reading ? `${word.back} / ${word.reading}` : word.back;
+}
+
+function quizMixInterval() {
+  if (words.length <= 30) return 2;
+  if (words.length <= 80) return 3;
+  return 4;
+}
+
+function interleaveMarkedIds(markedIds, otherIds) {
+  if (!markedIds.length || !otherIds.length) return [...markedIds, ...otherIds];
+
+  const mixed = [];
+  const batchSize = quizMixInterval();
+  let markedIndex = 0;
+  let otherIndex = 0;
+
+  while (markedIndex < markedIds.length || otherIndex < otherIds.length) {
+    for (let i = 0; i < batchSize && markedIndex < markedIds.length; i += 1) {
+      mixed.push(markedIds[markedIndex]);
+      markedIndex += 1;
+    }
+    if (otherIndex < otherIds.length) {
+      mixed.push(otherIds[otherIndex]);
+      otherIndex += 1;
+    }
+    if (markedIndex >= markedIds.length) {
+      mixed.push(...otherIds.slice(otherIndex));
+      break;
+    }
+    if (otherIndex >= otherIds.length) {
+      mixed.push(...markedIds.slice(markedIndex));
+      break;
+    }
   }
 
-  if (!state.milestones.allSeenAt && hasReachedAllSeen()) {
-    state.milestones.allSeenAt = now;
-    return "このデッキを一周しました";
+  return mixed;
+}
+
+function buildCardQueue(nextMode) {
+  if (nextMode === MODES.UNKNOWN) return shuffle(idsForUnknownMode());
+  const marked = shuffle(idsForUnknownMode());
+  const rest = shuffle(words.map((word) => word.id).filter((id) => !state.unknownIds.includes(id)));
+  return interleaveMarkedIds(marked, rest);
+}
+
+function buildQuizQueue() {
+  const wrong = shuffle(state.quizWrongIds.filter((id) => wordById(id)));
+  const rest = shuffle(words.map((word) => word.id).filter((id) => !state.quizWrongIds.includes(id)));
+  return interleaveMarkedIds(wrong, rest);
+}
+
+function setControlsEnabled(enabled) {
+  $("deckSelect").disabled = !enabled;
+  $("shuffleBtn").disabled = !enabled;
+  for (const button of document.querySelectorAll(".reset-history")) {
+    button.disabled = !enabled;
+  }
+  for (const button of document.querySelectorAll("[data-mode]")) {
+    button.disabled = !enabled;
+  }
+}
+
+function setAnswerControlsEnabled(enabled) {
+  for (const id of ["unknownBtn", "knownBtn"]) {
+    $(id).disabled = !enabled;
+  }
+}
+
+function updateModeButtons() {
+  for (const button of document.querySelectorAll("[data-mode]")) {
+    button.classList.toggle("active", button.dataset.mode === mode);
+  }
+}
+
+function updateCardFaceAccessibility() {
+  $("cardFront").setAttribute("aria-hidden", String(flipped));
+  $("cardBack").setAttribute("aria-hidden", String(!flipped));
+}
+
+function renderAnswer(word) {
+  const container = $("backText");
+  container.replaceChildren();
+  container.append(document.createTextNode(word.back));
+  if (word.reading) {
+    const reading = document.createElement("small");
+    reading.textContent = word.reading;
+    container.append(reading);
+  }
+}
+
+function renderCardReason(word) {
+  const badge = $("cardBadge");
+  const reason = $("cardReason");
+
+  if (isUnknown(word.id)) {
+    badge.textContent = "分からなかった";
+    badge.dataset.kind = "retry";
+    reason.textContent = "分からなかったリストに入っています";
+    return;
   }
 
-  return null;
+  if (state.seenIds.includes(word.id)) {
+    badge.textContent = "確認済み";
+    badge.dataset.kind = "practice";
+    reason.textContent = "";
+    return;
+  }
+
+  badge.textContent = "未確認";
+  badge.dataset.kind = "new";
+  reason.textContent = "";
+}
+
+function updateStats(includeCurrent = Boolean(currentId || currentQuiz)) {
+  $("remainingCount").textContent = String(queue.length + (includeCurrent ? 1 : 0));
+  $("unknownCount").textContent = String(state.unknownIds.length);
+  $("quizWrongCount").textContent = String(state.quizWrongIds.length);
+  $("totalCount").textContent = String(words.length);
 }
 
 function launchConfetti(message) {
+  celebrationRun += 1;
+  const currentRun = celebrationRun;
   const celebration = $("celebration");
   const stage = $("confettiStage");
   $("celebrationMessage").textContent = message;
@@ -204,189 +244,46 @@ function launchConfetti(message) {
   }
 
   window.setTimeout(() => {
+    if (currentRun !== celebrationRun) return;
     celebration.classList.remove("show");
     window.setTimeout(() => {
+      if (currentRun !== celebrationRun) return;
       celebration.hidden = true;
       stage.replaceChildren();
     }, 250);
   }, 2600);
 }
 
-function priorityForWord(word) {
-  const progress = state.progress[word.id] || blankProgress();
-  const now = Date.now();
-
-  if (progress.seen && progress.due <= now) {
-    if (progress.lastResult === "unknown") {
-      return { bucket: QUEUE_BUCKET.UNKNOWN_DUE, score: progress.due || 0 };
-    }
-    if (progress.lastResult === "unsure") {
-      return { bucket: QUEUE_BUCKET.UNSURE_DUE, score: progress.due || 0 };
-    }
-    return { bucket: QUEUE_BUCKET.REVIEW_DUE, score: progress.due || 0 };
-  }
-  if (progress.lastResult === "unsure") {
-    return { bucket: QUEUE_BUCKET.UNSURE_RECENT, score: -(progress.lastSeenAt || 0) };
-  }
-  if (!progress.seen) {
-    return { bucket: QUEUE_BUCKET.NEW, score: 0 };
-  }
-  return { bucket: QUEUE_BUCKET.LONG_UNSEEN, score: progress.lastSeenAt || 0 };
+function hideCelebration() {
+  celebrationRun += 1;
+  const celebration = $("celebration");
+  celebration.classList.remove("show");
+  celebration.hidden = true;
+  $("confettiStage").replaceChildren();
+  $("celebrationMessage").textContent = "";
 }
 
-function buildPrioritizedQueue() {
-  const items = words
-    .map((word) => ({ id: word.id, random: Math.random(), priority: priorityForWord(word) }))
-    .sort((a, b) =>
-      a.priority.bucket - b.priority.bucket
-      || a.priority.score - b.priority.score
-      || a.random - b.random
-    );
-  return interleavePriorityAndFreshItems(items).map((item) => item.id);
+function maybeCelebrateUnknownClear(previousUnknownCount) {
+  if (previousUnknownCount > 0 && state.unknownIds.length === 0) {
+    launchConfetti("分からなかったカードがゼロになりました");
+    return true;
+  }
+  return false;
 }
 
-function interleavePriorityAndFreshItems(items) {
-  const priorityItems = items.filter((item) => item.priority.bucket < QUEUE_BUCKET.NEW);
-  const freshItems = items.filter((item) => item.priority.bucket >= QUEUE_BUCKET.NEW);
-  if (!priorityItems.length || !freshItems.length) return items;
-
-  const balanced = [];
-  const priorityBatchSize = retryMixInterval();
-  let priorityIndex = 0;
-  let freshIndex = 0;
-
-  while (priorityIndex < priorityItems.length || freshIndex < freshItems.length) {
-    for (let i = 0; i < priorityBatchSize && priorityIndex < priorityItems.length; i += 1) {
-      balanced.push(priorityItems[priorityIndex]);
-      priorityIndex += 1;
-    }
-    if (freshIndex < freshItems.length) {
-      balanced.push(freshItems[freshIndex]);
-      freshIndex += 1;
-    }
-    if (priorityIndex >= priorityItems.length) {
-      balanced.push(...freshItems.slice(freshIndex));
-      break;
-    }
-    if (freshIndex >= freshItems.length) {
-      balanced.push(...priorityItems.slice(priorityIndex));
-      break;
-    }
-  }
-
-  return balanced;
-}
-
-function currentWord() {
-  return words.find((word) => word.id === currentId) || null;
-}
-
-function setControlsEnabled(enabled) {
-  for (const id of ["deckSelect", "shuffleBtn"]) {
-    $(id).disabled = !enabled;
-  }
-  for (const button of document.querySelectorAll(".reset-history")) {
-    button.disabled = !enabled;
-  }
-}
-
-function setAnswerControlsEnabled(enabled) {
-  for (const id of ["unknownBtn", "unsureBtn", "easyBtn"]) {
-    $(id).disabled = !enabled;
-  }
-}
-
-function updateCardFaceAccessibility() {
-  $("cardFront").setAttribute("aria-hidden", String(flipped));
-  $("cardBack").setAttribute("aria-hidden", String(!flipped));
-}
-
-function renderAnswer(word) {
-  const container = $("backText");
-  container.replaceChildren();
-  container.append(document.createTextNode(word.back));
-  if (word.reading) {
-    const reading = document.createElement("small");
-    reading.textContent = word.reading;
-    container.append(reading);
-  }
-}
-
-function renderCardReason(word) {
-  const progress = state.progress[word.id] || blankProgress();
-  const badge = $("cardBadge");
-  const reason = $("cardReason");
-
-  if (currentSource === "retry" && currentId === word.id) {
-    badge.textContent = "再挑戦";
-    badge.dataset.kind = "retry";
-    reason.textContent = "先ほど「分からなかった」を選んだため、間を空けて再出題しています";
-    return;
-  }
-
-  if (progress.seen && progress.due <= Date.now()) {
-    badge.textContent = "復習カード";
-    badge.dataset.kind = progress.lastResult === "unknown" ? "retry" : "review";
-    if (progress.lastResult === "unsure") {
-      reason.textContent = "前回迷ったため短めの間隔で再出題しています";
-    } else if (progress.lastResult === "unknown") {
-      reason.textContent = "前回分からなかったカードです";
-    } else {
-      const days = reviewIntervalDays(progress.streak);
-      reason.textContent = `前回正解から${days}日以上経過したため再出題しています`;
-    }
-    return;
-  }
-
-  if (progress.lastResult === "unsure") {
-    badge.textContent = "迷いカード";
-    badge.dataset.kind = "unsure";
-    reason.textContent = "前回「迷った」を選んだカードです";
-    return;
-  }
-
-  if (progress.lastResult === "unknown") {
-    badge.textContent = "再学習カード";
-    badge.dataset.kind = "retry";
-    reason.textContent = "以前「分からなかった」を選んだカードです";
-    return;
-  }
-
-  if (progress.seen) {
-    badge.textContent = "練習カード";
-    badge.dataset.kind = "practice";
-    reason.textContent = "復習予定前ですが、もう一周として出題しています";
-    return;
-  }
-
-  badge.textContent = "新しいカード";
-  badge.dataset.kind = "new";
-  reason.textContent = "";
-}
-
-function updateStats(includeCurrent = Boolean(currentId)) {
-  const values = words.map((word) => state.progress[word.id] || blankProgress());
-  $("remainingCount").textContent = String(queue.length + retryQueue.length + (includeCurrent ? 1 : 0));
-  $("easyCount").textContent = String(values.filter((item) => item.everEasy).length);
-  $("unsureCount").textContent = String(values.filter((item) => item.lastResult === "unsure").length);
-  $("totalCount").textContent = String(words.length);
-}
-
-function nextReviewDate() {
-  const future = words
-    .map((word) => state.progress[word.id])
-    .filter((item) => item?.seen && item.due > Date.now() && Number.isFinite(item.due))
-    .sort((a, b) => a.due - b.due);
-  return future[0]?.due || null;
-}
-
-function renderEmpty() {
+function hideAllStudySurfaces() {
   $("studyArea").hidden = true;
+  $("quizArea").hidden = true;
+  $("emptyArea").hidden = true;
+}
+
+function renderEmpty(title, message) {
+  $("studyArea").hidden = true;
+  $("quizArea").hidden = true;
   $("emptyArea").hidden = false;
-  const nextDue = nextReviewDate();
-  $("emptyMessage").textContent = nextDue
-    ? `次の復習予定は ${new Date(nextDue).toLocaleDateString("ja-JP")} です。まだ続けたい場合は、もう一周できます。`
-    : "まだ続けたい場合は、出題順を変えてもう一周できます。";
+  $("emptyTitle").textContent = title;
+  $("emptyMessage").textContent = message;
+  updateStats(false);
 }
 
 function resetCardPositionImmediately() {
@@ -402,148 +299,191 @@ function restoreCardTransition() {
   });
 }
 
-function scheduleRetry(id) {
-  retryQueue = retryQueue.filter((item) => item.id !== id);
-  retryIds.add(id);
-  retryQueue.push({ id, readyAfter: answeredCount + RETRY_MIN_GAP });
-}
-
-function takeReadyRetry(ignoreReadiness = false) {
-  const retryIndex = retryQueue.findIndex((item) => ignoreReadiness || item.readyAfter <= answeredCount);
-  if (retryIndex < 0) return null;
-  const [entry] = retryQueue.splice(retryIndex, 1);
-  retryIds.delete(entry.id);
-  return entry.id;
-}
-
-function chooseNextCard() {
-  const canMixRetry = retryQueue.length > 0
-    && mainShownSinceRetry >= retryMixInterval()
-    && retryQueue.some((item) => item.readyAfter <= answeredCount);
-
-  if (queue.length > 0 && canMixRetry) {
-    const retryId = takeReadyRetry();
-    if (retryId) return { id: retryId, source: "retry" };
-  }
-
-  const mainId = queue.shift();
-  if (mainId) return { id: mainId, source: "main" };
-
-  const retryId = takeReadyRetry(true);
-  return retryId ? { id: retryId, source: "retry" } : { id: null, source: null };
-}
-
 function nextCard() {
+  currentQuiz = null;
   resetCardPositionImmediately();
   flipped = false;
   setAnswerControlsEnabled(false);
   updateCardFaceAccessibility();
-  const next = chooseNextCard();
-  currentId = next.id;
-  currentSource = next.source;
+  currentId = queue.shift() || null;
 
   if (!currentId) {
     restoreCardTransition();
-    renderEmpty();
-    updateStats();
+    if (mode === MODES.UNKNOWN) {
+      renderEmpty(
+        "分からなかったカードはありません",
+        state.unknownIds.length
+          ? "この回の分からなかったカードを一通り見ました。続ける場合はもう一度回せます。"
+          : "分からなかったカードはゼロです。"
+      );
+    } else {
+      renderEmpty("この回のカードを一通り見ました", "まだ続けたい場合は、同じモードでもう一周できます。");
+    }
     return;
   }
 
-  const word = currentWord();
+  const word = wordById(currentId);
   $("frontText").textContent = word.front;
   renderAnswer(word);
   renderCardReason(word);
   $("studyArea").hidden = false;
+  $("quizArea").hidden = true;
   $("emptyArea").hidden = true;
   restoreCardTransition();
   updateStats();
 }
 
-function buildQueue() {
-  retryIds.clear();
-  retryQueue = [];
-  queue = buildPrioritizedQueue();
+function startCardMode(nextMode) {
+  hideCelebration();
+  mode = nextMode;
+  updateModeButtons();
+  queue = buildCardQueue(mode);
   currentId = null;
-  currentSource = null;
-  answeredCount = 0;
-  mainShownSinceRetry = 0;
+  currentQuiz = null;
   nextCard();
 }
 
 function flipCard() {
-  if (!currentId) return;
+  if (!currentId || mode === MODES.QUIZ) return;
   flipped = !flipped;
   $("card").classList.toggle("flipped", flipped);
   setAnswerControlsEnabled(flipped);
   updateCardFaceAccessibility();
 }
 
-function answer(result) {
+function answerCard(result) {
   if (!currentId || !flipped) return;
   const answeredId = currentId;
-  const answeredSource = currentSource;
-  const progress = state.progress[answeredId];
-  const now = Date.now();
-
-  answeredCount += 1;
-  if (answeredSource === "retry") {
-    mainShownSinceRetry = 0;
-  } else {
-    mainShownSinceRetry += 1;
-  }
-  progress.seen = Number(progress.seen || 0) + 1;
-  progress.lastSeenAt = now;
-  progress.lastResult = result;
+  const previousUnknownCount = state.unknownIds.length;
+  markSeen(answeredId);
 
   if (result === "unknown") {
-    progress.mastered = false;
-    progress.wrong = Number(progress.wrong || 0) + 1;
-    progress.streak = 0;
-    progress.due = now + UNKNOWN_REVIEW_DAYS * DAY;
-    scheduleRetry(answeredId);
-  } else if (result === "unsure") {
-    progress.mastered = false;
-    progress.unsure = Number(progress.unsure || 0) + 1;
-    progress.streak = Math.max(Number(progress.streak || 0), 0);
-    progress.due = now + UNCERTAIN_REVIEW_DAYS * DAY;
-    retryIds.delete(answeredId);
+    setIdMembership("unknownIds", answeredId, true);
+    if (mode === MODES.UNKNOWN && !queue.includes(answeredId)) queue.push(answeredId);
   } else {
-    progress.mastered = true;
-    progress.everEasy = true;
-    if (!progress.firstEasyAt) progress.firstEasyAt = now;
-    progress.streak = Number(progress.streak || 0) + 1;
-    progress.due = now + reviewIntervalDays(progress.streak) * DAY;
-    retryIds.delete(answeredId);
+    setIdMembership("unknownIds", answeredId, false);
   }
 
-  const milestoneMessage = nextMilestoneMessage();
   saveState();
   updateStats(false);
   setAnswerControlsEnabled(false);
 
-  if (milestoneMessage) {
-    launchConfetti(milestoneMessage);
+  if (maybeCelebrateUnknownClear(previousUnknownCount)) {
     window.setTimeout(nextCard, MILESTONE_ADVANCE_DELAY_MS);
   } else {
     nextCard();
   }
 }
 
-function resetLearningHistory() {
-  if (!confirm("この教材の学習記録をリセットしますか？\n単語データは消えません。回答結果・迷いカード・復習予定だけが最初に戻ります。")) {
+function createQuizForWord(word) {
+  const usedLabels = new Set([choiceLabel(word)]);
+  const distractors = [];
+  for (const candidate of shuffle(words.filter((item) => item.id !== word.id))) {
+    const label = choiceLabel(candidate);
+    if (usedLabels.has(label)) continue;
+    usedLabels.add(label);
+    distractors.push({ id: candidate.id, label });
+    if (distractors.length >= 3) break;
+  }
+
+  return {
+    word,
+    choices: shuffle([{ id: word.id, label: choiceLabel(word) }, ...distractors]),
+    answered: false,
+  };
+}
+
+function renderQuiz() {
+  currentId = null;
+  const nextId = queue.shift() || null;
+  if (!nextId) {
+    currentQuiz = null;
+    renderEmpty("クイズを一通り解きました", "もう一度解く場合はクイズモードを続けられます。");
     return;
   }
-  state = { progress: {} };
-  for (const word of words) state.progress[word.id] = blankProgress();
-  state.milestones = {};
+
+  currentQuiz = createQuizForWord(wordById(nextId));
+  const isWrong = state.quizWrongIds.includes(nextId);
+  $("quizBadge").textContent = isWrong ? "前回間違えた問題" : "クイズ";
+  $("quizBadge").dataset.kind = isWrong ? "retry" : "new";
+  $("quizReason").textContent = isWrong ? "前回のクイズで間違えた問題です" : "";
+  $("quizPrompt").textContent = currentQuiz.word.front;
+  $("quizFeedback").textContent = "";
+  $("quizFeedback").dataset.kind = "";
+  $("quizNextBtn").hidden = true;
+
+  const optionContainer = $("quizOptions");
+  optionContainer.replaceChildren();
+  for (const choice of currentQuiz.choices) {
+    const button = document.createElement("button");
+    button.className = "quiz-option";
+    button.type = "button";
+    button.textContent = choice.label;
+    button.addEventListener("click", () => answerQuiz(choice.id, button));
+    optionContainer.append(button);
+  }
+
+  $("studyArea").hidden = true;
+  $("quizArea").hidden = false;
+  $("emptyArea").hidden = true;
+  updateStats();
+}
+
+function startQuizMode() {
+  hideCelebration();
+  mode = MODES.QUIZ;
+  updateModeButtons();
+  queue = buildQuizQueue();
+  currentId = null;
+  renderQuiz();
+}
+
+function answerQuiz(selectedId, selectedButton) {
+  if (!currentQuiz || currentQuiz.answered) return;
+  currentQuiz.answered = true;
+  const correctId = currentQuiz.word.id;
+  const isCorrect = selectedId === correctId;
+
+  if (isCorrect) {
+    setIdMembership("quizWrongIds", correctId, false);
+    $("quizFeedback").textContent = "正解";
+    $("quizFeedback").dataset.kind = "correct";
+  } else {
+    setIdMembership("quizWrongIds", correctId, true);
+    $("quizFeedback").textContent = `不正解。正解は ${choiceLabel(currentQuiz.word)} です。`;
+    $("quizFeedback").dataset.kind = "wrong";
+  }
+
+  for (const button of $("quizOptions").querySelectorAll("button")) {
+    button.disabled = true;
+    const choice = currentQuiz.choices.find((item) => item.label === button.textContent);
+    if (choice?.id === correctId) button.classList.add("correct");
+  }
+  if (!isCorrect) selectedButton.classList.add("wrong");
+
   saveState();
-  buildQueue();
+  updateStats();
+  $("quizNextBtn").hidden = false;
+}
+
+function rebuildCurrentMode() {
+  if (mode === MODES.QUIZ) startQuizMode();
+  else startCardMode(mode);
+}
+
+function resetLearningHistory() {
+  if (!confirm("この教材の学習記録をリセットしますか？\n単語データは消えません。分からなかったカードとクイズ履歴だけが最初に戻ります。")) {
+    return;
+  }
+  hideCelebration();
+  state = blankState();
+  saveState();
+  rebuildCurrentMode();
 }
 
 function showError(error) {
   console.error(error);
-  $("studyArea").hidden = true;
-  $("emptyArea").hidden = true;
+  hideAllStudySurfaces();
   $("errorArea").hidden = false;
   $("errorMessage").textContent = "通信状態を確認して、再読み込みしてください。";
   $("subtitle").textContent = "教材の読み込みに失敗しました";
@@ -551,11 +491,11 @@ function showError(error) {
 }
 
 async function selectDeck(id) {
+  hideCelebration();
   setControlsEnabled(false);
-  $("studyArea").hidden = true;
-  $("emptyArea").hidden = true;
+  hideAllStudySurfaces();
   $("errorArea").hidden = true;
-  $("subtitle").textContent = "教材を読み込んでいます…";
+  $("subtitle").textContent = "教材を読み込んでいます...";
 
   deckMeta = manifest.decks.find((item) => item.id === id);
   if (!deckMeta) throw new Error(`Unknown deck: ${id}`);
@@ -573,7 +513,7 @@ async function selectDeck(id) {
   $("subtitle").textContent = deckMeta.subtitle;
   $("backLabel").textContent = deckMeta.backLabel;
   setControlsEnabled(true);
-  buildQueue();
+  rebuildCurrentMode();
 }
 
 async function init() {
@@ -612,20 +552,28 @@ $("card").addEventListener("keydown", (event) => {
     flipCard();
   }
 });
-$("unknownBtn").addEventListener("click", () => answer("unknown"));
-$("unsureBtn").addEventListener("click", () => answer("unsure"));
-$("easyBtn").addEventListener("click", () => answer("easy"));
-$("shuffleBtn").addEventListener("click", buildQueue);
-$("continueBtn").addEventListener("click", buildQueue);
+$("unknownBtn").addEventListener("click", () => answerCard("unknown"));
+$("knownBtn").addEventListener("click", () => answerCard("known"));
+$("shuffleBtn").addEventListener("click", rebuildCurrentMode);
+$("continueBtn").addEventListener("click", rebuildCurrentMode);
+$("emptyUnknownBtn").addEventListener("click", () => startCardMode(MODES.UNKNOWN));
+$("emptyQuizBtn").addEventListener("click", startQuizMode);
+$("quizNextBtn").addEventListener("click", renderQuiz);
+$("retryBtn").addEventListener("click", init);
 for (const button of document.querySelectorAll(".reset-history")) {
   button.addEventListener("click", resetLearningHistory);
 }
-$("retryBtn").addEventListener("click", init);
+for (const button of document.querySelectorAll("[data-mode]")) {
+  button.addEventListener("click", () => {
+    if (button.dataset.mode === MODES.QUIZ) startQuizMode();
+    else startCardMode(button.dataset.mode);
+  });
+}
 document.addEventListener("keydown", (event) => {
-  if (!currentId || !flipped) return;
-  if (event.key === "1") answer("unknown");
-  if (event.key === "2") answer("unsure");
-  if (event.key === "3") answer("easy");
+  if (mode !== MODES.QUIZ && currentId && flipped) {
+    if (event.key === "1") answerCard("unknown");
+    if (event.key === "2") answerCard("known");
+  }
 });
 
 init();

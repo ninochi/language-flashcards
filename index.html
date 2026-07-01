@@ -23,16 +23,21 @@
         <select id="deckSelect" disabled></select>
       </div>
       <div class="settings-actions">
-        <button id="shuffleBtn" class="secondary" disabled>出題順をシャッフル</button>
+        <button id="shuffleBtn" class="secondary" disabled>このモードをシャッフル</button>
         <button class="danger-outline reset-history" disabled>学習記録をリセット</button>
       </div>
-      <p class="review-policy">答えを見る前の感覚で「分からなかった・迷った・すぐ分かった」を選びます。</p>
+      <div class="mode-tabs" aria-label="学習モード">
+        <button class="mode-tab active" data-mode="all" disabled>カード</button>
+        <button class="mode-tab" data-mode="unknown" disabled>分からなかっただけ</button>
+        <button class="mode-tab" data-mode="quiz" disabled>クイズ</button>
+      </div>
+      <p class="review-policy">カードは「分からなかった・分かった」だけで記録します。クイズは既存カードから4択を自動生成します。</p>
     </section>
 
     <section class="stats" aria-label="学習状況">
       <div class="stat"><strong id="remainingCount">0</strong><span>今回の残り</span></div>
-      <div class="stat"><strong id="easyCount">0</strong><span>すぐ分かった</span></div>
-      <div class="stat"><strong id="unsureCount">0</strong><span>迷いカード</span></div>
+      <div class="stat"><strong id="unknownCount">0</strong><span>分からなかった</span></div>
+      <div class="stat"><strong id="quizWrongCount">0</strong><span>クイズ間違い</span></div>
       <div class="stat"><strong id="totalCount">0</strong><span>全単語</span></div>
     </section>
 
@@ -57,17 +62,32 @@
       </div>
       <div class="controls">
         <button id="unknownBtn" class="unknown" disabled>分からなかった</button>
-        <button id="unsureBtn" class="unsure" disabled>迷った</button>
-        <button id="easyBtn" class="easy" disabled>すぐ分かった</button>
+        <button id="knownBtn" class="easy" disabled>分かった</button>
+      </div>
+    </section>
+
+    <section id="quizArea" hidden>
+      <div class="quiz-card">
+        <div class="card-meta quiz-meta">
+          <span id="quizBadge" class="card-badge" data-kind="new">クイズ</span>
+          <span id="quizReason" class="card-reason"></span>
+        </div>
+        <span class="face-label">日本語</span>
+        <div id="quizPrompt" class="word"></div>
+        <div id="quizOptions" class="quiz-options" aria-label="選択肢"></div>
+        <div id="quizFeedback" class="quiz-feedback" aria-live="polite"></div>
+        <button id="quizNextBtn" class="secondary" hidden>次の問題</button>
       </div>
     </section>
 
     <section id="emptyArea" class="empty" hidden>
       <div>
-        <h2>この回のカードを一通り見ました</h2>
+        <h2 id="emptyTitle">この回のカードを一通り見ました</h2>
         <p id="emptyMessage"></p>
         <div class="empty-actions">
           <button id="continueBtn" class="secondary">もう一周する</button>
+          <button id="emptyUnknownBtn" class="secondary">分からなかっただけ</button>
+          <button id="emptyQuizBtn" class="secondary">クイズ</button>
           <button class="danger-outline reset-history">学習記録をリセット</button>
         </div>
       </div>
